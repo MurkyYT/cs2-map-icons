@@ -28,11 +28,11 @@ jobs:
           pip install -r requirements.txt
           playwright install chromium
       
-      - name: Clear images folder
-        run: |
-          rm -rf images/*
-          mkdir images/
-          touch images/.gitkeep
+      # - name: Clear images folder
+      #   run: |
+      #     rm -rf images/*
+      #     mkdir images/
+      #     touch images/.gitkeep
       
       - name: Run scraper
         run: |
