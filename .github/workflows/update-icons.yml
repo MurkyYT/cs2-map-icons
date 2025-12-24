@@ -1,0 +1,65 @@
+name: Update CS2 Map Icons
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/**'
+
+jobs:
+  update-icons:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+      
+      - name: Clear images folder
+        run: |
+          rm -rf images/*
+          mkdir images/
+          touch images/.gitkeep
+      
+      - name: Run scraper
+        run: |
+          cd scripts
+          python scrape_icons.py
+      
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git add images/
+          if git diff --staged --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add images/
+          git commit -m "chore: update CS2 map icons - $(date +'%Y-%m-%d %H:%M UTC')"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: No changes detected
+        if: steps.check_changes.outputs.changed == 'false'
+        run: echo "No new icons found. Repository is up to date."
