@@ -40,8 +40,11 @@ def get_remote_file_hash(url, session):
 
 def load_existing_data():
     try:
-        if os.path.exists("available.json"):
-            with open("available.json", "r") as f:
+        repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        json_path = os.path.join(repo_root, "available.json")
+        
+        if os.path.exists(json_path):
+            with open(json_path, "r") as f:
                 return json.load(f)
     except Exception as e:
         print(f"Could not load existing data: {e}")
@@ -223,7 +226,10 @@ def dump_available_maps(downloaded_data):
         "maps": downloaded_data
     }
 
-    with open("available.json", "w") as f:
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    json_path = os.path.join(repo_root, "available.json")
+
+    with open(json_path, "w") as f:
         json.dump(available_maps, f, indent=4)
 
 if __name__ == "__main__":
@@ -242,6 +248,6 @@ if __name__ == "__main__":
         os.path.join(os.path.dirname(__file__), "..", "images")
     )
 
-    print(f"\nComplete! Images: {images_dir}")
+    print(f"\nComplete")
 
     dump_available_maps(downloaded_data)
