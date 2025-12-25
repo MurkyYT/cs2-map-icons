@@ -1,0 +1,240 @@
+{
+    "count": 39,
+    "last_update": "2025-12-25 11:31:44",
+    "maps": {
+        "ar_baggage": {
+            "path": "images/ar_baggage.png",
+            "origin": "https://developer.valvesoftware.com/w/images/c/c4/Ar_baggage.png",
+            "hash": "65c31794-1fc93",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "cs_italy": {
+            "path": "images/cs_italy.png",
+            "origin": "https://developer.valvesoftware.com/w/images/5/5d/Cs_italy.png",
+            "hash": "64f18c4d-449de",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_ancient": {
+            "path": "images/de_ancient.png",
+            "origin": "https://developer.valvesoftware.com/w/images/9/94/De_ancient.png",
+            "hash": "621cb32a-20e7b",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_anubis": {
+            "path": "images/de_anubis.png",
+            "origin": "https://developer.valvesoftware.com/w/images/5/54/De_anubis.png",
+            "hash": "63789765-bccb",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "ar_pool_day": {
+            "path": "images/ar_pool_day.png",
+            "origin": "https://developer.valvesoftware.com/w/images/2/2a/Ar_pool_day.png",
+            "hash": "667bc099-12e3a",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "cs_office": {
+            "path": "images/cs_office.png",
+            "origin": "https://developer.valvesoftware.com/w/images/9/96/Cs_office.png",
+            "hash": "624c5fc0-c4dd",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "ar_shoots": {
+            "path": "images/ar_shoots.png",
+            "origin": "https://developer.valvesoftware.com/w/images/5/5d/Ar_shoots.png",
+            "hash": "65c317b8-52367",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "cs_agency": {
+            "path": "images/cs_agency.png",
+            "origin": "https://developer.valvesoftware.com/w/images/f/fb/Map_icon_cs_agency.png",
+            "hash": "681ce1de-1312c",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_ancient_night": {
+            "path": "images/de_ancient_night.png",
+            "origin": "https://developer.valvesoftware.com/w/images/9/93/Map_icon_de_ancient_night.png",
+            "hash": "689efd28-6d99a",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "ar_shoots_night": {
+            "path": "images/ar_shoots_night.png",
+            "origin": "https://developer.valvesoftware.com/w/images/6/6d/Map_icon_ar_shoots_night.png",
+            "hash": "689efd20-4c87d",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_dust2": {
+            "path": "images/de_dust2.png",
+            "origin": "https://developer.valvesoftware.com/w/images/f/f4/De_dust2.png",
+            "hash": "624c605d-2bc17",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_golden": {
+            "path": "images/de_golden.png",
+            "origin": "https://developer.valvesoftware.com/w/images/4/4e/Map_icon_de_golden.png",
+            "hash": "68ded7a3-17811",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_nuke": {
+            "path": "images/de_nuke.png",
+            "origin": "https://developer.valvesoftware.com/w/images/5/57/De_nuke.png",
+            "hash": "624c60ec-1bf76",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_mirage": {
+            "path": "images/de_mirage.png",
+            "origin": "https://developer.valvesoftware.com/w/images/6/68/De_mirage.png",
+            "hash": "624c60d5-11798",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_palacio": {
+            "path": "images/de_palacio.png",
+            "origin": "https://developer.valvesoftware.com/w/images/3/30/Map_icon_de_palacio.png",
+            "hash": "68ded7ae-17df8",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_rooftop": {
+            "path": "images/de_rooftop.png",
+            "origin": "https://developer.valvesoftware.com/w/images/9/91/Map_icon_de_rooftop.png",
+            "hash": "68ded7ba-1948a",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_assembly": {
+            "path": "images/de_assembly.png",
+            "origin": "https://developer.valvesoftware.com/w/images/6/68/De_assembly.png",
+            "hash": "667bc0a5-19fa9",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_overpass": {
+            "path": "images/de_overpass.png",
+            "origin": "https://developer.valvesoftware.com/w/images/d/dc/De_overpass.png",
+            "hash": "64f18c91-5b822",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_train": {
+            "path": "images/de_train.png",
+            "origin": "https://developer.valvesoftware.com/w/images/0/0b/Map_icon_de_train.png",
+            "hash": "67357359-48868",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_inferno": {
+            "path": "images/de_inferno.png",
+            "origin": "https://developer.valvesoftware.com/w/images/b/be/De_inferno.png",
+            "hash": "64f18c72-38761",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_sugarcane": {
+            "path": "images/de_sugarcane.png",
+            "origin": "https://developer.valvesoftware.com/w/images/9/95/De_sugarcane.png",
+            "hash": "621cb3b7-11147",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "cs_icon": {
+            "path": "images/cs_icon.png",
+            "origin": "https://developer.valvesoftware.com/w/images/8/8f/Cs_icon.png",
+            "hash": "65a0f113-326",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_memento": {
+            "path": "images/de_memento.png",
+            "origin": "https://developer.valvesoftware.com/w/images/1/11/De_memento.png",
+            "hash": "667bc0b6-13a3d",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_thera": {
+            "path": "images/de_thera.png",
+            "origin": "https://developer.valvesoftware.com/w/images/a/ae/De_thera.png",
+            "hash": "667bc0ca-129fa",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_whistle": {
+            "path": "images/de_whistle.png",
+            "origin": "https://developer.valvesoftware.com/w/images/5/52/Map_icon_de_whistle.png",
+            "hash": "673583e5-25397",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_brewery": {
+            "path": "images/de_brewery.png",
+            "origin": "https://developer.valvesoftware.com/w/images/9/93/Map_icon_de_brewery.png",
+            "hash": "681ce1f5-1368a",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_vertigo": {
+            "path": "images/de_vertigo.png",
+            "origin": "https://developer.valvesoftware.com/w/images/d/d5/De_vertigo.png",
+            "hash": "621cbbd3-2d9f9",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_dogtown": {
+            "path": "images/de_dogtown.png",
+            "origin": "https://developer.valvesoftware.com/w/images/f/f7/Map_icon_de_dogtown.png",
+            "hash": "681ce1fd-12b06",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_basalt": {
+            "path": "images/de_basalt.png",
+            "origin": "https://developer.valvesoftware.com/w/images/f/f2/Map_icon_de_basalt.png",
+            "hash": "6735622e-242cc",
+            "last_checked": "2025-12-25 11:31:43"
+        },
+        "de_mills": {
+            "path": "images/de_mills.png",
+            "origin": "https://developer.valvesoftware.com/w/images/6/60/De_mills.png",
+            "hash": "667bc0c2-1218b",
+            "last_checked": "2025-12-25 11:31:44"
+        },
+        "de_palais": {
+            "path": "images/de_palais.png",
+            "origin": "https://developer.valvesoftware.com/w/images/0/01/Map_icon_de_palais.png",
+            "hash": "673583d3-25def",
+            "last_checked": "2025-12-25 11:31:44"
+        },
+        "de_canals": {
+            "path": "images/de_canals.png",
+            "origin": "https://developer.valvesoftware.com/w/images/7/7d/De_canals.png",
+            "hash": "621cb342-24c01",
+            "last_checked": "2025-12-25 11:31:44"
+        },
+        "de_edin": {
+            "path": "images/de_edin.png",
+            "origin": "https://developer.valvesoftware.com/w/images/3/35/Map_icon_de_edin.png",
+            "hash": "67358320-2635a",
+            "last_checked": "2025-12-25 11:31:44"
+        },
+        "de_grail": {
+            "path": "images/de_grail.png",
+            "origin": "https://developer.valvesoftware.com/w/images/f/f0/Map_icon_de_grail.png",
+            "hash": "681ce204-13504",
+            "last_checked": "2025-12-25 11:31:44"
+        },
+        "de_transit": {
+            "path": "images/de_transit.png",
+            "origin": "https://developer.valvesoftware.com/w/images/a/ab/Map_icon_de_transit.png",
+            "hash": "68ded7c2-17cab",
+            "last_checked": "2025-12-25 11:31:44"
+        },
+        "de_cbble": {
+            "path": "images/de_cbble.png",
+            "origin": "https://developer.valvesoftware.com/w/images/f/f7/De_cbble.png",
+            "hash": "624c602a-1590e",
+            "last_checked": "2025-12-25 11:31:44"
+        },
+        "de_jura": {
+            "path": "images/de_jura.png",
+            "origin": "https://developer.valvesoftware.com/w/images/0/00/Map_icon_de_jura.png",
+            "hash": "681ce210-126de",
+            "last_checked": "2025-12-25 11:31:44"
+        },
+        "de_lake": {
+            "path": "images/de_lake.png",
+            "origin": "https://developer.valvesoftware.com/w/images/b/b6/De_lake.png",
+            "hash": "624c60c2-828e",
+            "last_checked": "2025-12-25 11:31:44"
+        },
+        "de_dust": {
+            "path": "images/de_dust.png",
+            "origin": "https://developer.valvesoftware.com/w/images/2/29/De_dust.png",
+            "hash": "624c604e-1e94f",
+            "last_checked": "2025-12-25 11:31:44"
+        }
+    }
+}
