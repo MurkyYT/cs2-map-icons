@@ -173,7 +173,6 @@ def process_map(args):
             "path": f"images/{filename}",
             "origin": icon_url,
             "hash": file_hash,
-            "last_checked": time.strftime("%Y-%m-%d %H:%M:%S")
         })
     return None
 
@@ -222,7 +221,6 @@ def download_all_icons(existing_data):
 def dump_available_maps(downloaded_data):
     available_maps = {
         "count": len(downloaded_data),
-        "last_update": time.strftime("%Y-%m-%d %H:%M:%S"),
         "maps": downloaded_data
     }
 
@@ -230,7 +228,7 @@ def dump_available_maps(downloaded_data):
     json_path = os.path.join(repo_root, "available.json")
 
     with open(json_path, "w") as f:
-        json.dump(available_maps, f, indent=4)
+        json.dump(available_maps, f, indent=4, sort_keys=True)
 
 if __name__ == "__main__":
     print("=== Finding Icons ===")
