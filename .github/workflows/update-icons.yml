@@ -38,6 +38,8 @@ jobs:
         run: |
           cd scripts
           python scrape_icons.py
+      - name: Update timestamp
+        run: echo "Last checked: $(date -u)" > last-check.txt
       
       - name: Check for changes
         id: check_changes
@@ -55,7 +57,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add -A
-          git commit -m "chore: update CS2 map icons - $(date +'%Y-%m-%d %H:%M UTC')"
+          git commit -m "chore: check CS2 map icons - $(date +'%Y-%m-%d %H:%M UTC')"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
