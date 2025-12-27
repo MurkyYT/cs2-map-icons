@@ -42,6 +42,7 @@ def get_remote_file_hash(url, session):
         return None
 
 def load_existing_data():
+    logger.info("Loading existing maps data...")
     try:
         repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
         json_path = os.path.join(repo_root, "available.json")
@@ -173,7 +174,7 @@ def process_map(args):
     
     if success:
         return (map_name, {
-            "path": f"images/{filename}",
+            "path": f"{f"https://github.com/{repo}/" if repo != None else ""}images/{filename}",
             "origin": icon_url,
             "hash": file_hash,
         })
@@ -233,12 +234,12 @@ def dump_available_maps(downloaded_data):
     with open(json_path, "w") as f:
         json.dump(available_maps, f, indent=4, sort_keys=True)
 
-if __name__ == "__main__":
-    logger.info("=== Finding Icons ===")
-
+def main():
     logger.debug(f"Repo path: {repo}")
-    
+
     existing_data = load_existing_data()
+    
+    logger.info("=== Finding Icons ===")
     logger.info(f"Loaded {existing_data.get('count', 0)} existing map(s)")
     
     load_map_icons()
@@ -247,10 +248,9 @@ if __name__ == "__main__":
 
     downloaded_data = download_all_icons(existing_data)
 
-    images_dir = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "images")
-    )
-
     logger.info(f"Complete")
 
     dump_available_maps(downloaded_data)
+
+if __name__ == "__main__":
+    main()
