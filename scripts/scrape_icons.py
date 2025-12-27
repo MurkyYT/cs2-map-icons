@@ -15,6 +15,7 @@ logger.info_lock = Lock()
 data_lock = Lock()
 
 repo = os.getenv("GITHUB_REPOSITORY")
+default_branch = os.getenv("DEFAULT_BRANCH")
 
 def is_official(map_name):
     return map_name.lower()[0:3] in ["de_", "dz_", "gd_", "cs_", "ar_"]
@@ -173,7 +174,7 @@ def process_map(args):
     success, file_hash, _ = download_image(icon_url, filename, existing_hash, session)
     
     if success:
-        prefix = f"https://github.com/{repo}/" if repo is not None else ""
+        prefix = f"https://raw.githubusercontent.com/{repo}/{default_branch}/" if repo is not None and default_branch is not None else ""
 
         return (map_name, {
             "path": f"{prefix}images/{filename}",
@@ -238,6 +239,7 @@ def dump_available_maps(downloaded_data):
 
 def main():
     logger.debug(f"Repo path: {repo}")
+    logger.debug(f"Default branch: {default_branch}")
 
     existing_data = load_existing_data()
     
