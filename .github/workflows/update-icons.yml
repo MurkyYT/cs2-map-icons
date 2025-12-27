@@ -40,7 +40,7 @@ jobs:
           python scrape_icons.py
 
       - name: Update Timestamp
-        run: echo "Last checked: $(date -u)" > last-check.txt
+        run: 'echo "Last checked: $(date -u)" > last-check.txt'
       
       - name: Check for changes
         id: check_changes
