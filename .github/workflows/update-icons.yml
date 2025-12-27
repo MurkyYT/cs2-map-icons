@@ -31,6 +31,8 @@ jobs:
       #     rm -rf images/*
       #     mkdir images/
       #     touch images/.gitkeep
+      - name: Set DEFAULT_BRANCH env variable from context
+        run: echo "DEFAULT_BRANCH=${{ github.event.repository.default_branch }}" >> $GITHUB_ENV
       
       - name: Run scraper
         run: |
