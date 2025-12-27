@@ -173,8 +173,10 @@ def process_map(args):
     success, file_hash, _ = download_image(icon_url, filename, existing_hash, session)
     
     if success:
+        prefix = f"https://github.com/{repo}/" if repo is not None else ""
+
         return (map_name, {
-            "path": f"{f"https://github.com/{repo}/" if repo != None else ""}images/{filename}",
+            "path": f"{prefix}images/{filename}",
             "origin": icon_url,
             "hash": file_hash,
         })
