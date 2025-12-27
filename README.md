@@ -26,7 +26,7 @@ The repository includes icons for all official CS2 maps:
 
 Icons are automatically scraped and updated daily at **00:00 UTC** via GitHub Actions.
 
-Last checked: [here](last-checked.txt)
+Last checked: [here](last-check.txt)
 
 ## License
 
