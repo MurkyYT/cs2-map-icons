@@ -83,12 +83,12 @@ def download_image(url, filename, existing_hash, session):
 
         status = "Updated" if existing_hash else "Downloaded"
         with print_lock:
-            logger.info(f"{status}: {filename}")
+            logger.debug(f"{status}: {filename}")
         return True, remote_hash or content_hash, filename
         
     except Exception as e:
         with print_lock:
-            logger.info(f"Failed: {filename}: {e}")
+            logger.warning(f"Failed: {filename}: {e}")
         return False, None, filename
 
 def load_map_icons():
@@ -224,10 +224,19 @@ def download_all_icons(existing_data):
 
     return downloaded_data
 
-def dump_available_maps(downloaded_data):
+def dump_available_maps(downloaded_data, existing_data):
+
+    merged_maps = existing_data.get("maps", {}).copy()
+
+    for map_name in merged_maps:
+        if map_name not in downloaded_data:
+            merged_maps[map_name]["origin"] = ""
+    
+    merged_maps.update(downloaded_data)
+
     available_maps = {
-        "count": len(downloaded_data),
-        "maps": downloaded_data
+        "count": len(merged_maps),
+        "maps": merged_maps
     }
 
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -244,7 +253,7 @@ def dump_available_maps(downloaded_data):
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
 
-        for map_name, map_data in downloaded_data.items():
+        for map_name, map_data in sorted(merged_maps.items()):
             writer.writerow({
                 "map_name": map_name,
                 "hash": map_data.get("hash"),
@@ -256,7 +265,7 @@ def dump_available_maps(downloaded_data):
     with open(md_path, "w", encoding="utf-8") as f:
         f.write("| map_name | hash | origin | path |\n")
         f.write("|----------|------|--------|------|\n")
-        for name, d in downloaded_data.items():
+        for name, d in sorted(merged_maps.items()):
             f.write(f"| {name} | {d['hash']} | {d['origin']} | {d['path']} |\n")
     logger.info("Dumped all data to available.md")
 
@@ -282,7 +291,7 @@ def main():
     downloaded_data = download_all_icons(existing_data)
     logger.info(f"Complete")
 
-    dump_available_maps(downloaded_data)
+    dump_available_maps(downloaded_data, existing_data)
 
 if __name__ == "__main__":
     main()
