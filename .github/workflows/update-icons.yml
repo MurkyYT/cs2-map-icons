@@ -42,7 +42,7 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
-          git add images/ available.json
+          git add -A
           if git diff --staged --quiet; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
