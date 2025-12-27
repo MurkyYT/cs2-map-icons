@@ -5,13 +5,14 @@ import sys
 import json
 import time
 import hashlib
+import csv
 from loguru import logger
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
 
 map_icons = {}
 file_lock = Lock()
-logger.info_lock = Lock()
+print_lock = Lock()
 data_lock = Lock()
 
 repo = os.getenv("GITHUB_REPOSITORY")
@@ -38,7 +39,7 @@ def get_remote_file_hash(url, session):
         return hashlib.md5(response.content).hexdigest()
         
     except Exception as e:
-        with logger.info_lock:
+        with print_lock:
             logger.info(f"Failed to get hash for {url}: {e}")
         return None
 
@@ -66,7 +67,7 @@ def download_image(url, filename, existing_hash, session):
         remote_hash = get_remote_file_hash(url, session)
         
         if remote_hash and existing_hash and remote_hash == existing_hash and file_exists:
-            with logger.info_lock:
+            with print_lock:
                 logger.debug(f"Skipped: {filename}")
             return True, remote_hash, filename
         
@@ -81,12 +82,12 @@ def download_image(url, filename, existing_hash, session):
         content_hash = hashlib.md5(response.content).hexdigest()
 
         status = "Updated" if existing_hash else "Downloaded"
-        with logger.info_lock:
+        with print_lock:
             logger.info(f"{status}: {filename}")
         return True, remote_hash or content_hash, filename
         
     except Exception as e:
-        with logger.info_lock:
+        with print_lock:
             logger.info(f"Failed: {filename}: {e}")
         return False, None, filename
 
@@ -184,8 +185,6 @@ def process_map(args):
     return None
 
 def download_all_icons(existing_data):
-    logger.info("=== Checking Icons ===")
-
     if not map_icons:
         logger.info("No icons found!")
         return {}
@@ -233,25 +232,54 @@ def dump_available_maps(downloaded_data):
 
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     json_path = os.path.join(repo_root, "available.json")
+    csv_path = os.path.join(repo_root, "available.csv")
+    md_path = os.path.join(repo_root, "available.md")
 
     with open(json_path, "w") as f:
         json.dump(available_maps, f, indent=4, sort_keys=True)
+    logger.info("Dumped all data to available.json")
+
+    fieldnames = ["map_name", "hash", "origin", "path"]
+    with open(csv_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for map_name, map_data in downloaded_data.items():
+            writer.writerow({
+                "map_name": map_name,
+                "hash": map_data.get("hash"),
+                "origin": map_data.get("origin"),
+                "path": map_data.get("path"),
+            })
+    logger.info("Dumped all data to available.csv")
+
+    with open(md_path, "w", encoding="utf-8") as f:
+        f.write("| map_name | hash | origin | path |\n")
+        f.write("|----------|------|--------|------|\n")
+        for name, d in downloaded_data.items():
+            f.write(f"| {name} | {d['hash']} | {d['origin']} | {d['path']} |\n")
+    logger.info("Dumped all data to available.md")
 
 def main():
-    logger.debug(f"Repo path: {repo}")
-    logger.debug(f"Default branch: {default_branch}")
+    if repo:
+        logger.debug(f"Repo path: {repo}")
+    else:
+        logger.warning("No repo path found")
+    
+    if default_branch:
+        logger.debug(f"Default branch: {default_branch}")
+    else:
+        logger.warning("No default branch found")
 
     existing_data = load_existing_data()
-    
-    logger.info("=== Finding Icons ===")
     logger.info(f"Loaded {existing_data.get('count', 0)} existing map(s)")
     
+    logger.info("=== Finding Icons ===")
     load_map_icons()
-
     logger.info(f"Found {len(map_icons)} icons")
 
+    logger.info("=== Updating map Icons ===")
     downloaded_data = download_all_icons(existing_data)
-
     logger.info(f"Complete")
 
     dump_available_maps(downloaded_data)
