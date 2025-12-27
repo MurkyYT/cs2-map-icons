@@ -5,13 +5,16 @@ import sys
 import json
 import time
 import hashlib
+from loguru import logger
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
 
 map_icons = {}
 file_lock = Lock()
-print_lock = Lock()
+logger.info_lock = Lock()
 data_lock = Lock()
+
+repo = os.getenv("GITHUB_REPOSITORY")
 
 def is_official(map_name):
     return map_name.lower()[0:3] in ["de_", "dz_", "gd_", "cs_", "ar_"]
@@ -34,8 +37,8 @@ def get_remote_file_hash(url, session):
         return hashlib.md5(response.content).hexdigest()
         
     except Exception as e:
-        with print_lock:
-            print(f"Failed to get hash for {url}: {e}")
+        with logger.info_lock:
+            logger.info(f"Failed to get hash for {url}: {e}")
         return None
 
 def load_existing_data():
@@ -47,7 +50,7 @@ def load_existing_data():
             with open(json_path, "r") as f:
                 return json.load(f)
     except Exception as e:
-        print(f"Could not load existing data: {e}")
+        logger.info(f"Could not load existing data: {e}")
     
     return {"count": 0, "maps": {}}
 
@@ -61,8 +64,8 @@ def download_image(url, filename, existing_hash, session):
         remote_hash = get_remote_file_hash(url, session)
         
         if remote_hash and existing_hash and remote_hash == existing_hash and file_exists:
-            with print_lock:
-                print(f"Skipped: {filename}")
+            with logger.info_lock:
+                logger.debug(f"Skipped: {filename}")
             return True, remote_hash, filename
         
         response = session.get(url, timeout=3)
@@ -76,13 +79,13 @@ def download_image(url, filename, existing_hash, session):
         content_hash = hashlib.md5(response.content).hexdigest()
 
         status = "Updated" if existing_hash else "Downloaded"
-        with print_lock:
-            print(f"{status}: {filename}")
+        with logger.info_lock:
+            logger.info(f"{status}: {filename}")
         return True, remote_hash or content_hash, filename
         
     except Exception as e:
-        with print_lock:
-            print(f"Failed: {filename}: {e}")
+        with logger.info_lock:
+            logger.info(f"Failed: {filename}: {e}")
         return False, None, filename
 
 def load_map_icons():
@@ -114,7 +117,7 @@ def load_map_icons():
                 """
             )
 
-            print("Loading website...")
+            logger.info("Loading website...")
 
             start_time = time.time()
             page.goto(
@@ -124,7 +127,7 @@ def load_map_icons():
             )
             end_time = time.time()
 
-            print(f"Loaded in {end_time - start_time:.2f}s")
+            logger.debug(f"Loaded in {end_time - start_time:.2f}s")
 
             page.wait_for_selector('img[src*="Map_icon_"]', timeout=10000)
             html = page.content()
@@ -152,13 +155,13 @@ def load_map_icons():
 
                     final_link = f"https://developer.valvesoftware.com/w/images/{image_info[0]}/{image_info[1]}/{image_info[2]}"
                     map_icons[map_name] = final_link
-                    print(f"Found: {map_name}")
+                    logger.debug(f"Found: {map_name}")
 
             except Exception:
                 continue
 
     except Exception as e:
-        print(f"Error: {e}")
+        logger.error(f"Error: {e}")
         sys.exit(1)
 
 def process_map(args):
@@ -177,10 +180,10 @@ def process_map(args):
     return None
 
 def download_all_icons(existing_data):
-    print("\n=== Checking Icons ===")
+    logger.info("=== Checking Icons ===")
 
     if not map_icons:
-        print("No icons found!")
+        logger.info("No icons found!")
         return {}
 
     existing_maps = existing_data.get("maps", {})
@@ -231,14 +234,16 @@ def dump_available_maps(downloaded_data):
         json.dump(available_maps, f, indent=4, sort_keys=True)
 
 if __name__ == "__main__":
-    print("=== Finding Icons ===")
+    logger.info("=== Finding Icons ===")
+
+    logger.debug(f"Repo path: {repo}")
     
     existing_data = load_existing_data()
-    print(f"Loaded {existing_data.get('count', 0)} existing map(s)")
+    logger.info(f"Loaded {existing_data.get('count', 0)} existing map(s)")
     
     load_map_icons()
 
-    print(f"\nFound {len(map_icons)} icons")
+    logger.info(f"Found {len(map_icons)} icons")
 
     downloaded_data = download_all_icons(existing_data)
 
@@ -246,6 +251,6 @@ if __name__ == "__main__":
         os.path.join(os.path.dirname(__file__), "..", "images")
     )
 
-    print(f"\nComplete")
+    logger.info(f"Complete")
 
     dump_available_maps(downloaded_data)
