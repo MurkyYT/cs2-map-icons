@@ -15,8 +15,8 @@ file_lock = Lock()
 print_lock = Lock()
 data_lock = Lock()
 
-repo = os.getenv("GITHUB_REPOSITORY")
-default_branch = os.getenv("DEFAULT_BRANCH")
+repo = os.getenv("GITHUB_REPOSITORY", "MurkyYT/cs2-map-icons")
+default_branch = os.getenv("DEFAULT_BRANCH", "main")
 
 def is_official(map_name):
     return map_name.lower()[0:3] in ["de_", "dz_", "gd_", "cs_", "ar_"]
@@ -191,10 +191,13 @@ def download_all_icons(existing_data):
 
     existing_maps = existing_data.get("maps", {})
 
+    logical_cpus = os.cpu_count() or 4
+    max_workers = logical_cpus * 4
+
     session = requests.Session()
     adapter = requests.adapters.HTTPAdapter(
-        pool_connections=20,
-        pool_maxsize=40,
+        pool_connections=max_workers,
+        pool_maxsize=max_workers * 2,
         max_retries=1,
         pool_block=False
     )
@@ -209,7 +212,12 @@ def download_all_icons(existing_data):
             existing_hash = existing_maps.get(map_name, {}).get("hash")
             tasks.append((map_name, icon_url, existing_hash, session))
         
-        with ThreadPoolExecutor(max_workers=10) as executor:
+        logger.info(
+            f"Running with {max_workers} worker threads "
+            f"({logical_cpus} logical CPUs)"
+        )
+        
+        with ThreadPoolExecutor(max_workers=logical_cpus) as executor:
             futures = {executor.submit(process_map, task): task for task in tasks}
             
             for future in as_completed(futures):
