@@ -7,7 +7,7 @@ on:
     branches:
       - main
     paths:
-      - 'scripts/**'
+      - 'scraper/**'
 jobs:
   update-icons:
     runs-on: ubuntu-latest
