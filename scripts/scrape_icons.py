@@ -1,4 +1,4 @@
-import os, requests, sys, json, time, hashlib, csv, subprocess
+import os, requests, sys, json, time, hashlib, csv
 from playwright.sync_api import sync_playwright
 from loguru import logger
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -11,21 +11,6 @@ data_lock = Lock()
 
 repo = os.getenv("GITHUB_REPOSITORY", "MurkyYT/cs2-map-icons")
 default_branch = os.getenv("DEFAULT_BRANCH", "main")
-
-def get_cpu_count():
-    count = os.cpu_count()
-    if count is not None:
-        return count
-    
-    if sys.platform == "linux":
-        try:
-            cmd = "lscpu | grep '^CPU(s):' | awk '{print $2}'"
-            output = subprocess.check_output(cmd, shell=True, text=True)
-            return int(output.strip())
-        except Exception:
-            pass
-            
-    return None
 
 def is_official(map_name):
     return map_name.lower()[0:3] in ["de_", "dz_", "gd_", "cs_", "ar_"]
@@ -200,7 +185,7 @@ def download_all_icons(existing_data):
 
     existing_maps = existing_data.get("maps", {})
 
-    logical_cpus = get_cpu_count() or 4
+    logical_cpus = os.cpu_count() or 10
     max_workers = logical_cpus * 4
 
     session = requests.Session()
