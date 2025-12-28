@@ -5,6 +5,8 @@ from shared import *
 data_dir = os.path.join(repo_root , "data")
 
 def dump_available_maps(downloaded_data: dict, existing_data: dict):
+    os.makedirs(data_dir, exist_ok=True)
+
     merged_maps: dict = existing_data.get("maps", {}).copy()
 
     for map_name in merged_maps:
@@ -48,6 +50,8 @@ def dump_available_maps(downloaded_data: dict, existing_data: dict):
     logger.info("Dumped all data to available.md")
 
 def load_existing_data():
+    os.makedirs(data_dir, exist_ok=True)
+    
     logger.info("Loading existing maps data...")
     try:
         json_path = os.path.join(data_dir, "available.json")

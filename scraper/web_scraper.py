@@ -32,7 +32,7 @@ def get_remote_file_hash(url, session):
 
 def download_image(url, filename, existing_hash, session):
     try:
-        images_dir = os.path.join(os.path.dirname(__file__), "..", "images")
+        images_dir = os.path.join(repo_root, "images")
         filepath = os.path.join(images_dir, filename)
         
         file_exists = os.path.exists(filepath)
