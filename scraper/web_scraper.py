@@ -1,16 +1,9 @@
-import os, requests, sys, json, time, hashlib, csv
+import requests, sys, time, hashlib
 from playwright.sync_api import sync_playwright
 from loguru import logger
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from threading import Lock
 
-map_icons = {}
-file_lock = Lock()
-print_lock = Lock()
-data_lock = Lock()
-
-repo = os.getenv("GITHUB_REPOSITORY", "MurkyYT/cs2-map-icons")
-default_branch = os.getenv("DEFAULT_BRANCH", "main")
+from shared import *
 
 def is_official(map_name):
     return map_name.lower()[0:3] in ["de_", "dz_", "gd_", "cs_", "ar_"]
@@ -36,20 +29,6 @@ def get_remote_file_hash(url, session):
         with print_lock:
             logger.info(f"Failed to get hash for {url}: {e}")
         return None
-
-def load_existing_data():
-    logger.info("Loading existing maps data...")
-    try:
-        repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-        json_path = os.path.join(repo_root, "available.json")
-        
-        if os.path.exists(json_path):
-            with open(json_path, "r") as f:
-                return json.load(f)
-    except Exception as e:
-        logger.info(f"Could not load existing data: {e}")
-    
-    return {"count": 0, "maps": {}}
 
 def download_image(url, filename, existing_hash, session):
     try:
@@ -225,75 +204,3 @@ def download_all_icons(existing_data):
         session.close()
 
     return downloaded_data
-
-def dump_available_maps(downloaded_data, existing_data):
-
-    merged_maps = existing_data.get("maps", {}).copy()
-
-    for map_name in merged_maps:
-        if map_name not in downloaded_data:
-            merged_maps[map_name]["origin"] = ""
-    
-    merged_maps.update(downloaded_data)
-
-    available_maps = {
-        "count": len(merged_maps),
-        "maps": merged_maps
-    }
-
-    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    json_path = os.path.join(repo_root, "available.json")
-    csv_path = os.path.join(repo_root, "available.csv")
-    md_path = os.path.join(repo_root, "available.md")
-
-    with open(json_path, "w") as f:
-        json.dump(available_maps, f, indent=4, sort_keys=True)
-    logger.info("Dumped all data to available.json")
-
-    fieldnames = ["map_name", "hash", "origin", "path"]
-    with open(csv_path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-
-        for map_name, map_data in sorted(merged_maps.items()):
-            writer.writerow({
-                "map_name": map_name,
-                "hash": map_data.get("hash"),
-                "origin": map_data.get("origin"),
-                "path": map_data.get("path"),
-            })
-    logger.info("Dumped all data to available.csv")
-
-    with open(md_path, "w", encoding="utf-8") as f:
-        f.write("| map_name | hash | origin | path |\n")
-        f.write("|----------|------|--------|------|\n")
-        for name, d in sorted(merged_maps.items()):
-            f.write(f"| {name} | {d['hash']} | {d['origin']} | {d['path']} |\n")
-    logger.info("Dumped all data to available.md")
-
-def main():
-    if repo:
-        logger.debug(f"Repo path: {repo}")
-    else:
-        logger.warning("No repo path found")
-    
-    if default_branch:
-        logger.debug(f"Default branch: {default_branch}")
-    else:
-        logger.warning("No default branch found")
-
-    existing_data = load_existing_data()
-    logger.info(f"Loaded {existing_data.get('count', 0)} existing map(s)")
-    
-    logger.info("=== Finding Icons ===")
-    load_map_icons()
-    logger.info(f"Found {len(map_icons)} icons")
-
-    logger.info("=== Updating map Icons ===")
-    downloaded_data = download_all_icons(existing_data)
-    logger.info(f"Complete")
-
-    dump_available_maps(downloaded_data, existing_data)
-
-if __name__ == "__main__":
-    main()

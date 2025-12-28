@@ -23,7 +23,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          pip install -r scraper/requirements.txt
           playwright install chromium
       
       # - name: Clear images folder
@@ -36,8 +36,8 @@ jobs:
       
       - name: Run scraper
         run: |
-          cd scripts
-          python scrape_icons.py
+          cd scraper
+          python main.py
 
       - name: Update Timestamp
         run: 'echo "Last checked: $(date -u)" > last-check.txt'
