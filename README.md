@@ -22,6 +22,12 @@ The repository includes icons for all official CS2 maps:
 - Arms Race maps (`ar_*`)
 - Guardian maps (`gd_*`)
 
+Auto updated list of all maps scraped ever:
+
+- [CSV](data/available.csv)
+- [JSON](data/available.json)
+- [MD](data/available.md)
+
 ## Updates
 
 Icons are automatically scraped and updated daily at **00:00 UTC** via GitHub Actions.
