@@ -22,7 +22,7 @@
 | de_edin | 67358320-2635a | https://developer.valvesoftware.com/w/images/3/35/Map_icon_de_edin.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_edin.png |
 | de_golden | 68ded7a3-17811 | https://developer.valvesoftware.com/w/images/4/4e/Map_icon_de_golden.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_golden.png |
 | de_grail | 681ce204-13504 | https://developer.valvesoftware.com/w/images/f/f0/Map_icon_de_grail.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_grail.png |
-| de_inferno | bebd2903a9e64c9d7a93dd05db9244d4 | https://developer.valvesoftware.com/w/images/b/be/De_inferno.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_inferno.png |
+| de_inferno | 64f18c72-38761 | https://developer.valvesoftware.com/w/images/b/be/De_inferno.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_inferno.png |
 | de_jura | 681ce210-126de | https://developer.valvesoftware.com/w/images/0/00/Map_icon_de_jura.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_jura.png |
 | de_lake | 624c60c2-828e | https://developer.valvesoftware.com/w/images/b/b6/De_lake.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_lake.png |
 | de_memento | 667bc0b6-13a3d | https://developer.valvesoftware.com/w/images/1/11/De_memento.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_memento.png |
