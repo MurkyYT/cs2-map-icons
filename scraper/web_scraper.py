@@ -27,7 +27,7 @@ def get_remote_file_hash(url, session):
         
     except Exception as e:
         with print_lock:
-            logger.info(f"Failed to get hash for {url}: {e}")
+            logger.warning(f"Failed to get hash for {url}: {e}")
         return None
 
 def download_image(url, filename, existing_hash, session):
@@ -149,6 +149,9 @@ def process_map(args):
     
     if success:
         prefix = f"https://raw.githubusercontent.com/{repo}/{default_branch}/" if repo is not None and default_branch is not None else ""
+
+        with print_lock:
+            logger.debug(f"Hash of {filename}: {file_hash}")
 
         return (map_name, {
             "path": f"{prefix}images/{filename}",
