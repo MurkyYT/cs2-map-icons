@@ -51,8 +51,8 @@ def dump_available_maps(downloaded_data: dict, existing_data: dict, map_names: d
         f.write("| map_name | display_name | hash | origin | path |\n")
         f.write("|----------|--------------|------|--------|------|\n")
         for name, d in sorted(merged_maps.items()):
-            display_name = d.get('display_name', '')
-            f.write(f"| {name} | {display_name if display_name else "-"} | {d['hash']} | {d['origin']} | {d['path']} |\n")
+            display_name = d.get('display_name', '-')
+            f.write(f"| {name} | {display_name} | {d['hash']} | {d['origin']} | {d['path']} |\n")
     logger.info("Dumped all data to available.md")
 
 def load_existing_data():
