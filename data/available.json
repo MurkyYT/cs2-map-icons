@@ -2,26 +2,31 @@
     "count": 39,
     "maps": {
         "ar_baggage": {
+            "display_name": "Baggage",
             "hash": "65c31794-1fc93",
             "origin": "https://developer.valvesoftware.com/w/images/c/c4/Ar_baggage.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_baggage.png"
         },
         "ar_pool_day": {
+            "display_name": "Pool Day",
             "hash": "667bc099-12e3a",
             "origin": "https://developer.valvesoftware.com/w/images/2/2a/Ar_pool_day.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_pool_day.png"
         },
         "ar_shoots": {
+            "display_name": "Shoots",
             "hash": "65c317b8-52367",
             "origin": "https://developer.valvesoftware.com/w/images/5/5d/Ar_shoots.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_shoots.png"
         },
         "ar_shoots_night": {
+            "display_name": "Shoots (Night)",
             "hash": "689efd20-4c87d",
             "origin": "https://developer.valvesoftware.com/w/images/6/6d/Map_icon_ar_shoots_night.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_shoots_night.png"
         },
         "cs_agency": {
+            "display_name": "Agency",
             "hash": "681ce1de-1312c",
             "origin": "https://developer.valvesoftware.com/w/images/f/fb/Map_icon_cs_agency.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_agency.png"
@@ -32,136 +37,163 @@
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_icon.png"
         },
         "cs_italy": {
+            "display_name": "Italy",
             "hash": "64f18c4d-449de",
             "origin": "https://developer.valvesoftware.com/w/images/5/5d/Cs_italy.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_italy.png"
         },
         "cs_office": {
+            "display_name": "Office",
             "hash": "624c5fc0-c4dd",
             "origin": "https://developer.valvesoftware.com/w/images/9/96/Cs_office.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_office.png"
         },
         "de_ancient": {
+            "display_name": "Ancient",
             "hash": "621cb32a-20e7b",
             "origin": "https://developer.valvesoftware.com/w/images/9/94/De_ancient.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_ancient.png"
         },
         "de_ancient_night": {
+            "display_name": "Ancient (Night)",
             "hash": "689efd28-6d99a",
             "origin": "https://developer.valvesoftware.com/w/images/9/93/Map_icon_de_ancient_night.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_ancient_night.png"
         },
         "de_anubis": {
+            "display_name": "Anubis",
             "hash": "63789765-bccb",
             "origin": "https://developer.valvesoftware.com/w/images/5/54/De_anubis.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_anubis.png"
         },
         "de_assembly": {
+            "display_name": "Assembly",
             "hash": "667bc0a5-19fa9",
             "origin": "https://developer.valvesoftware.com/w/images/6/68/De_assembly.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_assembly.png"
         },
         "de_basalt": {
+            "display_name": "Basalt",
             "hash": "6735622e-242cc",
             "origin": "https://developer.valvesoftware.com/w/images/f/f2/Map_icon_de_basalt.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_basalt.png"
         },
         "de_brewery": {
+            "display_name": "Brewery",
             "hash": "681ce1f5-1368a",
             "origin": "https://developer.valvesoftware.com/w/images/9/93/Map_icon_de_brewery.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_brewery.png"
         },
         "de_canals": {
+            "display_name": "Canals",
             "hash": "621cb342-24c01",
             "origin": "https://developer.valvesoftware.com/w/images/7/7d/De_canals.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_canals.png"
         },
         "de_cbble": {
+            "display_name": "Cobblestone",
             "hash": "624c602a-1590e",
             "origin": "https://developer.valvesoftware.com/w/images/f/f7/De_cbble.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_cbble.png"
         },
         "de_dogtown": {
+            "display_name": "Dogtown",
             "hash": "681ce1fd-12b06",
             "origin": "https://developer.valvesoftware.com/w/images/f/f7/Map_icon_de_dogtown.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dogtown.png"
         },
         "de_dust": {
+            "display_name": "Shortdust",
             "hash": "624c604e-1e94f",
             "origin": "https://developer.valvesoftware.com/w/images/2/29/De_dust.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dust.png"
         },
         "de_dust2": {
+            "display_name": "Dust II",
             "hash": "624c605d-2bc17",
             "origin": "https://developer.valvesoftware.com/w/images/f/f4/De_dust2.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dust2.png"
         },
         "de_edin": {
+            "display_name": "Edin",
             "hash": "67358320-2635a",
             "origin": "https://developer.valvesoftware.com/w/images/3/35/Map_icon_de_edin.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_edin.png"
         },
         "de_golden": {
+            "display_name": "Golden",
             "hash": "68ded7a3-17811",
             "origin": "https://developer.valvesoftware.com/w/images/4/4e/Map_icon_de_golden.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_golden.png"
         },
         "de_grail": {
+            "display_name": "Grail",
             "hash": "681ce204-13504",
             "origin": "https://developer.valvesoftware.com/w/images/f/f0/Map_icon_de_grail.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_grail.png"
         },
         "de_inferno": {
+            "display_name": "Inferno",
             "hash": "64f18c72-38761",
             "origin": "https://developer.valvesoftware.com/w/images/b/be/De_inferno.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_inferno.png"
         },
         "de_jura": {
+            "display_name": "Jura",
             "hash": "681ce210-126de",
             "origin": "https://developer.valvesoftware.com/w/images/0/00/Map_icon_de_jura.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_jura.png"
         },
         "de_lake": {
+            "display_name": "Lake",
             "hash": "624c60c2-828e",
             "origin": "https://developer.valvesoftware.com/w/images/b/b6/De_lake.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_lake.png"
         },
         "de_memento": {
+            "display_name": "Memento",
             "hash": "667bc0b6-13a3d",
             "origin": "https://developer.valvesoftware.com/w/images/1/11/De_memento.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_memento.png"
         },
         "de_mills": {
+            "display_name": "Mills",
             "hash": "667bc0c2-1218b",
             "origin": "https://developer.valvesoftware.com/w/images/6/60/De_mills.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_mills.png"
         },
         "de_mirage": {
+            "display_name": "Mirage",
             "hash": "624c60d5-11798",
             "origin": "https://developer.valvesoftware.com/w/images/6/68/De_mirage.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_mirage.png"
         },
         "de_nuke": {
+            "display_name": "Nuke",
             "hash": "624c60ec-1bf76",
             "origin": "https://developer.valvesoftware.com/w/images/5/57/De_nuke.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_nuke.png"
         },
         "de_overpass": {
+            "display_name": "Overpass",
             "hash": "64f18c91-5b822",
             "origin": "https://developer.valvesoftware.com/w/images/d/dc/De_overpass.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_overpass.png"
         },
         "de_palacio": {
+            "display_name": "Palacio",
             "hash": "68ded7ae-17df8",
             "origin": "https://developer.valvesoftware.com/w/images/3/30/Map_icon_de_palacio.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_palacio.png"
         },
         "de_palais": {
+            "display_name": "Palais",
             "hash": "673583d3-25def",
             "origin": "https://developer.valvesoftware.com/w/images/0/01/Map_icon_de_palais.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_palais.png"
         },
         "de_rooftop": {
+            "display_name": "Rooftop",
             "hash": "68ded7ba-1948a",
             "origin": "https://developer.valvesoftware.com/w/images/9/91/Map_icon_de_rooftop.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_rooftop.png"
@@ -172,26 +204,31 @@
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_sugarcane.png"
         },
         "de_thera": {
+            "display_name": "Thera",
             "hash": "667bc0ca-129fa",
             "origin": "https://developer.valvesoftware.com/w/images/a/ae/De_thera.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_thera.png"
         },
         "de_train": {
+            "display_name": "Train",
             "hash": "67357359-48868",
             "origin": "https://developer.valvesoftware.com/w/images/0/0b/Map_icon_de_train.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_train.png"
         },
         "de_transit": {
+            "display_name": "Transit",
             "hash": "68ded7c2-17cab",
             "origin": "https://developer.valvesoftware.com/w/images/a/ab/Map_icon_de_transit.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_transit.png"
         },
         "de_vertigo": {
+            "display_name": "Vertigo",
             "hash": "621cbbd3-2d9f9",
             "origin": "https://developer.valvesoftware.com/w/images/d/d5/De_vertigo.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_vertigo.png"
         },
         "de_whistle": {
+            "display_name": "Whistle",
             "hash": "673583e5-25397",
             "origin": "https://developer.valvesoftware.com/w/images/5/52/Map_icon_de_whistle.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_whistle.png"

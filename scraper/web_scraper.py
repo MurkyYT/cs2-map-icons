@@ -1,4 +1,4 @@
-import requests, sys, time, hashlib
+import requests, sys, time, hashlib, re
 from playwright.sync_api import sync_playwright
 from loguru import logger
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -64,6 +64,21 @@ def download_image(url, filename, existing_hash, session):
             logger.warning(f"Failed: {filename}: {e}")
         return False, None, filename
 
+def extract_display_name(html_chunk):
+    """Extract the display name from HTML chunk after the image tag."""
+    try:
+        match = re.search(r'</td>\s*<td>([^<]+)\s*</td>\s*<td>([^<\s]+)', html_chunk)
+        if match:
+            display_name = match.group(1).strip()
+            technical_name = match.group(2).strip()
+
+            if is_official(technical_name):
+                return display_name
+    except Exception as e:
+        logger.debug(f"Could not extract display name: {e}")
+    
+    return None
+
 def load_map_icons():
     try:
         with sync_playwright() as p:
@@ -128,10 +143,13 @@ def load_map_icons():
                 if is_official(map_name):
                     if not is_new and map_name in map_icons:
                         continue
+                    
+                    display_name = extract_display_name(splt[i])
 
                     final_link = f"https://developer.valvesoftware.com/w/images/{image_info[0]}/{image_info[1]}/{image_info[2]}"
                     map_icons[map_name] = final_link
-                    logger.debug(f"Found: {map_name}")
+                    if map_name not in map_names: map_names[map_name] = display_name
+                    logger.debug(f"Found: {map_name} - {display_name}")
 
             except Exception:
                 continue

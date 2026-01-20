@@ -8,6 +8,7 @@ print_lock = Lock()
 data_lock = Lock()
 
 map_icons = {}
+map_names = {}
 
 repo = os.getenv("GITHUB_REPOSITORY", "MurkyYT/cs2-map-icons")
 default_branch = os.getenv("DEFAULT_BRANCH", "main")

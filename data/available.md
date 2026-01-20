@@ -1,41 +1,41 @@
-| map_name | hash | origin | path |
-|----------|------|--------|------|
-| ar_baggage | 65c31794-1fc93 | https://developer.valvesoftware.com/w/images/c/c4/Ar_baggage.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_baggage.png |
-| ar_pool_day | 667bc099-12e3a | https://developer.valvesoftware.com/w/images/2/2a/Ar_pool_day.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_pool_day.png |
-| ar_shoots | 65c317b8-52367 | https://developer.valvesoftware.com/w/images/5/5d/Ar_shoots.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_shoots.png |
-| ar_shoots_night | 689efd20-4c87d | https://developer.valvesoftware.com/w/images/6/6d/Map_icon_ar_shoots_night.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_shoots_night.png |
-| cs_agency | 681ce1de-1312c | https://developer.valvesoftware.com/w/images/f/fb/Map_icon_cs_agency.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_agency.png |
-| cs_icon | 65a0f113-326 | https://developer.valvesoftware.com/w/images/8/8f/Cs_icon.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_icon.png |
-| cs_italy | 64f18c4d-449de | https://developer.valvesoftware.com/w/images/5/5d/Cs_italy.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_italy.png |
-| cs_office | 624c5fc0-c4dd | https://developer.valvesoftware.com/w/images/9/96/Cs_office.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_office.png |
-| de_ancient | 621cb32a-20e7b | https://developer.valvesoftware.com/w/images/9/94/De_ancient.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_ancient.png |
-| de_ancient_night | 689efd28-6d99a | https://developer.valvesoftware.com/w/images/9/93/Map_icon_de_ancient_night.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_ancient_night.png |
-| de_anubis | 63789765-bccb | https://developer.valvesoftware.com/w/images/5/54/De_anubis.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_anubis.png |
-| de_assembly | 667bc0a5-19fa9 | https://developer.valvesoftware.com/w/images/6/68/De_assembly.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_assembly.png |
-| de_basalt | 6735622e-242cc | https://developer.valvesoftware.com/w/images/f/f2/Map_icon_de_basalt.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_basalt.png |
-| de_brewery | 681ce1f5-1368a | https://developer.valvesoftware.com/w/images/9/93/Map_icon_de_brewery.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_brewery.png |
-| de_canals | 621cb342-24c01 | https://developer.valvesoftware.com/w/images/7/7d/De_canals.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_canals.png |
-| de_cbble | 624c602a-1590e | https://developer.valvesoftware.com/w/images/f/f7/De_cbble.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_cbble.png |
-| de_dogtown | 681ce1fd-12b06 | https://developer.valvesoftware.com/w/images/f/f7/Map_icon_de_dogtown.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dogtown.png |
-| de_dust | 624c604e-1e94f | https://developer.valvesoftware.com/w/images/2/29/De_dust.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dust.png |
-| de_dust2 | 624c605d-2bc17 | https://developer.valvesoftware.com/w/images/f/f4/De_dust2.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dust2.png |
-| de_edin | 67358320-2635a | https://developer.valvesoftware.com/w/images/3/35/Map_icon_de_edin.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_edin.png |
-| de_golden | 68ded7a3-17811 | https://developer.valvesoftware.com/w/images/4/4e/Map_icon_de_golden.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_golden.png |
-| de_grail | 681ce204-13504 | https://developer.valvesoftware.com/w/images/f/f0/Map_icon_de_grail.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_grail.png |
-| de_inferno | 64f18c72-38761 | https://developer.valvesoftware.com/w/images/b/be/De_inferno.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_inferno.png |
-| de_jura | 681ce210-126de | https://developer.valvesoftware.com/w/images/0/00/Map_icon_de_jura.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_jura.png |
-| de_lake | 624c60c2-828e | https://developer.valvesoftware.com/w/images/b/b6/De_lake.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_lake.png |
-| de_memento | 667bc0b6-13a3d | https://developer.valvesoftware.com/w/images/1/11/De_memento.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_memento.png |
-| de_mills | 667bc0c2-1218b | https://developer.valvesoftware.com/w/images/6/60/De_mills.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_mills.png |
-| de_mirage | 624c60d5-11798 | https://developer.valvesoftware.com/w/images/6/68/De_mirage.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_mirage.png |
-| de_nuke | 624c60ec-1bf76 | https://developer.valvesoftware.com/w/images/5/57/De_nuke.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_nuke.png |
-| de_overpass | 64f18c91-5b822 | https://developer.valvesoftware.com/w/images/d/dc/De_overpass.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_overpass.png |
-| de_palacio | 68ded7ae-17df8 | https://developer.valvesoftware.com/w/images/3/30/Map_icon_de_palacio.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_palacio.png |
-| de_palais | 673583d3-25def | https://developer.valvesoftware.com/w/images/0/01/Map_icon_de_palais.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_palais.png |
-| de_rooftop | 68ded7ba-1948a | https://developer.valvesoftware.com/w/images/9/91/Map_icon_de_rooftop.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_rooftop.png |
-| de_sugarcane | 621cb3b7-11147 | https://developer.valvesoftware.com/w/images/9/95/De_sugarcane.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_sugarcane.png |
-| de_thera | 667bc0ca-129fa | https://developer.valvesoftware.com/w/images/a/ae/De_thera.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_thera.png |
-| de_train | 67357359-48868 | https://developer.valvesoftware.com/w/images/0/0b/Map_icon_de_train.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_train.png |
-| de_transit | 68ded7c2-17cab | https://developer.valvesoftware.com/w/images/a/ab/Map_icon_de_transit.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_transit.png |
-| de_vertigo | 621cbbd3-2d9f9 | https://developer.valvesoftware.com/w/images/d/d5/De_vertigo.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_vertigo.png |
-| de_whistle | 673583e5-25397 | https://developer.valvesoftware.com/w/images/5/52/Map_icon_de_whistle.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_whistle.png |
+| map_name | display_name | hash | origin | path |
+|----------|--------------|------|--------|------|
+| ar_baggage | Baggage | 65c31794-1fc93 | https://developer.valvesoftware.com/w/images/c/c4/Ar_baggage.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_baggage.png |
+| ar_pool_day | Pool Day | 667bc099-12e3a | https://developer.valvesoftware.com/w/images/2/2a/Ar_pool_day.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_pool_day.png |
+| ar_shoots | Shoots | 65c317b8-52367 | https://developer.valvesoftware.com/w/images/5/5d/Ar_shoots.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_shoots.png |
+| ar_shoots_night | Shoots (Night) | 689efd20-4c87d | https://developer.valvesoftware.com/w/images/6/6d/Map_icon_ar_shoots_night.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_shoots_night.png |
+| cs_agency | Agency | 681ce1de-1312c | https://developer.valvesoftware.com/w/images/f/fb/Map_icon_cs_agency.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_agency.png |
+| cs_icon | - | 65a0f113-326 | https://developer.valvesoftware.com/w/images/8/8f/Cs_icon.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_icon.png |
+| cs_italy | Italy | 64f18c4d-449de | https://developer.valvesoftware.com/w/images/5/5d/Cs_italy.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_italy.png |
+| cs_office | Office | 624c5fc0-c4dd | https://developer.valvesoftware.com/w/images/9/96/Cs_office.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_office.png |
+| de_ancient | Ancient | 621cb32a-20e7b | https://developer.valvesoftware.com/w/images/9/94/De_ancient.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_ancient.png |
+| de_ancient_night | Ancient (Night) | 689efd28-6d99a | https://developer.valvesoftware.com/w/images/9/93/Map_icon_de_ancient_night.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_ancient_night.png |
+| de_anubis | Anubis | 63789765-bccb | https://developer.valvesoftware.com/w/images/5/54/De_anubis.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_anubis.png |
+| de_assembly | Assembly | 667bc0a5-19fa9 | https://developer.valvesoftware.com/w/images/6/68/De_assembly.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_assembly.png |
+| de_basalt | Basalt | 6735622e-242cc | https://developer.valvesoftware.com/w/images/f/f2/Map_icon_de_basalt.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_basalt.png |
+| de_brewery | Brewery | 681ce1f5-1368a | https://developer.valvesoftware.com/w/images/9/93/Map_icon_de_brewery.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_brewery.png |
+| de_canals | Canals | 621cb342-24c01 | https://developer.valvesoftware.com/w/images/7/7d/De_canals.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_canals.png |
+| de_cbble | Cobblestone | 624c602a-1590e | https://developer.valvesoftware.com/w/images/f/f7/De_cbble.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_cbble.png |
+| de_dogtown | Dogtown | 681ce1fd-12b06 | https://developer.valvesoftware.com/w/images/f/f7/Map_icon_de_dogtown.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dogtown.png |
+| de_dust | Shortdust | 624c604e-1e94f | https://developer.valvesoftware.com/w/images/2/29/De_dust.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dust.png |
+| de_dust2 | Dust II | 624c605d-2bc17 | https://developer.valvesoftware.com/w/images/f/f4/De_dust2.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dust2.png |
+| de_edin | Edin | 67358320-2635a | https://developer.valvesoftware.com/w/images/3/35/Map_icon_de_edin.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_edin.png |
+| de_golden | Golden | 68ded7a3-17811 | https://developer.valvesoftware.com/w/images/4/4e/Map_icon_de_golden.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_golden.png |
+| de_grail | Grail | 681ce204-13504 | https://developer.valvesoftware.com/w/images/f/f0/Map_icon_de_grail.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_grail.png |
+| de_inferno | Inferno | 64f18c72-38761 | https://developer.valvesoftware.com/w/images/b/be/De_inferno.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_inferno.png |
+| de_jura | Jura | 681ce210-126de | https://developer.valvesoftware.com/w/images/0/00/Map_icon_de_jura.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_jura.png |
+| de_lake | Lake | 624c60c2-828e | https://developer.valvesoftware.com/w/images/b/b6/De_lake.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_lake.png |
+| de_memento | Memento | 667bc0b6-13a3d | https://developer.valvesoftware.com/w/images/1/11/De_memento.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_memento.png |
+| de_mills | Mills | 667bc0c2-1218b | https://developer.valvesoftware.com/w/images/6/60/De_mills.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_mills.png |
+| de_mirage | Mirage | 624c60d5-11798 | https://developer.valvesoftware.com/w/images/6/68/De_mirage.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_mirage.png |
+| de_nuke | Nuke | 624c60ec-1bf76 | https://developer.valvesoftware.com/w/images/5/57/De_nuke.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_nuke.png |
+| de_overpass | Overpass | 64f18c91-5b822 | https://developer.valvesoftware.com/w/images/d/dc/De_overpass.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_overpass.png |
+| de_palacio | Palacio | 68ded7ae-17df8 | https://developer.valvesoftware.com/w/images/3/30/Map_icon_de_palacio.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_palacio.png |
+| de_palais | Palais | 673583d3-25def | https://developer.valvesoftware.com/w/images/0/01/Map_icon_de_palais.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_palais.png |
+| de_rooftop | Rooftop | 68ded7ba-1948a | https://developer.valvesoftware.com/w/images/9/91/Map_icon_de_rooftop.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_rooftop.png |
+| de_sugarcane | - | 621cb3b7-11147 | https://developer.valvesoftware.com/w/images/9/95/De_sugarcane.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_sugarcane.png |
+| de_thera | Thera | 667bc0ca-129fa | https://developer.valvesoftware.com/w/images/a/ae/De_thera.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_thera.png |
+| de_train | Train | 67357359-48868 | https://developer.valvesoftware.com/w/images/0/0b/Map_icon_de_train.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_train.png |
+| de_transit | Transit | 68ded7c2-17cab | https://developer.valvesoftware.com/w/images/a/ab/Map_icon_de_transit.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_transit.png |
+| de_vertigo | Vertigo | 621cbbd3-2d9f9 | https://developer.valvesoftware.com/w/images/d/d5/De_vertigo.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_vertigo.png |
+| de_whistle | Whistle | 673583e5-25397 | https://developer.valvesoftware.com/w/images/5/52/Map_icon_de_whistle.png | https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_whistle.png |

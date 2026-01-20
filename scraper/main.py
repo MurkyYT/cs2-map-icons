@@ -24,7 +24,7 @@ def main():
     downloaded_data = download_all_icons(existing_data)
     logger.info(f"Complete")
 
-    dump_available_maps(downloaded_data, existing_data)
+    dump_available_maps(downloaded_data, existing_data, map_names)
 
 if __name__ == "__main__":
     main()

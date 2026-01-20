@@ -4,7 +4,7 @@ from shared import *
 
 data_dir = os.path.join(repo_root , "data")
 
-def dump_available_maps(downloaded_data: dict, existing_data: dict):
+def dump_available_maps(downloaded_data: dict, existing_data: dict, map_names: dict):
     os.makedirs(data_dir, exist_ok=True)
 
     merged_maps: dict = existing_data.get("maps", {}).copy()
@@ -14,6 +14,10 @@ def dump_available_maps(downloaded_data: dict, existing_data: dict):
             merged_maps[map_name]["origin"] = ""
     
     merged_maps.update(downloaded_data)
+
+    for map_name in merged_maps:
+        if map_name in map_names and map_names[map_name]:
+            merged_maps[map_name]["display_name"] = map_names[map_name]
 
     available_maps = {
         "count": len(merged_maps),
@@ -28,7 +32,7 @@ def dump_available_maps(downloaded_data: dict, existing_data: dict):
         json.dump(available_maps, f, indent=4, sort_keys=True)
     logger.info("Dumped all data to available.json")
 
-    fieldnames = ["map_name", "hash", "origin", "path"]
+    fieldnames = ["map_name", "display_name", "hash", "origin", "path"]
     with open(csv_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
@@ -36,6 +40,7 @@ def dump_available_maps(downloaded_data: dict, existing_data: dict):
         for map_name, map_data in sorted(merged_maps.items()):
             writer.writerow({
                 "map_name": map_name,
+                "display_name": map_data.get("display_name", ""),
                 "hash": map_data.get("hash"),
                 "origin": map_data.get("origin"),
                 "path": map_data.get("path"),
@@ -43,10 +48,11 @@ def dump_available_maps(downloaded_data: dict, existing_data: dict):
     logger.info("Dumped all data to available.csv")
 
     with open(md_path, "w", encoding="utf-8") as f:
-        f.write("| map_name | hash | origin | path |\n")
-        f.write("|----------|------|--------|------|\n")
+        f.write("| map_name | display_name | hash | origin | path |\n")
+        f.write("|----------|--------------|------|--------|------|\n")
         for name, d in sorted(merged_maps.items()):
-            f.write(f"| {name} | {d['hash']} | {d['origin']} | {d['path']} |\n")
+            display_name = d.get('display_name', '')
+            f.write(f"| {name} | {display_name if display_name else "-"} | {d['hash']} | {d['origin']} | {d['path']} |\n")
     logger.info("Dumped all data to available.md")
 
 def load_existing_data():
