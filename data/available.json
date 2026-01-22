@@ -1,5 +1,5 @@
 {
-    "count": 39,
+    "count": 40,
     "maps": {
         "ar_baggage": {
             "display_name": "Baggage",
@@ -232,6 +232,12 @@
             "hash": "673583e5-25397",
             "origin": "https://developer.valvesoftware.com/w/images/5/52/Map_icon_de_whistle.png",
             "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_whistle.png"
+        },
+        "lobby_mapveto": {
+            "display_name": "Pick/Ban",
+            "hash": "621cb413-f920",
+            "origin": "https://developer.valvesoftware.com/w/images/c/c5/Lobby_mapveto.png",
+            "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/lobby_mapveto.png"
         }
     }
 }
