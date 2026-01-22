@@ -6,7 +6,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from shared import *
 
 def is_official(map_name):
-    return map_name.lower()[0:3] in ["de_", "dz_", "gd_", "cs_", "ar_"]
+    known_maps = ["lobby_mapveto"]
+    return map_name.lower()[0:3] in ["de_", "dz_", "gd_", "cs_", "ar_"] or map_name.lower() in known_maps
 
 def get_remote_file_hash(url, session):
     try:
