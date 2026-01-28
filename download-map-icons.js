@@ -62,14 +62,21 @@ async function downloadVPKDir(user, manifest) {
 }
 
 function getFiles(vpkDir) {
-    return Object.keys(vpkDir.tree).filter(fileName => mapIconRegex.test(fileName));
+    const mapIconFiles = Object.keys(vpkDir.tree).filter(fileName => mapIconRegex.test(fileName));
+    const csgoEnglishFile = "resource/csgo_english.txt";
+    if (vpkDir.tree[csgoEnglishFile]) {
+        mapIconFiles.push(csgoEnglishFile);
+    }
+    return mapIconFiles;
 }
 
 function getRequiredVPKArchives(vpkDir, files) {
     const requiredIndices = new Set();
     for (const fileName of files) {
         const fileInfo = vpkDir.tree[fileName];
-        if (fileInfo && fileInfo.archiveIndex !== undefined) requiredIndices.add(fileInfo.archiveIndex);
+        if (fileInfo && fileInfo.archiveIndex !== undefined && fileInfo.archiveIndex !== 0x7fff) {
+            requiredIndices.add(fileInfo.archiveIndex);
+        }
     }
     return Array.from(requiredIndices).sort((a, b) => a - b);
 }
