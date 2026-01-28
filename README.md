@@ -2,7 +2,7 @@
 
 ![Update Status](https://github.com/MurkyYT/cs2-map-icons/actions/workflows/update-icons.yml/badge.svg)
 
-Automatically updated Counter-Strike 2 map icons, scraped daily from the [Valve Developer Wiki](https://developer.valvesoftware.com/wiki/Counter-Strike_2/Maps).
+Automatically updated Counter-Strike 2 map icons, scraped daily from the official game depot.
 
 ## Usage
 
@@ -27,12 +27,6 @@ Auto updated list of all maps scraped ever:
 - [CSV](data/available.csv)
 - [JSON](data/available.json)
 - [MD](data/available.md)
-
-## Updates
-
-Icons are automatically scraped and updated daily at **00:00 UTC** via GitHub Actions.
-
-Last checked: [here](last-check.txt)
 
 ## License
 
