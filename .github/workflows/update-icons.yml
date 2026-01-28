@@ -28,26 +28,24 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('scraper/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm ci
-        working-directory: ./scraper
 
       - name: Set DEFAULT_BRANCH env variable
         run: echo "DEFAULT_BRANCH=${{ github.event.repository.default_branch }}" >> $GITHUB_ENV
 
       - name: Run scraper script
         run: node download-map-icons.js
-        working-directory: ./scraper
 
       - name: Read manifestId.txt
         id: manifestId
         uses: juliangruber/read-file-action@v1
         with:
-          path: ./scraper/static/manifest.txt
+          path: ./static/manifest.txt
 
       - name: Configure Git
         run: |
