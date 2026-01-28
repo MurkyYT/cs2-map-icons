@@ -1,9 +1,10 @@
 const SteamUser = require('steam-user');
 const fs = require('fs');
-const vpk = require('vpk');
+const vpk = require('./vpk-no-request');
 const path = require('path');
 const crypto = require('crypto');
 const VsvgConverter = require('./vsvg-converter');
+const console = require('console');
 
 const appId = 730;
 const depotId = 2347770;
@@ -106,6 +107,7 @@ async function extractAndConvertMapIcons(vpkDir, files, options = {}) {
         if (!m) continue;
         const mapName = m[1];
         const mapData = { origin: vpkPath, hash: hashBuffer(buffer) };
+        console.log(`Extracted ${mapName}`)
         if (mapNames[mapName]) mapData.display_name = mapNames[mapName];
         try {
             const pngBuffer = await converter.convertToPng(buffer, {

@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Download and convert CS:GO/CS2 map icons from Steam (vsvg_c to PNG)",
   "main": "download-map-icons.js",
-  "type": "module",
   "scripts": {
     "start": "node download-map-icons.js",
     "test": "node test-converter.js",
@@ -11,14 +10,13 @@
   },
   "dependencies": {
     "steam-user": "^5.0.0",
-    "vpk": "^0.2.0",
-    "canvas": "^2.11.2"
+    "canvas": "^2.11.2",
+    "crc": "^4.1.0"
   },
   "optionalDependencies": {
     "sharp": "^0.33.0"
   },
   "overrides": {
-    "request": "2.88.2",
     "qs": "6.14.1",
     "form-data": "2.5.5",
     "tough-cookie": "4.1.3",
