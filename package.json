@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "steam-user": "^5.0.0",
-    "canvas": "^2.11.2",
+    "canvas": "^3.2.1",
     "crc": "^4.1.0"
   },
   "optionalDependencies": {
