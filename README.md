@@ -1,6 +1,7 @@
 # CS2 Map Icons
 
 ![Update Status](https://github.com/MurkyYT/cs2-map-icons/actions/workflows/update-icons.yml/badge.svg)
+![Last Update](https://img.shields.io/github/last-commit/MurkyYT/cs2-map-icons/main?path=static/manifest.txt&label=Last%20Update&color=brightgreen)
 
 Automatically updated Counter-Strike 2 map icons, scraped daily from the official game depot.
 
