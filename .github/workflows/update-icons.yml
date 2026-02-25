@@ -55,4 +55,4 @@ jobs:
       - name: Commit and push if changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "chore: update CS2 map icons - manifest ${{ steps.manifestId.outputs.content }}"
+          commit_message: "chore: manifest ${{ steps.manifestId.outputs.content }}"
