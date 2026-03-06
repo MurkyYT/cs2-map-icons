@@ -41,6 +41,12 @@ jobs:
       - name: Run scraper script
         run: node download-map-icons.js
 
+      - name: Cache temp VPK files
+        uses: actions/cache@v4
+        with:
+          path: ./temp
+          key: ${{ runner.os }}-vpk
+
       - name: Read manifestId.txt
         id: manifestId
         uses: juliangruber/read-file-action@v1

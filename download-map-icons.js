@@ -89,6 +89,19 @@ async function downloadVPKArchives(user, manifest, vpkDir, files) {
         const file = manifest.manifest.files.find(f => f.filename.endsWith(fileName));
         if (!file) continue;
         const filePath = path.join(temp, fileName);
+        
+        if (fs.existsSync(filePath)) {
+            const localHash = crypto.createHash('sha1')
+                .update(fs.readFileSync(filePath))
+                .digest('hex');
+            const manifestHash = file.sha_content?.toString('hex') ?? file.sha?.toString('hex');
+
+            if (manifestHash && localHash === manifestHash) {
+                console.log(`Skipping ${fileName} (hash matches)`);
+                continue;
+            }
+        }
+
         console.log(`Downloading ${fileName}`);
         await user.downloadFile(appId, depotId, file, filePath);
     }
