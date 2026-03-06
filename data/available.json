@@ -22,7 +22,10 @@
       "origin": "panorama/images/map_icons/map_icon_ar_pool_day.vsvg_c",
       "hash": "0b12ce72",
       "display_name": "Pool Day",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_pool_day.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_pool_day.png",
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_pool_day_png.png"
+      ]
     },
     "ar_shoots": {
       "origin": "panorama/images/map_icons/map_icon_ar_shoots.vsvg_c",
@@ -393,7 +396,10 @@
       "origin": "panorama/images/map_icons/map_icon_cs_alpine.vsvg_c",
       "hash": "38518c27",
       "display_name": "Alpine",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_alpine.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_alpine.png",
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_alpine_png.png"
+      ]
     },
     "de_poseidon": {
       "origin": "panorama/images/map_icons/map_icon_de_poseidon.vsvg_c",

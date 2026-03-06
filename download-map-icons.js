@@ -252,7 +252,11 @@ async function downloadVPKArchives(user, manifest, vpkDir, files) {
     const toDownload = (await Promise.all(requiredIndices.map(async (archiveIndex) => {
         const paddedIndex = archiveIndex.toString().padStart(3, '0');
         const fileName = `pak01_${paddedIndex}.vpk`;
-        const file = manifest.manifest.files.find(f => f.filename.endsWith(fileName));
+        const file = manifest.manifest.files.find(f => 
+            f.filename.endsWith(`csgo\\${fileName}`) || f.filename.endsWith(`csgo/${fileName}`)
+        ) || manifest.manifest.files.find(f =>
+            f.filename.endsWith(fileName)
+        );
         if (!file) return null;
         const filePath = path.join(temp, fileName);
 
