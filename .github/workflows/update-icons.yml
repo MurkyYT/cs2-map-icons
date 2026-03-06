@@ -44,6 +44,18 @@ jobs:
           path: ./temp
           key: ${{ runner.os }}-vpk
 
+      - name: Get latest Source2Viewer-CLI version
+        id: s2v_version
+        run: |
+          VERSION=$(curl -s https://api.github.com/repos/ValveResourceFormat/ValveResourceFormat/releases/latest | jq -r '.tag_name')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Cache Source2Viewer-CLI
+        uses: actions/cache@v4
+        with:
+          path: ./s2v
+          key: ${{ runner.os }}-s2v-${{ steps.s2v_version.outputs.version }}
+
       - name: Run scraper script
         run: node download-map-icons.js
 
