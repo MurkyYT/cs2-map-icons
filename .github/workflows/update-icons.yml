@@ -38,11 +38,28 @@ jobs:
       - name: Set DEFAULT_BRANCH env variable
         run: echo "DEFAULT_BRANCH=${{ github.event.repository.default_branch }}" >> $GITHUB_ENV
 
+      - name: Get latest CS2 manifest ID
+        id: cs2_manifest
+        run: |
+          node -e "
+          const SteamUser = require('steam-user');
+          const user = new SteamUser();
+          user.logOn({ anonymous: true });
+          user.once('loggedOn', async () => {
+            const info = await user.getProductInfo([730], [], true);
+            const gid = info.apps[730].appinfo.depots[2347770].manifests.public.gid;
+            console.log('manifest=' + gid);
+            process.exit(0);
+          });
+          " >> $GITHUB_OUTPUT
+
       - name: Cache temp VPK files
         uses: actions/cache@v4
         with:
           path: ./temp
-          key: ${{ runner.os }}-vpk
+          key: ${{ runner.os }}-vpk-${{ steps.cs2_manifest.outputs.manifest }}
+          restore-keys: |
+            ${{ runner.os }}-vpk-
 
       - name: Get latest Source2Viewer-CLI version
         id: s2v_version
