@@ -303,6 +303,22 @@ async function downloadVPKArchives(user, manifest, vpkDir, files) {
     console.log(`Downloaded ${completed} VPK archive(s).`);
 }
 
+function cleanupVPKArchives(vpkDir, files) {
+    const requiredIndices = new Set(
+        getRequiredVPKArchives(vpkDir, files).map(i => i.toString().padStart(3, '0'))
+    );
+    let removed = 0;
+    for (const entry of fs.readdirSync(temp)) {
+        const m = entry.match(/^pak01_(\d{3})\.vpk$/);
+        if (!m) continue;
+        if (requiredIndices.has(m[1])) continue;
+        fs.unlinkSync(path.join(temp, entry));
+        console.log(`Removed unused temp file: ${entry}`);
+        removed++;
+    }
+    if (removed > 0) console.log(`Cleaned up ${removed} unused VPK archive(s) from temp.`);
+}
+
 async function extractAndConvertMapIcons(vpkDir, files, radarMap, thumbMap, options = {}) {
     let useSharp = false;
     try { require('sharp'); useSharp = true; } catch { }
@@ -412,6 +428,7 @@ user.once('loggedOn', async () => {
         const vpkDirPath = path.join(temp, 'pak01_dir.vpk');
         const { radarMap, thumbMap } = await extractRadarsAndThumbs(vpkDirPath, radarFiles, thumbFiles, mapIconFiles);
         const downloadedData = await extractAndConvertMapIcons(vpkDir, mapIconFiles, radarMap, thumbMap, options);
+        cleanupVPKArchives(vpkDir, all);
         generateDataFiles(downloadedData);
         writeManifestId(latestManifestId);
         process.exit(0);
