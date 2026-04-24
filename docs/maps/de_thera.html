@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #0d0e10;
+      --bg2:     #13151a;
+      --bg3:     #1c1f28;
+      --surface: #1e2130;
+      --border:  #2a2d3a;
+      --accent:  #f0b84b;
+      --accent2: #e05252;
+      --text:    #dde2ee;
+      --muted:   #6b7080;
+      --radius:  6px;
+      --card-w:  280px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      background-image:
+        repeating-linear-gradient(0deg,   transparent, transparent 39px, #ffffff04 39px, #ffffff04 40px),
+        repeating-linear-gradient(90deg,  transparent, transparent 39px, #ffffff04 39px, #ffffff04 40px);
+    }
+    a { color: inherit; text-decoration: none; }
+  </style>
+  <title>Thera - CS2 Map Icons</title>
+  <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_thera.png">
+  <meta name="description" content="Thera (de_thera) - icons, radar and screenshots from Counter-Strike 2.">
+  <style>
+    /* NAV BAR */
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(13,14,16,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0 2rem; height: 48px;
+      font-size: .7rem; letter-spacing: .08em;
+    }
+    .topbar-home {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+      color: var(--accent); font-size: .95rem;
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+    .topbar-home:hover { text-decoration: underline; }
+    .topbar-sep { color: var(--muted); }
+    .topbar-title { color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: .72rem; }
+    .topbar-mode {
+      margin-left: auto;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 100px;
+      border: 1px solid var(--mode-c, var(--border));
+      color: var(--mode-c, var(--muted));
+    }
+
+    /* HERO */
+    .page-hero {
+      display: grid; grid-template-columns: 1fr 340px;
+      gap: 0; border-bottom: 1px solid var(--border); min-height: 360px;
+    }
+    @media (max-width: 820px) { .page-hero { grid-template-columns: 1fr; } }
+
+    /* SLIDESHOW */
+    .slideshow { position: relative; background: #000; overflow: hidden; }
+    .slide {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      opacity: 0; transition: opacity .8s ease;
+    }
+    .slide.active { opacity: 1; }
+    .slide-count {
+      position: absolute; bottom: 10px; right: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem; letter-spacing: .12em;
+      color: rgba(255,255,255,.5); z-index: 2;
+    }
+    .slide-progress {
+      position: absolute; bottom: 0; left: 0;
+      height: 2px; background: var(--accent);
+      transition: width linear; z-index: 3;
+    }
+    .slide-empty {
+      width: 100%; height: 100%; min-height: 300px;
+      background: repeating-linear-gradient(
+        -45deg, var(--bg3) 0, var(--bg3) 6px, var(--bg2) 6px, var(--bg2) 12px
+      );
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem; color: var(--muted); letter-spacing: .1em;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      border-left: 1px solid var(--border); padding: 2rem;
+      display: flex; flex-direction: column; gap: 1.5rem;
+      background: var(--surface);
+    }
+    @media (max-width: 820px) { .sidebar { border-left: none; border-top: 1px solid var(--border); } }
+    .map-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; font-size: 2.2rem; line-height: 1; letter-spacing: -.01em;
+    }
+    .map-key-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem; letter-spacing: .1em;
+      padding: 3px 8px; background: var(--bg3);
+      border: 1px solid var(--border); color: var(--muted); margin-top: .4rem;
+      border-radius: 3px;
+    }
+    .map-icon-wrap { display: flex; align-items: center; gap: 1rem; }
+    .map-icon-wrap img {
+      width: 72px; height: 72px; object-fit: contain;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,.7));
+    }
+    .meta-table { width: 100%; border-collapse: collapse; }
+    .meta-table tr { border-bottom: 1px solid var(--border); }
+    .meta-table tr:last-child { border-bottom: none; }
+    .meta-table td { padding: .4rem 0; font-size: .7rem; letter-spacing: .04em; vertical-align: top; }
+    .meta-table td:first-child {
+      color: var(--muted); width: 100px;
+      text-transform: uppercase; letter-spacing: .1em; font-size: .62rem; padding-right: 1rem;
+    }
+    .meta-table a { color: var(--accent); }
+    .meta-table a:hover { text-decoration: underline; }
+    .hash-val { font-family: 'JetBrains Mono', monospace; font-size: .6rem; word-break: break-all; color: var(--muted); }
+
+    /* DOWNLOADS */
+    .dl-section { border-top: 1px solid var(--border); padding: 2rem; }
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 1rem; font-weight: 700;
+    }
+    .dl-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px;
+    }
+    .dl-card {
+      border: 1px solid var(--border); background: var(--surface);
+      display: flex; flex-direction: column; border-radius: var(--radius);
+      overflow: hidden; transition: border-color .15s;
+    }
+    .dl-card:hover { border-color: var(--accent); }
+    .dl-card img {
+      width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;
+      border-bottom: 1px solid var(--border); filter: saturate(.7); transition: filter .2s;
+    }
+    .dl-card:hover img { filter: saturate(1); }
+    .dl-card-label {
+      padding: .4rem .6rem; font-size: .62rem; letter-spacing: .08em;
+      display: flex; justify-content: space-between; align-items: center; color: var(--muted);
+    }
+    .dl-card-label a { color: var(--accent); font-size: .6rem; }
+    .dl-card-label a:hover { text-decoration: underline; }
+    .dl-card-square img { aspect-ratio: 1/1; object-fit: contain; background: var(--bg3); padding: 8px; }
+
+    /* NAV PREV/NEXT */
+    .map-nav {
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2rem; font-size: .7rem; letter-spacing: .06em;
+    }
+    .nav-arrow { color: var(--accent); }
+    .nav-arrow:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border); padding: .8rem 2rem;
+      font-size: .62rem; color: var(--muted); letter-spacing: .06em;
+      display: flex; justify-content: space-between;
+    }
+    footer a { color: var(--accent); }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="topbar-home" href="../index.html">CS2</a>
+  <span class="topbar-sep">/</span>
+  <span class="topbar-title">de_thera</span>
+  <div class="topbar-mode" style="--mode-c:#e05252">Bomb Defuse</div>
+</div>
+
+<div class="page-hero">
+  <!-- SLIDESHOW -->
+  <div class="slideshow" id="ss">
+    <div class="slide-empty">no screenshots available</div>
+    
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div>
+      <h1 class="map-title">Thera</h1>
+      <div class="map-key-badge">de_thera</div>
+    </div>
+
+    
+    <div class="map-icon-wrap">
+      <img src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_thera.png" alt="Thera icon">
+      <span style="font-size:.68rem;color:var(--muted);letter-spacing:.06em;">map icon</span>
+    </div>
+
+    <table class="meta-table">
+      <tr><td>mode</td><td>Bomb Defuse</td></tr>
+      <tr><td>key</td><td>de_thera</td></tr>
+      <tr><td>screenshots</td><td>0</td></tr>
+      <tr><td>radars</td><td>0</td></tr>
+      <tr><td>vpk hash</td><td><span class="hash-val">667bc0ca-129fa</span></td></tr>
+      <tr><td>icon</td><td><a href="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_thera.png" target="_blank">icon.png ↗</a></td></tr>
+      
+    </table>
+  </aside>
+</div>
+
+
+<section class="dl-section">
+  <div class="section-label">Assets</div>
+  <div class="dl-grid">
+    
+    <div class="dl-card dl-card-square">
+      <img src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_thera.png" alt="Thera icon" loading="lazy">
+      <div class="dl-card-label"><span>Map Icon</span><a href="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_thera.png" target="_blank" rel="noopener">↗ png</a></div>
+    </div>
+    
+    
+  </div>
+</section>
+
+<nav class="map-nav">
+  <a class="nav-arrow nav-prev" href="de_stronghold.html">← Stronghold</a>
+  <a href="../index.html" style="color:var(--muted);font-size:.65rem;letter-spacing:.1em">ALL MAPS</a>
+  <a class="nav-arrow nav-next" href="de_train.html">Train →</a>
+</nav>
+
+<footer>
+  <span><a href="https://github.com/MurkyYT/cs2-map-icons">MurkyYT/cs2-map-icons</a> · not affiliated with valve</span>
+  <span>Fri, 24 Apr 2026 12:47:53 GMT</span>
+</footer>
+
+
+
+</body>
+</html>

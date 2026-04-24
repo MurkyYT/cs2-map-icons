@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #0d0e10;
+      --bg2:     #13151a;
+      --bg3:     #1c1f28;
+      --surface: #1e2130;
+      --border:  #2a2d3a;
+      --accent:  #f0b84b;
+      --accent2: #e05252;
+      --text:    #dde2ee;
+      --muted:   #6b7080;
+      --radius:  6px;
+      --card-w:  280px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      background-image:
+        repeating-linear-gradient(0deg,   transparent, transparent 39px, #ffffff04 39px, #ffffff04 40px),
+        repeating-linear-gradient(90deg,  transparent, transparent 39px, #ffffff04 39px, #ffffff04 40px);
+    }
+    a { color: inherit; text-decoration: none; }
+  </style>
+  <title>CS2 Map Icons</title>
+  <link rel="icon" type="image/x-icon" href="https://developer.valvesoftware.com/w/images/6/61/Csgo_icon_competitive.png">
+  <meta name="description" content="45 Counter-Strike 2 maps - icons, radars, screenshots.">
+  <style>
+    /* HEADER */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(13,14,16,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+    }
+    .header-inner {
+      max-width: 1600px; margin: 0 auto;
+      display: flex; align-items: center; gap: 1.5rem;
+      height: 58px;
+    }
+    .logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; font-size: 1.4rem;
+      letter-spacing: .04em; color: var(--accent);
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .logo span { color: var(--text); }
+    .header-count {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .85rem; color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 2px 8px; border-radius: 100px; white-space: nowrap;
+    }
+    .search-wrap { flex: 1; max-width: 400px; position: relative; }
+    .search-wrap svg {
+      position: absolute; left: 10px; top: 50%;
+      transform: translateY(-50%); opacity: .4; pointer-events: none;
+    }
+    #search {
+      width: 100%; padding: 7px 12px 7px 34px;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text);
+      font-family: inherit; font-size: .9rem; outline: none;
+      transition: border-color .2s;
+    }
+    #search:focus { border-color: var(--accent); }
+    #search::placeholder { color: var(--muted); }
+    .filter-pills { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .pill {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .8rem; font-weight: 600;
+      letter-spacing: .05em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 100px;
+      border: 1px solid var(--border); background: transparent;
+      color: var(--muted); cursor: pointer; transition: all .15s; white-space: nowrap;
+    }
+    .pill:hover    { border-color: var(--accent); color: var(--accent); }
+    .pill.active   { background: var(--accent); border-color: var(--accent); color: #000; }
+    .pill[data-mode="Bomb Defuse"].active { background: #e05252; border-color: #e05252; color: #fff; }
+    .pill[data-mode="Hostage"].active     { background: #3a9bd5; border-color: #3a9bd5; color: #fff; }
+    .pill[data-mode="Arms Race"].active   { background: #e8a020; border-color: #e8a020; color: #000; }
+    .pill[data-mode="Menu"].active        { background: #7a7a8c; border-color: #7a7a8c; color: #fff; }
+    .header-right {
+      margin-left: auto; font-size: .75rem; color: var(--muted); white-space: nowrap;
+    }
+    .header-right a { color: var(--accent); }
+    .header-right a:hover { text-decoration: underline; }
+
+    /* HERO */
+    .hero {
+      max-width: 1600px; margin: 0 auto; padding: 3rem 2rem 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1; letter-spacing: -.01em; margin-bottom: .5rem;
+    }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero p { color: var(--muted); max-width: 560px; font-size: .95rem; }
+
+    /* GRID */
+    .grid-wrap { max-width: 1600px; margin: 0 auto; padding: 1rem 2rem 4rem; }
+    .results-info { font-size: .82rem; color: var(--muted); margin-bottom: 1rem; height: 1.2em; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--surface);
+      display: flex; flex-direction: column;
+      transition: background .15s;
+      animation: fadeIn .3s ease both;
+    }
+    .card:hover { background: var(--bg3); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card-image-wrap {
+      position: relative; aspect-ratio: 16/9;
+      background: var(--bg2); overflow: hidden;
+    }
+    .card-thumb {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: opacity .4s, transform .35s;
+    }
+    .card:hover .card-thumb { transform: scale(1.03); }
+    .card-icon {
+      position: absolute; bottom: 8px; right: 8px;
+      width: 48px; height: 48px; object-fit: contain;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,.8));
+      transition: transform .2s;
+    }
+    .card:hover .card-icon { transform: scale(1.12); }
+    .card-mode-badge {
+      position: absolute; top: 8px; left: 8px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: .65rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: #000; background: var(--badge-color, #888);
+      padding: 2px 7px; border-radius: 3px;
+    }
+    .thumb-dots {
+      position: absolute; bottom: 6px; left: 50%;
+      transform: translateX(-50%); display: flex; gap: 4px;
+    }
+    .dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(255,255,255,.35);
+      cursor: pointer; transition: background .15s;
+    }
+    .dot.active, .dot:hover { background: #fff; }
+    .card-body { padding: .75rem 1rem .9rem; display: flex; flex-direction: column; gap: .3rem; flex: 1; }
+    .card-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: 1.15rem;
+      letter-spacing: .02em; color: var(--text); line-height: 1.2;
+    }
+    .card-key {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem; color: var(--muted); letter-spacing: .03em;
+    }
+
+    /* NO RESULTS */
+    .no-results {
+      display: none; padding: 4rem 2rem; text-align: center;
+      color: var(--muted); font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem; letter-spacing: .05em; text-transform: uppercase;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.2rem 2rem; text-align: center;
+      font-size: .78rem; color: var(--muted);
+    }
+    footer a { color: var(--accent); }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 700px) {
+      .header-inner { flex-wrap: wrap; height: auto; padding: .6rem 0; gap: .5rem; }
+      .header-right { display: none; }
+      .hero { padding: 1.5rem 1rem .8rem; }
+      .grid-wrap { padding: .5rem 1rem 3rem; }
+      :root { --card-w: 260px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">CS2 <span>MAP ICONS</span></div>
+    <span class="header-count">45 maps</span>
+
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input id="search" type="search" placeholder="Search maps…" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div class="filter-pills">
+      <button class="pill active" data-mode="all">All</button>
+      <button class="pill" data-mode="Bomb Defuse">Defuse</button>
+      <button class="pill" data-mode="Hostage">Hostage</button>
+      <button class="pill" data-mode="Arms Race">Arms Race</button>
+      <button class="pill" data-mode="Menu">Menu</button>
+    </div>
+
+    <div class="header-right">
+      Built Fri, 24 Apr 2026 12:47:53 GMT &nbsp;·&nbsp;
+      <a href="https://github.com/MurkyYT/cs2-map-icons" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Counter-Strike 2<br><em>Map Icons</em></h1>
+  <p>All 45 maps auto-extracted from the game VPK on every update. Icons, radars and screenshots available as raw PNGs.</p>
+</section>
+
+<main class="grid-wrap">
+  <div class="results-info" id="results-info"></div>
+  <div class="grid" id="grid">
+    
+  <a class="card" href="maps/cs_agency.html" data-mode="Hostage" data-key="cs_agency" data-name="agency">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Agency screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_agency.png" alt="Agency icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#3a9bd5">Hostage</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Agency</h2>
+      <code class="card-key">cs_agency</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/cs_alpine.html" data-mode="Hostage" data-key="cs_alpine" data-name="alpine">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_alpine_png.png" alt="Alpine screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_alpine.png" alt="Alpine icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#3a9bd5">Hostage</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Alpine</h2>
+      <code class="card-key">cs_alpine</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_ancient.html" data-mode="Bomb Defuse" data-key="de_ancient" data-name="ancient" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_4_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_1_png.png" alt="Ancient screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_ancient.png" alt="Ancient icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_4_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Ancient</h2>
+      <code class="card-key">de_ancient</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_ancient_night.html" data-mode="Bomb Defuse" data-key="de_ancient_night" data-name="ancient" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_night_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_night_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_night_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_night_4_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_night_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_night_1_png.png" alt="Ancient screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_ancient_night.png" alt="Ancient icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_night_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_night_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_night_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_night_4_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_ancient_night_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Ancient</h2>
+      <code class="card-key">de_ancient_night</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_anubis.html" data-mode="Bomb Defuse" data-key="de_anubis" data-name="anubis" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_anubis_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_anubis_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_anubis_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_anubis_4_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_anubis_5_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_anubis_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_anubis_1_png.png" alt="Anubis screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_anubis.png" alt="Anubis icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_anubis_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_anubis_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_anubis_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_anubis_4_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_anubis_5_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_anubis_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Anubis</h2>
+      <code class="card-key">de_anubis</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_assembly.html" data-mode="Bomb Defuse" data-key="de_assembly" data-name="assembly">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Assembly screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_assembly.png" alt="Assembly icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Assembly</h2>
+      <code class="card-key">de_assembly</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/ar_baggage.html" data-mode="Arms Race" data-key="ar_baggage" data-name="baggage" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_baggage_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_baggage_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_baggage_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_baggage_4_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_baggage_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_baggage_1_png.png" alt="Baggage screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_baggage.png" alt="Baggage icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e8a020">Arms Race</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_baggage_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_baggage_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_baggage_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_baggage_4_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_baggage_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Baggage</h2>
+      <code class="card-key">ar_baggage</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_basalt.html" data-mode="Bomb Defuse" data-key="de_basalt" data-name="basalt">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Basalt screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_basalt.png" alt="Basalt icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Basalt</h2>
+      <code class="card-key">de_basalt</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_brewery.html" data-mode="Bomb Defuse" data-key="de_brewery" data-name="brewery">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Brewery screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_brewery.png" alt="Brewery icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Brewery</h2>
+      <code class="card-key">de_brewery</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_canals.html" data-mode="Bomb Defuse" data-key="de_canals" data-name="canals">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Canals screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_canals.png" alt="Canals icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Canals</h2>
+      <code class="card-key">de_canals</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_cbble.html" data-mode="Bomb Defuse" data-key="de_cbble" data-name="cobblestone">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Cobblestone screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_cbble.png" alt="Cobblestone icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Cobblestone</h2>
+      <code class="card-key">de_cbble</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_dogtown.html" data-mode="Bomb Defuse" data-key="de_dogtown" data-name="dogtown">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Dogtown screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dogtown.png" alt="Dogtown icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Dogtown</h2>
+      <code class="card-key">de_dogtown</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_dust.html" data-mode="Bomb Defuse" data-key="de_dust" data-name="dust">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Dust screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dust.png" alt="Dust icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Dust</h2>
+      <code class="card-key">de_dust</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_dust2.html" data-mode="Bomb Defuse" data-key="de_dust2" data-name="dust ii" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_dust2_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_dust2_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_dust2_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_dust2_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_dust2_1_png.png" alt="Dust II screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dust2.png" alt="Dust II icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_dust2_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_dust2_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_dust2_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_dust2_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Dust II</h2>
+      <code class="card-key">de_dust2</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_edin.html" data-mode="Bomb Defuse" data-key="de_edin" data-name="edin">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Edin screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_edin.png" alt="Edin icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Edin</h2>
+      <code class="card-key">de_edin</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_golden.html" data-mode="Bomb Defuse" data-key="de_golden" data-name="golden">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Golden screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_golden.png" alt="Golden icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Golden</h2>
+      <code class="card-key">de_golden</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_grail.html" data-mode="Bomb Defuse" data-key="de_grail" data-name="grail">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Grail screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_grail.png" alt="Grail icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Grail</h2>
+      <code class="card-key">de_grail</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_inferno.html" data-mode="Bomb Defuse" data-key="de_inferno" data-name="inferno" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_inferno_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_inferno_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_inferno_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_inferno_4_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_inferno_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_inferno_1_png.png" alt="Inferno screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_inferno.png" alt="Inferno icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_inferno_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_inferno_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_inferno_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_inferno_4_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_inferno_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Inferno</h2>
+      <code class="card-key">de_inferno</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/cs_italy.html" data-mode="Hostage" data-key="cs_italy" data-name="italy" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_italy_0_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_italy_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_italy_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_italy_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_italy_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_italy_0_png.png" alt="Italy screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_italy.png" alt="Italy icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#3a9bd5">Hostage</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_italy_0_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_italy_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_italy_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_italy_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_italy_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Italy</h2>
+      <code class="card-key">cs_italy</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_jura.html" data-mode="Bomb Defuse" data-key="de_jura" data-name="jura">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Jura screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_jura.png" alt="Jura icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Jura</h2>
+      <code class="card-key">de_jura</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_lake.html" data-mode="Bomb Defuse" data-key="de_lake" data-name="lake">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Lake screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_lake.png" alt="Lake icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Lake</h2>
+      <code class="card-key">de_lake</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_memento.html" data-mode="Bomb Defuse" data-key="de_memento" data-name="memento">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Memento screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_memento.png" alt="Memento icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Memento</h2>
+      <code class="card-key">de_memento</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_mills.html" data-mode="Bomb Defuse" data-key="de_mills" data-name="mills">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Mills screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_mills.png" alt="Mills icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Mills</h2>
+      <code class="card-key">de_mills</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_mirage.html" data-mode="Bomb Defuse" data-key="de_mirage" data-name="mirage" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_mirage_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_mirage_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_mirage_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_mirage_4_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_mirage_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_mirage_1_png.png" alt="Mirage screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_mirage.png" alt="Mirage icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_mirage_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_mirage_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_mirage_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_mirage_4_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_mirage_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Mirage</h2>
+      <code class="card-key">de_mirage</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_nuke.html" data-mode="Bomb Defuse" data-key="de_nuke" data-name="nuke" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_nuke_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_nuke_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_nuke_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_nuke_4_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_nuke_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_nuke_1_png.png" alt="Nuke screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_nuke.png" alt="Nuke icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_nuke_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_nuke_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_nuke_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_nuke_4_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_nuke_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Nuke</h2>
+      <code class="card-key">de_nuke</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/cs_office.html" data-mode="Hostage" data-key="cs_office" data-name="office" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_office_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_office_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_office_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_office_4_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_office_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_office_1_png.png" alt="Office screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_office.png" alt="Office icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#3a9bd5">Hostage</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_office_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_office_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_office_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_office_4_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_office_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Office</h2>
+      <code class="card-key">cs_office</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_overpass.html" data-mode="Bomb Defuse" data-key="de_overpass" data-name="overpass" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_overpass_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_overpass_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_overpass_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_overpass_4_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_overpass_5_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_overpass_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_overpass_1_png.png" alt="Overpass screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_overpass.png" alt="Overpass icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_overpass_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_overpass_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_overpass_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_overpass_4_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_overpass_5_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_overpass_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Overpass</h2>
+      <code class="card-key">de_overpass</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_palacio.html" data-mode="Bomb Defuse" data-key="de_palacio" data-name="palacio">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Palacio screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_palacio.png" alt="Palacio icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Palacio</h2>
+      <code class="card-key">de_palacio</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_palais.html" data-mode="Bomb Defuse" data-key="de_palais" data-name="palais">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Palais screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_palais.png" alt="Palais icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Palais</h2>
+      <code class="card-key">de_palais</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/ar_pool_day.html" data-mode="Arms Race" data-key="ar_pool_day" data-name="pool day">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_pool_day_png.png" alt="Pool Day screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_pool_day.png" alt="Pool Day icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e8a020">Arms Race</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Pool Day</h2>
+      <code class="card-key">ar_pool_day</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_poseidon.html" data-mode="Bomb Defuse" data-key="de_poseidon" data-name="poseidon">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_poseidon_png.png" alt="Poseidon screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_poseidon.png" alt="Poseidon icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Poseidon</h2>
+      <code class="card-key">de_poseidon</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/lobby_mapveto.html" data-mode="Menu" data-key="lobby_mapveto" data-name="premier">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/lobby_mapveto_png.png" alt="Premier screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/lobby_mapveto.png" alt="Premier icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#7a7a8c">Menu</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Premier</h2>
+      <code class="card-key">lobby_mapveto</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_rooftop.html" data-mode="Bomb Defuse" data-key="de_rooftop" data-name="rooftop">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Rooftop screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_rooftop.png" alt="Rooftop icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Rooftop</h2>
+      <code class="card-key">de_rooftop</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_sanctum.html" data-mode="Bomb Defuse" data-key="de_sanctum" data-name="sanctum">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_sanctum_png.png" alt="Sanctum screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_sanctum.png" alt="Sanctum icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Sanctum</h2>
+      <code class="card-key">de_sanctum</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/ar_shoots.html" data-mode="Arms Race" data-key="ar_shoots" data-name="shoots (day)" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_4_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_1_png.png" alt="Shoots (Day) screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_shoots.png" alt="Shoots (Day) icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e8a020">Arms Race</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_4_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Shoots (Day)</h2>
+      <code class="card-key">ar_shoots</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/ar_shoots_night.html" data-mode="Arms Race" data-key="ar_shoots_night" data-name="shoots (night)" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_night_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_night_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_night_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_night_4_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_night_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_night_1_png.png" alt="Shoots (Night) screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_shoots_night.png" alt="Shoots (Night) icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e8a020">Arms Race</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_night_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_night_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_night_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_night_4_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_shoots_night_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Shoots (Night)</h2>
+      <code class="card-key">ar_shoots_night</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_stronghold.html" data-mode="Bomb Defuse" data-key="de_stronghold" data-name="stronghold">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_stronghold_png.png" alt="Stronghold screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_stronghold.png" alt="Stronghold icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Stronghold</h2>
+      <code class="card-key">de_stronghold</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_thera.html" data-mode="Bomb Defuse" data-key="de_thera" data-name="thera">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Thera screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_thera.png" alt="Thera icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Thera</h2>
+      <code class="card-key">de_thera</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_train.html" data-mode="Bomb Defuse" data-key="de_train" data-name="train" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_train_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_train_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_train_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_train_4_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_train_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_train_1_png.png" alt="Train screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_train.png" alt="Train icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_train_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_train_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_train_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_train_4_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_train_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Train</h2>
+      <code class="card-key">de_train</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_transit.html" data-mode="Bomb Defuse" data-key="de_transit" data-name="transit">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Transit screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_transit.png" alt="Transit icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Transit</h2>
+      <code class="card-key">de_transit</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_vertigo.html" data-mode="Bomb Defuse" data-key="de_vertigo" data-name="vertigo" data-thumbs='["https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_vertigo_1_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_vertigo_2_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_vertigo_3_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_vertigo_4_png.png","https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_vertigo_png.png"]'>
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_vertigo_1_png.png" alt="Vertigo screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_vertigo.png" alt="Vertigo icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      <div class="thumb-dots"><span class="dot active" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_vertigo_1_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_vertigo_2_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_vertigo_3_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_vertigo_4_png.png"></span><span class="dot" data-src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_vertigo_png.png"></span></div>
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Vertigo</h2>
+      <code class="card-key">de_vertigo</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_warden.html" data-mode="Bomb Defuse" data-key="de_warden" data-name="warden">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_warden_png.png" alt="Warden screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_warden.png" alt="Warden icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Warden</h2>
+      <code class="card-key">de_warden</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_whistle.html" data-mode="Bomb Defuse" data-key="de_whistle" data-name="whistle">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="Whistle screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_whistle.png" alt="Whistle icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">Whistle</h2>
+      <code class="card-key">de_whistle</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/cs_icon.html" data-mode="Hostage" data-key="cs_icon" data-name="cs_icon">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="cs_icon screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_icon.png" alt="cs_icon icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#3a9bd5">Hostage</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">cs_icon</h2>
+      <code class="card-key">cs_icon</code>
+    </div>
+  </a>
+
+  <a class="card" href="maps/de_sugarcane.html" data-mode="Bomb Defuse" data-key="de_sugarcane" data-name="de_sugarcane">
+    <div class="card-image-wrap">
+      <img class="card-thumb" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/default_psd.png" alt="de_sugarcane screenshot" loading="lazy">
+      <img class="card-icon" src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_sugarcane.png" alt="de_sugarcane icon" loading="lazy">
+      <span class="card-mode-badge" style="--badge-color:#e05252">Bomb Defuse</span>
+      
+    </div>
+    <div class="card-body">
+      <h2 class="card-name">de_sugarcane</h2>
+      <code class="card-key">de_sugarcane</code>
+    </div>
+  </a>
+  </div>
+  <div class="no-results" id="no-results">No maps found</div>
+</main>
+
+<footer>
+  Auto-generated from <a href="https://github.com/MurkyYT/cs2-map-icons">MurkyYT/cs2-map-icons</a> ·
+  Data sourced from Counter-Strike 2 game files · Not affiliated with Valve Corporation
+</footer>
+
+<script>
+  document.querySelectorAll('.card-image-wrap').forEach(wrap => {
+    const thumb = wrap.querySelector('.card-thumb');
+    const dots  = wrap.querySelectorAll('.dot');
+    if (!thumb || !dots.length) return;
+    dots.forEach(dot => {
+      dot.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        thumb.src = dot.dataset.src;
+        dots.forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+      });
+    });
+  });
+
+  document.querySelectorAll('.card[data-thumbs]').forEach(card => {
+    const wrap  = card.querySelector('.card-image-wrap');
+    const thumb = card.querySelector('.card-thumb');
+    const dots  = Array.from(card.querySelectorAll('.dot'));
+    const thumbs = JSON.parse(card.dataset.thumbs);
+    let idx = 0, timer = null;
+
+    function advance() {
+      idx = (idx + 1) % thumbs.length;
+      thumb.src = thumbs[idx];
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+
+    wrap.addEventListener('mouseenter', () => {
+      timer = setInterval(advance, 1400);
+    });
+    wrap.addEventListener('mouseleave', () => {
+      clearInterval(timer);
+      idx = 0;
+      thumb.src = thumbs[0];
+      dots.forEach((d, i) => d.classList.toggle('active', i === 0));
+    });
+  });
+
+  const cards       = Array.from(document.querySelectorAll('.card'));
+  const grid        = document.getElementById('grid');
+  const noResults   = document.getElementById('no-results');
+  const resultsInfo = document.getElementById('results-info');
+  const searchEl    = document.getElementById('search');
+  let activeMode    = 'all';
+
+  function update() {
+    const q = searchEl.value.trim().toLowerCase();
+    let visible = 0;
+    cards.forEach(card => {
+      const matchMode = activeMode === 'all' || card.dataset.mode === activeMode;
+      const matchQ    = !q || card.dataset.name.includes(q) || card.dataset.key.includes(q);
+      const show      = matchMode && matchQ;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    noResults.style.display = visible === 0 ? 'block' : 'none';
+    grid.style.display      = visible === 0 ? 'none'  : '';
+    resultsInfo.textContent = (q || activeMode !== 'all')
+      ? `Showing ${visible} of 45 maps`
+      : '';
+  }
+
+  searchEl.addEventListener('input', update);
+  document.querySelectorAll('.pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      activeMode = pill.dataset.mode;
+      update();
+    });
+  });
+</script>
+</body>
+</html>
