@@ -72,11 +72,27 @@ jobs:
         with:
           path: ./s2v
           key: ${{ runner.os }}-s2v-${{ steps.s2v_version.outputs.version }}
+      
+      - name: Check if manifest changed
+        id: manifest_check
+        run: |
+          NEW="${{ steps.cs2_manifest.outputs.manifest }}"
+          OLD=$(cat static/manifest.txt 2>/dev/null || echo "")
+
+          echo "old=$OLD"
+          echo "new=$NEW"
+
+          if [ "$NEW" = "$OLD" ]; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Run scraper script
         run: node download-map-icons.js
 
       - name: Generate HTML
+        if: steps.manifest_check.outputs.changed == 'true'
         run: node gen_html.js
 
       - name: Read manifestId.txt
