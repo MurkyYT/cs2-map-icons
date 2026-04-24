@@ -76,6 +76,9 @@ jobs:
       - name: Run scraper script
         run: node download-map-icons.js
 
+      - name: Generate HTML
+        run: node gen_html.js
+
       - name: Read manifestId.txt
         id: manifestId
         uses: juliangruber/read-file-action@v1
