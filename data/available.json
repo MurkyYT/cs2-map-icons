@@ -1,5 +1,5 @@
 {
-  "count": 45,
+  "count": 46,
   "maps": {
     "ar_baggage": {
       "origin": "panorama/images/map_icons/map_icon_ar_baggage.vsvg_c",
@@ -444,6 +444,23 @@
       "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/lobby_mapveto.png",
       "thumb_paths": [
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/lobby_mapveto_png.png"
+      ]
+    },
+    "de_cache": {
+      "origin": "panorama/images/map_icons/map_icon_de_cache.vsvg_c",
+      "hash": "996d4f04",
+      "display_name": "Cache",
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_cache.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_cache_radar_psd.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_cache_radar_tga.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_cache_1_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_cache_2_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_cache_3_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_cache_4_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_cache_png.png"
       ]
     }
   }
