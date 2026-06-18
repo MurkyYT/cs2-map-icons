@@ -63,7 +63,10 @@
       "display_name": "Agency",
       "hash": "681ce1de-1312c",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_agency.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_agency.png",
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_agency_png.png"
+      ]
     },
     "cs_icon": {
       "hash": "65a0f113-326",
@@ -337,8 +340,15 @@
     },
     "de_sugarcane": {
       "hash": "621cb3b7-11147",
+      "display_name": "Sugarcane",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_sugarcane.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_sugarcane.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_sugarcane_radar_psd.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_sugarcane_png.png"
+      ]
     },
     "de_thera": {
       "display_name": "Thera",
