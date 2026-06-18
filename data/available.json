@@ -159,31 +159,46 @@
       "display_name": "Assembly",
       "hash": "667bc0a5-19fa9",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_assembly.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_assembly.png",
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_assembly_png.png"
+      ]
     },
     "de_basalt": {
       "display_name": "Basalt",
       "hash": "6735622e-242cc",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_basalt.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_basalt.png",
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_basalt_png.png"
+      ]
     },
     "de_brewery": {
       "display_name": "Brewery",
       "hash": "681ce1f5-1368a",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_brewery.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_brewery.png",
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_brewery_png.png"
+      ]
     },
     "de_canals": {
       "display_name": "Canals",
       "hash": "621cb342-24c01",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_canals.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_canals.png",
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_canals_png.png"
+      ]
     },
     "de_cbble": {
       "display_name": "Cobblestone",
       "hash": "624c602a-1590e",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_cbble.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_cbble.png",
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_cbble_png.png"
+      ]
     },
     "de_dogtown": {
       "display_name": "Dogtown",
