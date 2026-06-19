@@ -881,6 +881,8 @@ ${hasThumb && thumbs.length > 1 ? `
 </html>`;
 }
 
+fs.rmSync(outDir, { recursive: true, force: true });
+
 [outDir, mapsDir].forEach(d => { if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true }); });
 
 fs.writeFileSync(outFile, indexHTML, 'utf8');

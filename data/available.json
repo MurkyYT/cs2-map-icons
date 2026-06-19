@@ -68,11 +68,6 @@
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_agency_png.png"
       ]
     },
-    "cs_icon": {
-      "hash": "65a0f113-326",
-      "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_icon.png"
-    },
     "cs_italy": {
       "origin": "panorama/images/map_icons/map_icon_cs_italy.vsvg_c",
       "hash": "bafb6d40",
