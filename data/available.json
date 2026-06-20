@@ -199,13 +199,25 @@
       "display_name": "Dogtown",
       "hash": "681ce1fd-12b06",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dogtown.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dogtown.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_dogtown_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_dogtown_png.png"
+      ]
     },
     "de_dust": {
       "origin": "panorama/images/map_icons/map_icon_de_dust.vsvg_c",
       "hash": "9ea1ea95",
       "display_name": "Dust",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dust.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dust.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_dust_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_dust_png.png"
+      ]
     },
     "de_dust2": {
       "origin": "panorama/images/map_icons/map_icon_de_dust2.vsvg_c",
@@ -226,19 +238,37 @@
       "display_name": "Edin",
       "hash": "67358320-2635a",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_edin.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_edin.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_edin_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_edin_png.png"
+      ]
     },
     "de_golden": {
       "display_name": "Golden",
       "hash": "68ded7a3-17811",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_golden.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_golden.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_golden_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_golden_png.png"
+      ]
     },
     "de_grail": {
       "display_name": "Grail",
       "hash": "681ce204-13504",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_grail.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_grail.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_grail_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_grail_png.png"
+      ]
     },
     "de_inferno": {
       "origin": "panorama/images/map_icons/map_icon_de_inferno.vsvg_c",
@@ -260,25 +290,49 @@
       "display_name": "Jura",
       "hash": "681ce210-126de",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_jura.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_jura.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_jura_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_jura_png.png"
+      ]
     },
     "de_lake": {
       "display_name": "Lake",
       "hash": "624c60c2-828e",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_lake.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_lake.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_lake_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_lake_png.png"
+      ]
     },
     "de_memento": {
       "display_name": "Memento",
       "hash": "667bc0b6-13a3d",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_memento.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_memento.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_memento_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_memento_png.png"
+      ]
     },
     "de_mills": {
       "display_name": "Mills",
       "hash": "667bc0c2-1218b",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_mills.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_mills.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_mills_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_mills_png.png"
+      ]
     },
     "de_mirage": {
       "origin": "panorama/images/map_icons/map_icon_de_mirage.vsvg_c",
@@ -334,19 +388,37 @@
       "display_name": "Palacio",
       "hash": "68ded7ae-17df8",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_palacio.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_palacio.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_palacio_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_palacio_png.png"
+      ]
     },
     "de_palais": {
       "display_name": "Palais",
       "hash": "673583d3-25def",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_palais.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_palais.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_palais_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_palais_png.png"
+      ]
     },
     "de_rooftop": {
       "display_name": "Rooftop",
       "hash": "68ded7ba-1948a",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_rooftop.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_rooftop.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_rooftop_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_rooftop_png.png"
+      ]
     },
     "de_sugarcane": {
       "hash": "621cb3b7-11147",
@@ -364,7 +436,13 @@
       "display_name": "Thera",
       "hash": "667bc0ca-129fa",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_thera.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_thera.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_thera_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_thera_png.png"
+      ]
     },
     "de_train": {
       "origin": "panorama/images/map_icons/map_icon_de_train.vsvg_c",
@@ -387,7 +465,13 @@
       "display_name": "Transit",
       "hash": "68ded7c2-17cab",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_transit.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_transit.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_transit_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_transit_png.png"
+      ]
     },
     "de_vertigo": {
       "origin": "panorama/images/map_icons/map_icon_de_vertigo.vsvg_c",
@@ -410,7 +494,13 @@
       "display_name": "Whistle",
       "hash": "673583e5-25397",
       "origin": "",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_whistle.png"
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_whistle.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_whistle_radar.png"
+      ],
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_whistle_png.png"
+      ]
     },
     "cs_alpine": {
       "origin": "panorama/images/map_icons/map_icon_cs_alpine.vsvg_c",
