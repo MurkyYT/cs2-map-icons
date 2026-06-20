@@ -150,14 +150,16 @@ async function runSource2ViewerCLI(cliPath, vpkDirPath, outputDir, filter) {
         });
     });
 
-    function flattenDir(dir) {
+        function flattenDir(dir) {
         for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
             const fullPath = path.join(dir, entry.name);
             if (entry.isDirectory()) {
                 flattenDir(fullPath);
-            } else {
+            } else if (entry.name.endsWith('.png')) {
                 const dest = path.join(outputDir, entry.name);
                 fs.renameSync(fullPath, dest);
+            } else {
+                fs.unlinkSync(fullPath);
             }
         }
     }
@@ -324,6 +326,7 @@ async function extractAndConvertMapIcons(vpkDir, files, radarMap, thumbMap, opti
     try { require('sharp'); useSharp = true; } catch { }
     const converter = new VsvgConverter({ useSharp });
     const downloadedData = {};
+    const existingData = loadExistingData();
     const csgoEnglishFile = "resource/csgo_english.txt";
     const fileBuffer = vpkDir.getFile(csgoEnglishFile);
     const fileString = fileBuffer.toString('utf8');
@@ -353,7 +356,10 @@ async function extractAndConvertMapIcons(vpkDir, files, radarMap, thumbMap, opti
         } catch { }
 
         if (radarMap[mapName]?.length) mapData.radar_paths = radarMap[mapName];
+        else if (existingData.maps[mapName]?.radar_paths) mapData.radar_paths = existingData.maps[mapName].radar_paths;
+
         if (thumbMap[mapName]?.length) mapData.thumb_paths = thumbMap[mapName];
+        else if (existingData.maps[mapName]?.thumb_paths) mapData.thumb_paths = existingData.maps[mapName].thumb_paths;
 
         downloadedData[mapName] = mapData;
     }
