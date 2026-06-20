@@ -211,13 +211,7 @@
       "origin": "panorama/images/map_icons/map_icon_de_dust.vsvg_c",
       "hash": "9ea1ea95",
       "display_name": "Dust",
-      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dust.png",
-      "radar_paths": [
-        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_dust_radar.png"
-      ],
-      "thumb_paths": [
-        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_dust_png.png"
-      ]
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_dust.png"
     },
     "de_dust2": {
       "origin": "panorama/images/map_icons/map_icon_de_dust2.vsvg_c",
