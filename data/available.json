@@ -17,7 +17,17 @@
         "pos_y": 1288,
         "scale": 2.539062,
         "rotate": 1,
-        "zoom": 1.3
+        "zoom": 1.3,
+        "verticalsections": {
+          "default": {
+            "AltitudeMax": 10000,
+            "AltitudeMin": -5
+          },
+          "lower": {
+            "AltitudeMax": -5,
+            "AltitudeMin": -10000
+          }
+        }
       },
       "thumb_paths": [
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/ar_baggage_1_png.png",
@@ -463,7 +473,17 @@
         "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/data/radar_info/de_nuke.txt",
         "pos_x": -3453,
         "pos_y": 2887,
-        "scale": 7
+        "scale": 7,
+        "verticalsections": {
+          "default": {
+            "AltitudeMax": 10000,
+            "AltitudeMin": -495
+          },
+          "lower": {
+            "AltitudeMax": -495,
+            "AltitudeMin": -10000
+          }
+        }
       },
       "thumb_paths": [
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_nuke_1_png.png",
@@ -573,7 +593,17 @@
         "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/data/radar_info/de_train.txt",
         "pos_x": -2308,
         "pos_y": 2078,
-        "scale": 4.082077
+        "scale": 4.082077,
+        "verticalsections": {
+          "default": {
+            "AltitudeMax": 20000,
+            "AltitudeMin": -50
+          },
+          "lower": {
+            "AltitudeMax": -50,
+            "AltitudeMin": -5000
+          }
+        }
       },
       "thumb_paths": [
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_train_1_png.png",
@@ -609,7 +639,17 @@
         "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/data/radar_info/de_vertigo.txt",
         "pos_x": -3168,
         "pos_y": 1762,
-        "scale": 4
+        "scale": 4,
+        "verticalsections": {
+          "default": {
+            "AltitudeMax": 20000,
+            "AltitudeMin": 11700
+          },
+          "lower": {
+            "AltitudeMax": 11700,
+            "AltitudeMin": -10000
+          }
+        }
       },
       "thumb_paths": [
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_vertigo_1_png.png",

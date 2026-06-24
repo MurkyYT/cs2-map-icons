@@ -32,6 +32,7 @@ const repo = process.env.GITHUB_REPOSITORY || "MurkyYT/cs2-map-icons";
 const defaultBranch = process.env.DEFAULT_BRANCH || "main";
 const S2V_REPO = 'ValveResourceFormat/ValveResourceFormat';
 const DEPOT_DOWNLOADER_REPO = 'SteamRE/DepotDownloader';
+const ignoreManifest = process.argv.includes('--ignore-manifest') || process.env.IGNORE_MANIFEST === 'true' || process.argv.includes('-i');
 
 const options = {
     width: 512,
@@ -313,6 +314,23 @@ async function runSource2ViewerCLI(cliPath, vpkDirPath, outputDir, filter) {
     fs.rmSync(tempOut, { recursive: true, force: true });
 }
 
+function extractBracedBlock(content, fromIndex) {
+    const openIdx = content.indexOf('{', fromIndex);
+    if (openIdx === -1) return null;
+
+    let depth = 0;
+    for (let i = openIdx; i < content.length; i++) {
+        if (content[i] === '{') depth++;
+        else if (content[i] === '}') {
+            depth--;
+            if (depth === 0) {
+                return { content: content.slice(openIdx + 1, i), endIndex: i };
+            }
+        }
+    }
+    return null;
+}
+
 function parseRadarInfo(content) {
     const result = {};
     const stripComments = content.replace(/\/\/[^\n]*/g, '');
@@ -327,22 +345,31 @@ function parseRadarInfo(content) {
         if (val !== undefined) result[key] = val;
     }
 
-    const verticalMatch = stripComments.match(/"verticalsections"\s*\{([^}]+)\}/s);
-    if (verticalMatch) {
-        const sections = {};
-        const sectionRegex = /"(\w+)"\s*\{([^}]+)\}/gs;
-        let sec;
-        while ((sec = sectionRegex.exec(verticalMatch[1])) !== null) {
-            const name = sec[1];
-            const body = sec[2];
-            const altMax = body.match(/"AltitudeMax"\s+"?([\-\d.]+)"?/);
-            const altMin = body.match(/"AltitudeMin"\s+"?([\-\d.]+)"?/);
-            sections[name] = {
-                ...(altMax ? { AltitudeMax: parseFloat(altMax[1]) } : {}),
-                ...(altMin ? { AltitudeMin: parseFloat(altMin[1]) } : {}),
-            };
+    const vsKeyMatch = stripComments.match(/"verticalsections"/);
+    if (vsKeyMatch) {
+        const block = extractBracedBlock(stripComments, vsKeyMatch.index + vsKeyMatch[0].length);
+        if (block) {
+            const sections = {};
+            const body = block.content;
+            const nameRegex = /"(\w+)"\s*(?=\{)/g;
+            let nameMatch;
+            while ((nameMatch = nameRegex.exec(body)) !== null) {
+                const name = nameMatch[1];
+                const subBlock = extractBracedBlock(body, nameMatch.index + nameMatch[0].length);
+                if (!subBlock) continue;
+
+                const sectionBody = subBlock.content;
+                const altMax = sectionBody.match(/"AltitudeMax"\s+"?([\-\d.]+)"?/);
+                const altMin = sectionBody.match(/"AltitudeMin"\s+"?([\-\d.]+)"?/);
+                sections[name] = {
+                    ...(altMax ? { AltitudeMax: parseFloat(altMax[1]) } : {}),
+                    ...(altMin ? { AltitudeMin: parseFloat(altMin[1]) } : {}),
+                };
+
+                nameRegex.lastIndex = nameMatch.index + nameMatch[0].length + subBlock.content.length + 2;
+            }
+            if (Object.keys(sections).length > 0) result.verticalsections = sections;
         }
-        if (Object.keys(sections).length > 0) result.verticalsections = sections;
     }
 
     return result;
@@ -602,12 +629,16 @@ async function getLatestManifestId() {
         const latestManifestId = await getLatestManifestId();
         const lastManifestId = readLastManifestId();
 
-        if (lastManifestId === latestManifestId) {
+        if (!ignoreManifest && lastManifestId === latestManifestId) {
             console.log('Manifest unchanged — skipping download');
             process.exit(0);
         }
 
-        console.log(`Manifest changed: ${lastManifestId || '(none)'} -> ${latestManifestId}`);
+        if (ignoreManifest && lastManifestId === latestManifestId) {
+            console.log(`Manifest unchanged (${latestManifestId}) but --ignore-manifest set — forcing run`);
+        } else {
+            console.log(`Manifest changed: ${lastManifestId || '(none)'} -> ${latestManifestId}`);
+        }
 
         const ddPath = await ensureDepotDownloader();
         const vpkDir = await downloadVPKFiles(ddPath);
