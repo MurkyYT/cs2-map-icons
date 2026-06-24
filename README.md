@@ -6,11 +6,9 @@
 [![Last Update](https://img.shields.io/github/last-commit/MurkyYT/cs2-map-icons/main?path=static/manifest.txt&label=Last%20Update&color=brightgreen&style=flat-square)](https://github.com/MurkyYT/cs2-map-icons/commits/main)
 [![Map Count](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/data/available.json&query=$.count&label=Maps&color=orange&style=flat-square)](data/available.json)
 
-**Automatically updated Counter-Strike 2 map icons including radar overheads and in-game thumbnails,  
-scraped daily from the official game depot.**
+**Automatically updated Counter-Strike 2 map icons, radar overheads, in-game thumbnails and overview/radar config data, scraped directly from the official game depot whenever Valve pushes an update.**
 
 </div>
-
 
 ## Available Assets
 
@@ -19,6 +17,7 @@ scraped daily from the official game depot.**
 | **Icon** | `/images/<map>.png` | Always available |
 | **Radar** | `/images/radars/<map>_radar_psd.png` | Multi-level maps include `_lower_` variant |
 | **Thumbnail** | `/images/thumbs/<map>_N_png.png` | Multiple screenshots per map |
+| **Radar info** | `/data/radar_info/<map>.txt` | Raw overview file (pos_x, pos_y, scale, verticalsections, etc.) |
 
 ## Usage
 
@@ -42,6 +41,14 @@ https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_du
 https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_inferno_3_png.png
 ```
 
+**Radar info**
+```
+https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/data/radar_info/de_dust2.txt
+```
+
+### Map Data
+
+Each map entry in `data/available.json` includes the icon path, hash, first seen date, radar paths, thumbnail paths and parsed radar info (pos_x, pos_y, scale, rotate, zoom, verticalsections) where available. This is the easiest way to pull everything for a given map in one request.
 
 ## Full Map List
 
@@ -52,12 +59,12 @@ Auto-updated list of all maps ever scraped:
 [![MD](https://img.shields.io/badge/Markdown-view-lightgrey?style=flat-square)](data/available.md)
 
 ## Used By
-- [zenojunior/cs-demo-analyzer](https://github.com/zenojunior/cs-demo-analyzer) — Browser-based 2D CS2 demo viewer. Playback, heatmaps and grenade trajectories.
+
+- [zenojunior/cs-demo-analyzer](https://github.com/zenojunior/cs-demo-analyzer) - Browser-based 2D CS2 demo viewer. Playback, heatmaps and grenade trajectories.
 
 ## License
 
-Map icons are property of **Valve Corporation**. This repository simply provides automated access to publicly available resources.
-
+Map icons, radars, thumbnails and overview data are property of **Valve Corporation**. This repository simply provides automated access to publicly available resources.
 
 ## Contributing
 
