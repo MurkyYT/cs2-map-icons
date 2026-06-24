@@ -24,7 +24,6 @@ const depotDownloaderDir = './depot-downloader';
 const s2vVersionFile = path.join(s2vDir, 'version.txt');
 const depotDownloaderVersionFile = path.join(depotDownloaderDir, 'version.txt');
 const manifestFile = path.join(staticDir, 'manifest.txt');
-const changelogFile = './CHANGELOG.md';
 const mapIconRegex = /^panorama\/images\/map_icons\/map_icon_.*\.vsvg_c$/i;
 const radarRegex = /^panorama\/images\/overheadmaps\/.*\.vtex_c$/i;
 const radarInfoRegex = /^resource\/overviews\/.+\.txt$/i;
@@ -401,86 +400,6 @@ function getMapFirstSeenDates() {
     return firstSeen;
 }
 
-function generateChangelog(oldData, newData) {
-    const oldMaps = oldData.maps || {};
-    const newMaps = newData.maps || {};
-    const date = new Date().toISOString().slice(0, 10);
-
-    const added   = Object.keys(newMaps).filter(m => !oldMaps[m]);
-    const removed = Object.keys(oldMaps).filter(m => !newMaps[m]);
-    const updated = Object.keys(newMaps).filter(m =>
-        oldMaps[m] && oldMaps[m].hash && newMaps[m].hash && oldMaps[m].hash !== newMaps[m].hash
-    );
-
-    if (!added.length && !updated.length && !removed.length) {
-        console.log('No map changes — skipping changelog');
-        return null;
-    }
-
-    const lines = [`## ${date}\n`];
-    if (added.length)   lines.push(`### Added\n${added.map(m => `- \`${m}\``).join('\n')}\n`);
-    if (updated.length) lines.push(`### Updated\n${updated.map(m => `- \`${m}\``).join('\n')}\n`);
-    if (removed.length) lines.push(`### Removed\n${removed.map(m => `- \`${m}\``).join('\n')}\n`);
-
-    const existing = fs.existsSync(changelogFile) ? fs.readFileSync(changelogFile, 'utf8') : '';
-    const header = existing.startsWith('# Changelog') ? '' : '# Changelog\n\n';
-    fs.writeFileSync(changelogFile, header + lines.join('\n') + '\n' + existing.replace(/^# Changelog\n\n?/, ''));
-    console.log('Updated CHANGELOG.md');
-
-    return { date, added, updated, removed };
-}
-
-async function publishGitHubRelease(manifestId, changes) {
-    if (!changes) return;
-
-    const token = process.env.GITHUB_TOKEN;
-    if (!token) {
-        console.log('No GITHUB_TOKEN — skipping release');
-        return;
-    }
-
-    const { date, added, updated, removed } = changes;
-
-    const bodyParts = [
-        added.length   ? `### Added\n${added.map(m => `- \`${m}\``).join('\n')}` : null,
-        updated.length ? `### Updated\n${updated.map(m => `- \`${m}\``).join('\n')}` : null,
-        removed.length ? `### Removed\n${removed.map(m => `- \`${m}\``).join('\n')}` : null,
-    ].filter(Boolean);
-
-    const payload = JSON.stringify({
-        tag_name: `update-${date}-${manifestId.slice(-6)}`,
-        name: `Map update ${date}`,
-        body: bodyParts.join('\n\n'),
-        draft: false,
-        prerelease: false,
-    });
-
-    await new Promise((resolve, reject) => {
-        const req = https.request({
-            hostname: 'api.github.com',
-            path: `/repos/${repo}/releases`,
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'User-Agent': 'cs2-map-icons',
-                'Content-Length': Buffer.byteLength(payload),
-            },
-        }, res => {
-            res.resume();
-            if (res.statusCode === 201) {
-                console.log(`Published GitHub release for manifest ${manifestId}`);
-                resolve();
-            } else {
-                reject(new Error(`GitHub release failed: ${res.statusCode}`));
-            }
-        });
-        req.on('error', reject);
-        req.write(payload);
-        req.end();
-    });
-}
-
 async function extractRadarsAndThumbs(vpkDirPath, radarFiles, thumbFiles, mapIconFiles) {
     const cliPath = await ensureSource2ViewerCLI();
 
@@ -708,10 +627,6 @@ async function getLatestManifestId() {
         const downloadedData = await extractAndConvertMapIcons(vpkDir, mapIconFiles, radarMap, thumbMap, radarInfoMap, firstSeenDates, options);
         
         generateDataFiles(downloadedData);
-        const newData = loadExistingData();
-        const changes = generateChangelog(oldData, newData);
-        
-        await publishGitHubRelease(latestManifestId, changes);
         writeManifestId(latestManifestId);
         
         console.log("Done!");
