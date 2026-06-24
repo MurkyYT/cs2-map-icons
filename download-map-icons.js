@@ -1,10 +1,10 @@
-const SteamUser = require('steam-user');
 const fs = require('fs');
 const vpk = require('./vpk-no-request');
 const path = require('path');
 const crypto = require('crypto');
 const https = require('https');
-const { execFile } = require('child_process');
+const SteamUser = require('steam-user');
+const { execFile, execSync } = require('child_process');
 const AdmZip = require('adm-zip');
 const VsvgConverter = require('./vsvg-converter');
 const console = require('console');
@@ -17,22 +17,41 @@ const imagesDir = './images';
 const pngDir = imagesDir;
 const dataDir = './data';
 const radarDir = path.join(imagesDir, 'radars');
+const radarInfoDir = path.join(dataDir, 'radar_info');
 const thumbDir = path.join(imagesDir, 'thumbs');
 const s2vDir = './s2v';
+const depotDownloaderDir = './depot-downloader';
 const s2vVersionFile = path.join(s2vDir, 'version.txt');
+const depotDownloaderVersionFile = path.join(depotDownloaderDir, 'version.txt');
 const manifestFile = path.join(staticDir, 'manifest.txt');
+const changelogFile = './CHANGELOG.md';
 const mapIconRegex = /^panorama\/images\/map_icons\/map_icon_.*\.vsvg_c$/i;
 const radarRegex = /^panorama\/images\/overheadmaps\/.*\.vtex_c$/i;
+const radarInfoRegex = /^resource\/overviews\/.+\.txt$/i;
 const thumbRegex = /^panorama\/images\/map_icons\/screenshots\/1080p\/.*\.vtex_c$/i;
 const repo = process.env.GITHUB_REPOSITORY || "MurkyYT/cs2-map-icons";
 const defaultBranch = process.env.DEFAULT_BRANCH || "main";
 const S2V_REPO = 'ValveResourceFormat/ValveResourceFormat';
+const DEPOT_DOWNLOADER_REPO = 'SteamRE/DepotDownloader';
 
 const options = {
     width: 512,
     height: 512,
     backgroundColor: 'transparent'
 };
+
+function getDepotDownloaderAssetName() {
+    switch (process.platform) {
+        case 'win32':  return 'DepotDownloader-windows-x64.zip';
+        case 'darwin': return 'DepotDownloader-osx-x64.zip';
+        default:       return 'DepotDownloader-linux-x64.zip';
+    }
+}
+
+function getDepotDownloaderExePath() {
+    const exe = process.platform === 'win32' ? 'DepotDownloader.exe' : 'DepotDownloader';
+    return path.join(depotDownloaderDir, exe);
+}
 
 function getS2vAssetName() {
     switch (process.platform) {
@@ -97,6 +116,43 @@ async function downloadFileHTTPS(url, destPath) {
     });
 }
 
+async function ensureDepotDownloader() {
+    if (!fs.existsSync(depotDownloaderDir)) fs.mkdirSync(depotDownloaderDir, { recursive: true });
+
+    const release = await fetchJson(`https://api.github.com/repos/${DEPOT_DOWNLOADER_REPO}/releases/latest`);
+    const latestVersion = release.tag_name;
+    const ddExe = getDepotDownloaderExePath();
+
+    const cachedVersion = fs.existsSync(depotDownloaderVersionFile)
+        ? fs.readFileSync(depotDownloaderVersionFile, 'utf8').trim()
+        : null;
+
+    if (cachedVersion === latestVersion && fs.existsSync(ddExe)) {
+        console.log(`DepotDownloader ${latestVersion} already cached`);
+        return ddExe;
+    }
+
+    const assetName = getDepotDownloaderAssetName();
+    const asset = release.assets.find(a => a.name === assetName);
+    if (!asset) throw new Error(`Could not find ${assetName} in release assets`);
+
+    console.log(`Downloading DepotDownloader ${latestVersion}${cachedVersion ? ` (was ${cachedVersion})` : ''}...`);
+
+    const zipPath = path.join(depotDownloaderDir, 'dd.zip');
+    await downloadFileHTTPS(asset.browser_download_url, zipPath);
+
+    new AdmZip(zipPath).extractAllTo(depotDownloaderDir, true);
+    fs.unlinkSync(zipPath);
+
+    if (process.platform !== 'win32') {
+        fs.chmodSync(ddExe, 0o755);
+    }
+
+    fs.writeFileSync(depotDownloaderVersionFile, latestVersion);
+    console.log(`DepotDownloader ${latestVersion} ready`);
+    return ddExe;
+}
+
 async function ensureSource2ViewerCLI() {
     if (!fs.existsSync(s2vDir)) fs.mkdirSync(s2vDir, { recursive: true });
 
@@ -134,6 +190,96 @@ async function ensureSource2ViewerCLI() {
     return s2vExe;
 }
 
+async function downloadVPKFiles(depotDownloaderPath) {
+    console.log(`\n[Stage 1/2] Downloading pak01_dir.vpk to determine required archives...`);
+    await runDepotDownloader(depotDownloaderPath, ['game/csgo/pak01_dir.vpk']);
+    
+    const vpkDirPath = path.join(temp, 'game', 'csgo', 'pak01_dir.vpk');
+    if (!fs.existsSync(vpkDirPath)) {
+        throw new Error(`pak01_dir.vpk not found at ${vpkDirPath}`);
+    }
+
+    const vpkDir = new vpk(vpkDirPath);
+    vpkDir.load();
+    
+    const { mapIconFiles, radarFiles, radarInfoFiles, thumbFiles, all } = getFiles(vpkDir);
+    const requiredArchives = getRequiredVPKArchives(vpkDir, all);
+    
+    console.log(`\nFound files to extract:`);
+    console.log(`  - ${mapIconFiles.length} map icons`);
+    console.log(`  - ${radarFiles.length} radars`);
+    console.log(`  - ${radarInfoFiles.length} radar info files`);
+    console.log(`  - ${thumbFiles.length} thumbnails`);
+    
+    console.log(`\nRequired VPK archives: ${requiredArchives.map(i => `pak01_${String(i).padStart(3, '0')}.vpk`).join(', ')}`);
+    
+    if (requiredArchives.length === 0) {
+        console.log('No additional archives needed.');
+        return vpkDir;
+    }
+
+    const fileList = requiredArchives
+        .map(i => `game/csgo/pak01_${String(i).padStart(3, '0')}.vpk`)
+        .concat(['game/csgo/pak01_dir.vpk']);
+
+    console.log(`\n[Stage 2/2] Downloading ${requiredArchives.length} VPK archive(s)...`);
+    await runDepotDownloader(depotDownloaderPath, fileList);
+    
+    return vpkDir;
+}
+
+async function runDepotDownloader(depotDownloaderPath, fileList) {
+    return new Promise((resolve, reject) => {
+        if (!fs.existsSync(temp)) {
+            fs.mkdirSync(temp, { recursive: true });
+        }
+
+        const args = [
+            '-app', appId.toString(),
+            '-depot', depotId.toString(),
+            '-os', 'windows',
+            '-dir', temp
+        ];
+
+        const fileListContent = fileList.join('\n');
+        const fileListPath = path.join(temp, 'filelist.txt');
+        fs.writeFileSync(fileListPath, fileListContent, 'utf8');
+        
+        console.log(`Files to download:\n${fileList.map(f => `  ${f}`).join('\n')}`);
+        console.log(`\nFile list written to: ${fileListPath}`);
+        console.log(`File list content:\n${fileListContent}\n`);
+        
+        args.push('-filelist');
+        args.push(fileListPath);
+
+        console.log(`Command: ${depotDownloaderPath} ${args.join(' ')}\n`);
+        
+        const child = require('child_process').spawn(depotDownloaderPath, args, {
+            stdio: ['pipe', 'inherit', 'inherit']
+        });
+
+        child.stdin.write('\n');
+        child.stdin.end();
+
+        child.on('error', (err) => {
+            reject(new Error(`Failed to execute DepotDownloader: ${err.message}`));
+        });
+
+        child.on('close', (code) => {
+            try {
+                fs.unlinkSync(fileListPath);
+            } catch { }
+            
+            if (code !== 0) {
+                reject(new Error(`DepotDownloader exited with code ${code}`));
+            } else {
+                console.log('\nDepotDownloader stage completed');
+                resolve();
+            }
+        });
+    });
+}
+
 async function runSource2ViewerCLI(cliPath, vpkDirPath, outputDir, filter) {
     const tempOut = path.join(outputDir, '_temp_extract');
     fs.mkdirSync(tempOut, { recursive: true });
@@ -150,7 +296,7 @@ async function runSource2ViewerCLI(cliPath, vpkDirPath, outputDir, filter) {
         });
     });
 
-        function flattenDir(dir) {
+    function flattenDir(dir) {
         for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
             const fullPath = path.join(dir, entry.name);
             if (entry.isDirectory()) {
@@ -166,6 +312,173 @@ async function runSource2ViewerCLI(cliPath, vpkDirPath, outputDir, filter) {
 
     flattenDir(tempOut);
     fs.rmSync(tempOut, { recursive: true, force: true });
+}
+
+function parseRadarInfo(content) {
+    const result = {};
+    const stripComments = content.replace(/\/\/[^\n]*/g, '');
+
+    const floatVal = (key) => {
+        const m = stripComments.match(new RegExp(`"${key}"\\s+"?([\\-\\d.]+)"?`));
+        return m ? parseFloat(m[1]) : undefined;
+    };
+
+    for (const key of ['pos_x', 'pos_y', 'scale', 'rotate', 'zoom']) {
+        const val = floatVal(key);
+        if (val !== undefined) result[key] = val;
+    }
+
+    const verticalMatch = stripComments.match(/"verticalsections"\s*\{([^}]+)\}/s);
+    if (verticalMatch) {
+        const sections = {};
+        const sectionRegex = /"(\w+)"\s*\{([^}]+)\}/gs;
+        let sec;
+        while ((sec = sectionRegex.exec(verticalMatch[1])) !== null) {
+            const name = sec[1];
+            const body = sec[2];
+            const altMax = body.match(/"AltitudeMax"\s+"?([\-\d.]+)"?/);
+            const altMin = body.match(/"AltitudeMin"\s+"?([\-\d.]+)"?/);
+            sections[name] = {
+                ...(altMax ? { AltitudeMax: parseFloat(altMax[1]) } : {}),
+                ...(altMin ? { AltitudeMin: parseFloat(altMin[1]) } : {}),
+            };
+        }
+        if (Object.keys(sections).length > 0) result.verticalsections = sections;
+    }
+
+    return result;
+}
+
+function extractRadarInfo(vpkDir, radarInfoFiles, knownMapNames) {
+    if (!fs.existsSync(radarInfoDir)) fs.mkdirSync(radarInfoDir, { recursive: true });
+
+    const radarInfoMap = {};
+
+    for (const vpkPath of radarInfoFiles) {
+        const buffer = vpkDir.getFile(vpkPath);
+        const fileName = path.basename(vpkPath);
+        const mapName = fileName.replace(/\.txt$/i, '');
+
+        if (!knownMapNames.includes(mapName)) continue;
+
+        fs.writeFileSync(path.join(radarInfoDir, fileName), buffer);
+        console.log(`Extracted radar info: ${fileName}`);
+
+        const parsed = parseRadarInfo(buffer.toString('utf8'));
+        if (Object.keys(parsed).length > 0) {
+            radarInfoMap[mapName] = {
+                path: `https://raw.githubusercontent.com/${repo}/${defaultBranch}/data/radar_info/${fileName}`,
+                ...parsed,
+            };
+        }
+    }
+
+    return radarInfoMap;
+}
+
+function getMapFirstSeenDates() {
+    const firstSeen = {};
+    try {
+        const log = execSync('git log --pretty=format:"%H %ai" -- data/available.json', { encoding: 'utf8' });
+        if (!log.trim()) return firstSeen;
+
+        const commits = log.trim().split('\n').map(line => {
+            const spaceIdx = line.indexOf(' ');
+            return { hash: line.slice(0, spaceIdx), date: line.slice(spaceIdx + 1, spaceIdx + 11) };
+        }).reverse();
+
+        for (const { hash, date } of commits) {
+            try {
+                const json = JSON.parse(execSync(`git show ${hash}:data/available.json`, { encoding: 'utf8' }));
+                for (const mapName of Object.keys(json.maps || {})) {
+                    if (!firstSeen[mapName]) firstSeen[mapName] = date;
+                }
+            } catch {
+            }
+        }
+    } catch {
+    }
+    return firstSeen;
+}
+
+function generateChangelog(oldData, newData) {
+    const oldMaps = oldData.maps || {};
+    const newMaps = newData.maps || {};
+    const date = new Date().toISOString().slice(0, 10);
+
+    const added   = Object.keys(newMaps).filter(m => !oldMaps[m]);
+    const removed = Object.keys(oldMaps).filter(m => !newMaps[m]);
+    const updated = Object.keys(newMaps).filter(m =>
+        oldMaps[m] && oldMaps[m].hash && newMaps[m].hash && oldMaps[m].hash !== newMaps[m].hash
+    );
+
+    if (!added.length && !updated.length && !removed.length) {
+        console.log('No map changes — skipping changelog');
+        return null;
+    }
+
+    const lines = [`## ${date}\n`];
+    if (added.length)   lines.push(`### Added\n${added.map(m => `- \`${m}\``).join('\n')}\n`);
+    if (updated.length) lines.push(`### Updated\n${updated.map(m => `- \`${m}\``).join('\n')}\n`);
+    if (removed.length) lines.push(`### Removed\n${removed.map(m => `- \`${m}\``).join('\n')}\n`);
+
+    const existing = fs.existsSync(changelogFile) ? fs.readFileSync(changelogFile, 'utf8') : '';
+    const header = existing.startsWith('# Changelog') ? '' : '# Changelog\n\n';
+    fs.writeFileSync(changelogFile, header + lines.join('\n') + '\n' + existing.replace(/^# Changelog\n\n?/, ''));
+    console.log('Updated CHANGELOG.md');
+
+    return { date, added, updated, removed };
+}
+
+async function publishGitHubRelease(manifestId, changes) {
+    if (!changes) return;
+
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) {
+        console.log('No GITHUB_TOKEN — skipping release');
+        return;
+    }
+
+    const { date, added, updated, removed } = changes;
+
+    const bodyParts = [
+        added.length   ? `### Added\n${added.map(m => `- \`${m}\``).join('\n')}` : null,
+        updated.length ? `### Updated\n${updated.map(m => `- \`${m}\``).join('\n')}` : null,
+        removed.length ? `### Removed\n${removed.map(m => `- \`${m}\``).join('\n')}` : null,
+    ].filter(Boolean);
+
+    const payload = JSON.stringify({
+        tag_name: `update-${date}-${manifestId.slice(-6)}`,
+        name: `Map update ${date}`,
+        body: bodyParts.join('\n\n'),
+        draft: false,
+        prerelease: false,
+    });
+
+    await new Promise((resolve, reject) => {
+        const req = https.request({
+            hostname: 'api.github.com',
+            path: `/repos/${repo}/releases`,
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'User-Agent': 'cs2-map-icons',
+                'Content-Length': Buffer.byteLength(payload),
+            },
+        }, res => {
+            res.resume();
+            if (res.statusCode === 201) {
+                console.log(`Published GitHub release for manifest ${manifestId}`);
+                resolve();
+            } else {
+                reject(new Error(`GitHub release failed: ${res.statusCode}`));
+            }
+        });
+        req.on('error', reject);
+        req.write(payload);
+        req.end();
+    });
 }
 
 async function extractRadarsAndThumbs(vpkDirPath, radarFiles, thumbFiles, mapIconFiles) {
@@ -212,21 +525,10 @@ async function extractRadarsAndThumbs(vpkDirPath, radarFiles, thumbFiles, mapIco
     return { radarMap, thumbMap };
 }
 
-async function downloadVPKDir(user, manifest) {
-    const dirFile = manifest.manifest.files.find(file =>
-        file.filename.endsWith("csgo\\pak01_dir.vpk")
-    );
-    if (!dirFile) throw new Error("Could not find pak01_dir.vpk in manifest");
-    const filePath = path.join(temp, 'pak01_dir.vpk');
-    await user.downloadFile(appId, depotId, dirFile, filePath);
-    const vpkDir = new vpk(filePath);
-    vpkDir.load();
-    return vpkDir;
-}
-
 function getFiles(vpkDir) {
     const mapIconFiles = Object.keys(vpkDir.tree).filter(fileName => mapIconRegex.test(fileName));
     const radarFiles = Object.keys(vpkDir.tree).filter(fileName => radarRegex.test(fileName));
+    const radarInfoFiles = Object.keys(vpkDir.tree).filter(fileName => radarInfoRegex.test(fileName));
     const thumbFiles = Object.keys(vpkDir.tree).filter(fileName => thumbRegex.test(fileName));
 
     const csgoEnglishFile = "resource/csgo_english.txt";
@@ -234,7 +536,7 @@ function getFiles(vpkDir) {
         mapIconFiles.push(csgoEnglishFile);
     }
 
-    return { mapIconFiles, radarFiles, thumbFiles, all: [...mapIconFiles, ...radarFiles, ...thumbFiles] };
+    return { mapIconFiles, radarFiles, radarInfoFiles, thumbFiles, all: [...mapIconFiles, ...radarFiles, ...radarInfoFiles, ...thumbFiles] };
 }
 
 function getRequiredVPKArchives(vpkDir, files) {
@@ -248,80 +550,7 @@ function getRequiredVPKArchives(vpkDir, files) {
     return Array.from(requiredIndices).sort((a, b) => a - b);
 }
 
-async function downloadVPKArchives(user, manifest, vpkDir, files) {
-    const requiredIndices = getRequiredVPKArchives(vpkDir, files);
-
-    const toDownload = (await Promise.all(requiredIndices.map(async (archiveIndex) => {
-        const paddedIndex = archiveIndex.toString().padStart(3, '0');
-        const fileName = `pak01_${paddedIndex}.vpk`;
-        const file = manifest.manifest.files.find(f => 
-            f.filename.endsWith(`csgo\\${fileName}`) || f.filename.endsWith(`csgo/${fileName}`)
-        ) || manifest.manifest.files.find(f =>
-            f.filename.endsWith(fileName)
-        );
-        if (!file) return null;
-        const filePath = path.join(temp, fileName);
-
-        if (fs.existsSync(filePath)) {
-            const localHash = crypto.createHash('sha1')
-                .update(fs.readFileSync(filePath))
-                .digest('hex');
-            const manifestHash = file.sha_content?.toString('hex') ?? file.sha?.toString('hex');
-            if (manifestHash && localHash === manifestHash) {
-                console.log(`Skipping ${fileName} (hash matches)`);
-                return null;
-            }
-            console.log(`Queued ${fileName} (hash mismatch)`);
-        } else {
-            console.log(`Queued ${fileName} (missing)`);
-        }
-
-        return { fileName, file, filePath };
-    }))).filter(Boolean);
-
-    if (toDownload.length === 0) {
-        console.log('All VPK archives up to date.');
-        return;
-    }
-
-    console.log(`Downloading ${toDownload.length} VPK archive(s)...`);
-    let completed = 0;
-
-    for (const { fileName, file, filePath } of toDownload) {
-        const fileSize = parseInt(file.size, 10);
-        const fileSizeMB = (fileSize / 1024 / 1024).toFixed(1);
-        const start = Date.now();
-
-        process.stdout.write(`[${completed + 1}/${toDownload.length}] ${fileName} (${fileSizeMB} MB)`);
-
-        await user.downloadFile(appId, depotId, file, filePath);
-
-        const elapsed = ((Date.now() - start) / 1000).toFixed(1);
-        const speedMBs = (fileSize / 1024 / 1024 / parseFloat(elapsed)).toFixed(1);
-        completed++;
-        process.stdout.write(`\r✓ [${completed}/${toDownload.length}] ${fileName} (${fileSizeMB} MB) — ${elapsed}s @ ${speedMBs} MB/s\n`);
-    }
-
-    console.log(`Downloaded ${completed} VPK archive(s).`);
-}
-
-function cleanupVPKArchives(vpkDir, files) {
-    const requiredIndices = new Set(
-        getRequiredVPKArchives(vpkDir, files).map(i => i.toString().padStart(3, '0'))
-    );
-    let removed = 0;
-    for (const entry of fs.readdirSync(temp)) {
-        const m = entry.match(/^pak01_(\d{3})\.vpk$/);
-        if (!m) continue;
-        if (requiredIndices.has(m[1])) continue;
-        fs.unlinkSync(path.join(temp, entry));
-        console.log(`Removed unused temp file: ${entry}`);
-        removed++;
-    }
-    if (removed > 0) console.log(`Cleaned up ${removed} unused VPK archive(s) from temp.`);
-}
-
-async function extractAndConvertMapIcons(vpkDir, files, radarMap, thumbMap, options = {}) {
+async function extractAndConvertMapIcons(vpkDir, files, radarMap, thumbMap, radarInfoMap, firstSeenDates, options = {}) {
     let useSharp = false;
     try { require('sharp'); useSharp = true; } catch { }
     const converter = new VsvgConverter({ useSharp });
@@ -344,6 +573,12 @@ async function extractAndConvertMapIcons(vpkDir, files, radarMap, thumbMap, opti
         const mapData = { origin: vpkPath, hash: hashBuffer(buffer) };
         console.log(`Extracted ${mapName}`);
         if (mapNames[mapName]) mapData.display_name = mapNames[mapName];
+
+        mapData.first_seen =
+            firstSeenDates[mapName] ||
+            existingData.maps[mapName]?.first_seen ||
+            new Date().toISOString().slice(0, 10);
+
         try {
             const pngBuffer = await converter.convertToPng(buffer, {
                 width: options.width,
@@ -357,6 +592,9 @@ async function extractAndConvertMapIcons(vpkDir, files, radarMap, thumbMap, opti
 
         if (radarMap[mapName]?.length) mapData.radar_paths = radarMap[mapName];
         else if (existingData.maps[mapName]?.radar_paths) mapData.radar_paths = existingData.maps[mapName].radar_paths;
+
+        if (radarInfoMap[mapName]) mapData.radar_info = radarInfoMap[mapName];
+        else if (existingData.maps[mapName]?.radar_info) mapData.radar_info = existingData.maps[mapName].radar_info;
 
         if (thumbMap[mapName]?.length) mapData.thumb_paths = thumbMap[mapName];
         else if (existingData.maps[mapName]?.thumb_paths) mapData.thumb_paths = existingData.maps[mapName].thumb_paths;
@@ -376,7 +614,7 @@ function generateDataFiles(downloadedData) {
     console.log('Dumped all data to available.json');
 
     const csvPath = path.join(dataDir, 'available.csv');
-    const fieldnames = ['map_name', 'display_name', 'hash', 'origin', 'path', 'radar_paths', 'thumb_paths'];
+    const fieldnames = ['map_name', 'display_name', 'hash', 'first_seen', 'origin', 'path', 'radar_paths', 'radar_info', 'thumb_paths'];
     const csvLines = [fieldnames.join(',')];
     for (const mapName of Object.keys(mergedMaps).sort()) {
         const d = mergedMaps[mapName];
@@ -384,67 +622,102 @@ function generateDataFiles(downloadedData) {
             mapName,
             d.display_name || '',
             d.hash || '',
+            d.first_seen || '',
             d.origin || '',
             d.path || '',
             (d.radar_paths || []).join(';'),
+            d.radar_info ? JSON.stringify(d.radar_info) : '',
             (d.thumb_paths || []).join(';'),
         ];
-        csvLines.push(row.map(s => `"${s}"`).join(','));
+        csvLines.push(row.map(s => `"${String(s).replace(/"/g, '""')}"`).join(','));
     }
     fs.writeFileSync(csvPath, csvLines.join('\n'), 'utf8');
     console.log('Dumped all data to available.csv');
 
     const mdPath = path.join(dataDir, 'available.md');
     const mdLines = [
-        '| map_name | display_name | hash | origin | path | radar_paths | thumb_paths |',
-        '|----------|--------------|------|--------|------|-------------|-------------|'
+        '| map_name | display_name | hash | first_seen | origin | path | radar_paths | radar_info | thumb_paths |',
+        '|----------|--------------|------|------------|--------|------|-------------|------------|-------------|'
     ];
     for (const mapName of Object.keys(mergedMaps).sort()) {
         const d = mergedMaps[mapName];
-        mdLines.push(`| ${mapName} | ${d.display_name || '-'} | ${d.hash || ''} | ${d.origin || ''} | ${d.path || ''} | ${(d.radar_paths || []).join('<br>') || '-'} | ${(d.thumb_paths || []).join('<br>') || '-'} |`);
+        const radarInfoStr = d.radar_info
+            ? `[txt](${d.radar_info.path}) pos_x:${d.radar_info.pos_x} pos_y:${d.radar_info.pos_y} scale:${d.radar_info.scale}`
+            : '-';
+        mdLines.push(`| ${mapName} | ${d.display_name || '-'} | ${d.hash || ''} | ${d.first_seen || '-'} | ${d.origin || ''} | ${d.path || ''} | ${(d.radar_paths || []).join('<br>') || '-'} | ${radarInfoStr} | ${(d.thumb_paths || []).join('<br>') || '-'} |`);
     }
     fs.writeFileSync(mdPath, mdLines.join('\n'), 'utf8');
     console.log('Dumped all data to available.md');
 }
 
-[imagesDir, pngDir, radarDir, thumbDir, staticDir, dataDir, temp, s2vDir].forEach(dir => {
+[imagesDir, pngDir, radarDir, radarInfoDir, thumbDir, staticDir, dataDir, temp, s2vDir, depotDownloaderDir].forEach(dir => {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 });
 
-const user = new SteamUser();
-user.logOn({ anonymous: true });
-console.log("Logging in to Steam...");
+async function getLatestManifestId() {
+    return new Promise((resolve, reject) => {
+        const user = new SteamUser();
 
-user.once('loggedOn', async () => {
+        user.on('error', (err) => reject(err));
+
+        user.logOn({ anonymous: true });
+
+        user.once('loggedOn', async () => {
+            try {
+                const cs = (await user.getProductInfo([appId], [], true)).apps[appId].appinfo;
+                const commonDepot = cs.depots[depotId];
+                const latestManifestId = commonDepot.manifests.public.gid;
+                console.log("Got manifest id " + latestManifestId);
+                user.logOff();
+                resolve(latestManifestId);
+            } catch (err) {
+                user.logOff();
+                reject(err);
+            }
+        });
+    });
+}
+
+(async () => {
     try {
-        const cs = (await user.getProductInfo([appId], [], true)).apps[appId].appinfo;
-        const commonDepot = cs.depots[depotId];
-        const latestManifestId = commonDepot.manifests.public.gid;
-        console.log("Got manifest id " + latestManifestId);
+        const latestManifestId = await getLatestManifestId();
         const lastManifestId = readLastManifestId();
+
         if (lastManifestId === latestManifestId) {
             console.log('Manifest unchanged — skipping download');
             process.exit(0);
         }
-        const manifest = await user.getManifest(appId, depotId, latestManifestId, 'public');
-        const vpkDir = await downloadVPKDir(user, manifest);
-        console.log("Downloaded pak01_dir.vpk");
-        const { mapIconFiles, radarFiles, thumbFiles, all } = getFiles(vpkDir);
-        await downloadVPKArchives(user, manifest, vpkDir, all);
-        const vpkDirPath = path.join(temp, 'pak01_dir.vpk');
+
+        console.log(`Manifest changed: ${lastManifestId || '(none)'} -> ${latestManifestId}`);
+
+        const ddPath = await ensureDepotDownloader();
+        const vpkDir = await downloadVPKFiles(ddPath);
+
+        const { mapIconFiles, radarFiles, radarInfoFiles, thumbFiles, all } = getFiles(vpkDir);
+        const vpkDirPath = path.join(temp, 'game', 'csgo', 'pak01_dir.vpk');
+
         const { radarMap, thumbMap } = await extractRadarsAndThumbs(vpkDirPath, radarFiles, thumbFiles, mapIconFiles);
-        const downloadedData = await extractAndConvertMapIcons(vpkDir, mapIconFiles, radarMap, thumbMap, options);
-        cleanupVPKArchives(vpkDir, all);
+
+        const knownMapNames = mapIconFiles
+            .map(f => path.basename(f).match(/map_icon_(.+)\.vsvg_c$/i)?.[1])
+            .filter(Boolean);
+
+        const radarInfoMap = extractRadarInfo(vpkDir, radarInfoFiles, knownMapNames);
+        const firstSeenDates = getMapFirstSeenDates();
+        const oldData = loadExistingData();
+        const downloadedData = await extractAndConvertMapIcons(vpkDir, mapIconFiles, radarMap, thumbMap, radarInfoMap, firstSeenDates, options);
+        
         generateDataFiles(downloadedData);
+        const newData = loadExistingData();
+        const changes = generateChangelog(oldData, newData);
+        
+        await publishGitHubRelease(latestManifestId, changes);
         writeManifestId(latestManifestId);
+        
+        console.log("Done!");
         process.exit(0);
     } catch (e) {
         console.error(e);
         process.exit(1);
     }
-});
-
-user.on('error', (err) => {
-    console.error(err);
-    process.exit(1);
-});
+})();
