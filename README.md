@@ -60,7 +60,7 @@ Auto-updated list of all maps ever scraped:
 
 ## Used By
 
-- [zenojunior/cs-demo-analyzer](https://github.com/zenojunior/cs-demo-analyzer) - Browser-based 2D CS2 demo viewer. Playback, heatmaps and grenade trajectories.
+- [zenojunior/cs2d](https://github.com/zenojunior/cs2d) - Browser-based 2D CS2 demo viewer. Playback, heatmaps and grenade trajectories.
 
 ## License
 
