@@ -43,13 +43,13 @@ jobs:
             process.exit(0);
           });
           " >> $GITHUB_OUTPUT
-      - name: Cache temp VPK files
-        uses: actions/cache@v4
-        with:
-          path: ./temp
-          key: ${{ runner.os }}-vpk-${{ steps.cs2_manifest.outputs.manifest }}
-          restore-keys: |
-            ${{ runner.os }}-vpk-
+#      - name: Cache temp VPK files
+#        uses: actions/cache@v4
+#        with:
+#          path: ./temp
+#          key: ${{ runner.os }}-vpk-${{ steps.cs2_manifest.outputs.manifest }}
+#          restore-keys: |
+#            ${{ runner.os }}-vpk-
       - name: Get latest Source2Viewer-CLI version
         id: s2v_version
         run: |
