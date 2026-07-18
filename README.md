@@ -10,6 +10,22 @@
 
 </div>
 
+<div align="center">
+
+### [Browse the live gallery](https://murkyyt.github.io/cs2-map-icons/)
+
+All maps, filterable by mode, auto-rebuilt on every Valve depot update.
+
+</div>
+
+<br>
+
+<div align="center">
+  <img src="docs/screenshot.png" alt="CS2 Map Icons gallery screenshot" width="800">
+</div>
+
+<br>
+
 ## Available Assets
 
 | Type | Path pattern | Notes |
