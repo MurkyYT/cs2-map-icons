@@ -687,6 +687,23 @@
       "display_name": "Poseidon",
       "first_seen": "2026-01-28",
       "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_poseidon.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_poseidon_radar_tga_f3ba7cb5.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_poseidon_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_poseidon_radar_spectate_tga.png"
+      ],
+      "radar_info": {
+        "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/data/radar_info/de_poseidon.txt",
+        "pos_x": -1046.3943,
+        "pos_y": 1166.3942,
+        "scale": 3.0124886,
+        "verticalsections": {
+          "default": {
+            "AltitudeMax": 16384,
+            "AltitudeMin": -16384
+          }
+        }
+      },
       "thumb_paths": [
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_poseidon_png.png"
       ]
@@ -761,6 +778,21 @@
       "display_name": "Shelter",
       "first_seen": "2026-07-09",
       "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/cs_shelter.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/cs_shelter_radar_tga.png"
+      ],
+      "radar_info": {
+        "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/data/radar_info/cs_shelter.txt",
+        "pos_x": -3448.7712,
+        "pos_y": 3805.3228,
+        "scale": 3.311857,
+        "verticalsections": {
+          "default": {
+            "AltitudeMax": 16384,
+            "AltitudeMin": -16384
+          }
+        }
+      },
       "thumb_paths": [
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_shelter_png.png"
       ]
@@ -771,6 +803,26 @@
       "display_name": "Boulder",
       "first_seen": "2026-07-09",
       "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_boulder.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_boulder_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_boulder_higher1_radar_tga.png"
+      ],
+      "radar_info": {
+        "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/data/radar_info/de_boulder.txt",
+        "pos_x": -3273.4917,
+        "pos_y": 2930.2207,
+        "scale": 2.8491137,
+        "verticalsections": {
+          "default": {
+            "AltitudeMax": 16384,
+            "AltitudeMin": 62.757324
+          },
+          "higher1": {
+            "AltitudeMax": 62.757324,
+            "AltitudeMin": -16384
+          }
+        }
+      },
       "thumb_paths": [
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_boulder_png.png"
       ]
@@ -781,6 +833,21 @@
       "display_name": "Debris",
       "first_seen": "2026-07-09",
       "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_debris.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_debris_radar_tga.png"
+      ],
+      "radar_info": {
+        "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/data/radar_info/de_debris.txt",
+        "pos_x": -3015.2393,
+        "pos_y": 2919.2393,
+        "scale": 1.9445695,
+        "verticalsections": {
+          "default": {
+            "AltitudeMax": 16384,
+            "AltitudeMin": -16384
+          }
+        }
+      },
       "thumb_paths": [
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_debris_png.png"
       ]
@@ -791,6 +858,23 @@
       "display_name": "El Dorado",
       "first_seen": "2026-07-09",
       "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_eldorado.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_eldorado_v20_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_eldorado_radar_tga_dabd6972.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_eldorado_radar_tga.png"
+      ],
+      "radar_info": {
+        "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/data/radar_info/de_eldorado.txt",
+        "pos_x": -3548.6814,
+        "pos_y": 2571.1816,
+        "scale": 2.0656068,
+        "verticalsections": {
+          "default": {
+            "AltitudeMax": 16384,
+            "AltitudeMin": -16384
+          }
+        }
+      },
       "thumb_paths": [
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_eldorado_png.png"
       ]
@@ -801,6 +885,22 @@
       "display_name": "Fachwerk",
       "first_seen": "2026-07-09",
       "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_fachwerk.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_fachwerk_radar_tga_e7f1da5c.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_fachwerk_radar_tga.png"
+      ],
+      "radar_info": {
+        "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/data/radar_info/de_fachwerk.txt",
+        "pos_x": -2311.0767,
+        "pos_y": 2874.6204,
+        "scale": 2.5537856,
+        "verticalsections": {
+          "default": {
+            "AltitudeMax": 16384,
+            "AltitudeMin": -16384
+          }
+        }
+      },
       "thumb_paths": [
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_fachwerk_png.png"
       ]

@@ -11,6 +11,7 @@ const console = require('console');
 
 const appId = 730;
 const depotId = 2347770;
+const communityAddonDepotId = 2347771;
 const temp = './temp';
 const staticDir = './static';
 const imagesDir = './images';
@@ -228,7 +229,7 @@ async function downloadVPKFiles(depotDownloaderPath) {
     return vpkDir;
 }
 
-async function runDepotDownloader(depotDownloaderPath, fileList) {
+async function runDepotDownloader(depotDownloaderPath, fileList, targetDepotId = depotId) {
     return new Promise((resolve, reject) => {
         if (!fs.existsSync(temp)) {
             fs.mkdirSync(temp, { recursive: true });
@@ -236,7 +237,7 @@ async function runDepotDownloader(depotDownloaderPath, fileList) {
 
         const args = [
             '-app', appId.toString(),
-            '-depot', depotId.toString(),
+            '-depot', targetDepotId.toString(),
             '-os', 'windows',
             '-dir', temp
         ];
@@ -402,6 +403,31 @@ function extractRadarInfo(vpkDir, radarInfoFiles, knownMapNames) {
     return radarInfoMap;
 }
 
+function extractRadarInfoForMap(vpkDir, radarInfoFiles, mapName) {
+    if (!fs.existsSync(radarInfoDir)) fs.mkdirSync(radarInfoDir, { recursive: true });
+
+    for (const vpkPath of radarInfoFiles) {
+        const buffer = vpkDir.getFile(vpkPath);
+        const fileName = path.basename(vpkPath);
+        const fileMapName = fileName.replace(/\.txt$/i, '');
+
+        if (fileMapName !== mapName) continue;
+
+        fs.writeFileSync(path.join(radarInfoDir, fileName), buffer);
+        console.log(`Extracted radar info: ${fileName}`);
+
+        const parsed = parseRadarInfo(buffer.toString('utf8'));
+        if (Object.keys(parsed).length > 0) {
+            return {
+                path: `https://raw.githubusercontent.com/${repo}/${defaultBranch}/data/radar_info/${fileName}`,
+                ...parsed,
+            };
+        }
+    }
+
+    return null;
+}
+
 function getMapFirstSeenDates() {
     const firstSeen = {};
     try {
@@ -469,6 +495,151 @@ async function extractRadarsAndThumbs(vpkDirPath, radarFiles, thumbFiles, mapIco
     }
 
     return { radarMap, thumbMap };
+}
+
+async function downloadCommunityAddonVPKs(depotDownloaderPath, mapNames) {
+    if (mapNames.length === 0) return {};
+
+    const baseRelDirFor = (mapName) => `game/csgo_community_addons/${mapName}`;
+    const dirVpkRelPathFor = (mapName) => `${baseRelDirFor(mapName)}/${mapName}_dir.vpk`;
+    const localVpkDirPathFor = (mapName) => path.join(temp, 'game', 'csgo_community_addons', mapName, `${mapName}_dir.vpk`);
+
+    console.log(`\n[Community addons 1/2] Downloading ${mapNames.length} dir VPK(s) together: ${mapNames.join(', ')}`);
+    const dirFileList = mapNames.map(dirVpkRelPathFor);
+    try {
+        await runDepotDownloader(depotDownloaderPath, dirFileList, communityAddonDepotId);
+    } catch (err) {
+        console.log(`  Failed to download community addon dir VPKs: ${err.message}`);
+    }
+
+    const loaded = {};
+    for (const mapName of mapNames) {
+        const localVpkDirPath = localVpkDirPathFor(mapName);
+        if (!fs.existsSync(localVpkDirPath)) {
+            console.log(`  ${dirVpkRelPathFor(mapName)} not found in depot, skipping ${mapName}`);
+            continue;
+        }
+        try {
+            const addonVpk = new vpk(localVpkDirPath);
+            addonVpk.load();
+            loaded[mapName] = { vpkDirPath: localVpkDirPath, addonVpk, baseRelDir: baseRelDirFor(mapName) };
+        } catch (err) {
+            console.log(`  Failed to load ${dirVpkRelPathFor(mapName)}: ${err.message}`);
+        }
+    }
+
+    const results = {};
+    const archiveFileList = [];
+
+    for (const [mapName, { addonVpk, baseRelDir, vpkDirPath }] of Object.entries(loaded)) {
+        const radarFiles = Object.keys(addonVpk.tree).filter(fileName => radarRegex.test(fileName));
+        const thumbFiles = Object.keys(addonVpk.tree).filter(fileName => thumbRegex.test(fileName));
+        const radarInfoFiles = Object.keys(addonVpk.tree).filter(fileName => radarInfoRegex.test(fileName));
+
+        if (radarFiles.length === 0 && thumbFiles.length === 0 && radarInfoFiles.length === 0) {
+            console.log(`  No radar, screenshot, or radar info files found inside community addon VPK for ${mapName}`);
+            continue;
+        }
+
+        const requiredArchives = getRequiredVPKArchives(addonVpk, [...radarFiles, ...thumbFiles, ...radarInfoFiles]);
+        for (const idx of requiredArchives) {
+            archiveFileList.push(`${baseRelDir}/${mapName}_${String(idx).padStart(3, '0')}.vpk`);
+        }
+        archiveFileList.push(`${baseRelDir}/${mapName}_dir.vpk`);
+
+        results[mapName] = { vpkDirPath, addonVpk, radarFiles, thumbFiles, radarInfoFiles };
+    }
+
+    if (archiveFileList.length > 0) {
+        console.log(`\n[Community addons 2/2] Downloading archive(s) for ${Object.keys(results).length} community addon map(s) together...`);
+        try {
+            await runDepotDownloader(depotDownloaderPath, archiveFileList, communityAddonDepotId);
+        } catch (err) {
+            console.log(`  Failed to download community addon archives: ${err.message}`);
+        }
+    }
+
+    return results;
+}
+
+async function extractCommunityAddonAssets(depotDownloaderPath, missingRadarMapNames, missingThumbMapNames, missingRadarInfoMapNames = []) {
+    const allMapNames = Array.from(new Set([...missingRadarMapNames, ...missingThumbMapNames, ...missingRadarInfoMapNames]));
+    if (allMapNames.length === 0) return { radarMap: {}, thumbMap: {}, radarInfoMap: {} };
+
+    console.log(`\nAttempting community addon fallback for ${allMapNames.length} map(s) missing radar/screenshots/radar info: ${allMapNames.join(', ')}`);
+
+    const perMapAssets = await downloadCommunityAddonVPKs(depotDownloaderPath, allMapNames);
+
+    const cliPath = await ensureSource2ViewerCLI();
+    const radarMap = {};
+    const thumbMap = {};
+    const radarInfoMap = {};
+    const missingRadarSet = new Set(missingRadarMapNames);
+    const missingThumbSet = new Set(missingThumbMapNames);
+    const missingRadarInfoSet = new Set(missingRadarInfoMapNames);
+
+    for (const [mapName, { vpkDirPath, addonVpk, radarFiles, thumbFiles, radarInfoFiles }] of Object.entries(perMapAssets)) {
+        if (missingRadarSet.has(mapName) && radarFiles.length > 0) {
+            console.log(`  Extracting ${radarFiles.length} radar image(s) for community addon map ${mapName}...`);
+            try {
+                await runSource2ViewerCLI(cliPath, vpkDirPath, radarDir, 'panorama/images/overheadmaps/');
+                for (const vpkPath of radarFiles) {
+                    const baseName = path.basename(vpkPath, '.vtex_c');
+                    const pngPath = path.join(radarDir, `${baseName}.png`);
+                    if (fs.existsSync(pngPath)) {
+                        if (!radarMap[mapName]) radarMap[mapName] = [];
+                        radarMap[mapName].push(`https://raw.githubusercontent.com/${repo}/${defaultBranch}/images/radars/${baseName}.png`);
+                    }
+                }
+                if (radarMap[mapName]?.length) {
+                    console.log(`  Found radar for ${mapName} via community addon depot`);
+                } else {
+                    console.log(`  Extraction ran but no radar PNG produced for ${mapName}`);
+                }
+            } catch (err) {
+                console.log(`  Failed to extract radar(s) for ${mapName}: ${err.message}`);
+            }
+        }
+
+        if (missingThumbSet.has(mapName) && thumbFiles.length > 0) {
+            console.log(`  Extracting ${thumbFiles.length} screenshot(s) for community addon map ${mapName}...`);
+            try {
+                await runSource2ViewerCLI(cliPath, vpkDirPath, thumbDir, 'panorama/images/map_icons/screenshots/1080p/');
+                for (const vpkPath of thumbFiles) {
+                    const baseName = path.basename(vpkPath, '.vtex_c');
+                    const pngPath = path.join(thumbDir, `${baseName}.png`);
+                    if (fs.existsSync(pngPath)) {
+                        if (!thumbMap[mapName]) thumbMap[mapName] = [];
+                        thumbMap[mapName].push(`https://raw.githubusercontent.com/${repo}/${defaultBranch}/images/thumbs/${baseName}.png`);
+                    }
+                }
+                if (thumbMap[mapName]?.length) {
+                    console.log(`  Found screenshot(s) for ${mapName} via community addon depot`);
+                } else {
+                    console.log(`  Extraction ran but no screenshot PNG produced for ${mapName}`);
+                }
+            } catch (err) {
+                console.log(`  Failed to extract screenshot(s) for ${mapName}: ${err.message}`);
+            }
+        }
+
+        if (missingRadarInfoSet.has(mapName) && radarInfoFiles.length > 0) {
+            console.log(`  Extracting radar info for community addon map ${mapName}...`);
+            try {
+                const info = extractRadarInfoForMap(addonVpk, radarInfoFiles, mapName);
+                if (info) {
+                    radarInfoMap[mapName] = info;
+                    console.log(`  Found radar info for ${mapName} via community addon depot`);
+                } else {
+                    console.log(`  Radar info file present but no usable data for ${mapName}`);
+                }
+            } catch (err) {
+                console.log(`  Failed to extract radar info for ${mapName}: ${err.message}`);
+            }
+        }
+    }
+
+    return { radarMap, thumbMap, radarInfoMap };
 }
 
 function getFiles(vpkDir) {
@@ -646,13 +817,30 @@ async function getLatestManifestId() {
         const { mapIconFiles, radarFiles, radarInfoFiles, thumbFiles, all } = getFiles(vpkDir);
         const vpkDirPath = path.join(temp, 'game', 'csgo', 'pak01_dir.vpk');
 
-        const { radarMap, thumbMap } = await extractRadarsAndThumbs(vpkDirPath, radarFiles, thumbFiles, mapIconFiles);
-
         const knownMapNames = mapIconFiles
             .map(f => path.basename(f).match(/map_icon_(.+)\.vsvg_c$/i)?.[1])
             .filter(Boolean);
 
+        const { radarMap, thumbMap } = await extractRadarsAndThumbs(vpkDirPath, radarFiles, thumbFiles, mapIconFiles);
         const radarInfoMap = extractRadarInfo(vpkDir, radarInfoFiles, knownMapNames);
+
+        const mapsMissingRadar = knownMapNames.filter(name => !radarMap[name] || radarMap[name].length === 0);
+        const mapsMissingThumb = knownMapNames.filter(name => !thumbMap[name] || thumbMap[name].length === 0);
+        const mapsMissingRadarInfo = knownMapNames.filter(name => !radarInfoMap[name]);
+
+        if (mapsMissingRadar.length > 0 || mapsMissingThumb.length > 0 || mapsMissingRadarInfo.length > 0) {
+            const communityAssets = await extractCommunityAddonAssets(ddPath, mapsMissingRadar, mapsMissingThumb, mapsMissingRadarInfo);
+            for (const [mapName, urls] of Object.entries(communityAssets.radarMap)) {
+                radarMap[mapName] = urls;
+            }
+            for (const [mapName, urls] of Object.entries(communityAssets.thumbMap)) {
+                thumbMap[mapName] = urls;
+            }
+            for (const [mapName, info] of Object.entries(communityAssets.radarInfoMap)) {
+                radarInfoMap[mapName] = info;
+            }
+        }
+
         const firstSeenDates = getMapFirstSeenDates();
         const oldData = loadExistingData();
         const downloadedData = await extractAndConvertMapIcons(vpkDir, mapIconFiles, radarMap, thumbMap, radarInfoMap, firstSeenDates, options);
