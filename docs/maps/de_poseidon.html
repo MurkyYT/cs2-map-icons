@@ -216,6 +216,14 @@
     .dl-card-label a { color: var(--accent); font-size: .6rem; }
     .dl-card-label a:hover { text-decoration: underline; }
     .dl-card-square img { aspect-ratio: 1/1; object-fit: contain; background: var(--bg3); padding: 8px; }
+    .dl-actions { display: flex; align-items: center; gap: 6px; }
+    .copy-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      font-family: inherit; font-size: .6rem; line-height: 1; padding: 2px 5px;
+      border-radius: 3px; cursor: pointer; transition: border-color .15s, color .15s;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-btn.copied { border-color: #6bbf6b; color: #6bbf6b; }
     .map-nav {
       border-top: 1px solid var(--border);
       display: flex; justify-content: space-between; align-items: center;
@@ -302,13 +310,25 @@
     
     <div class="dl-card dl-card-square">
       <img src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_poseidon.png" alt="Poseidon icon" loading="lazy">
-      <div class="dl-card-label"><span data-i18n="mapIcon">Map Icon</span><a href="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_poseidon.png" target="_blank" rel="noopener">↗ png</a></div>
+      <div class="dl-card-label">
+        <span data-i18n="mapIcon">Map Icon</span>
+        <span class="dl-actions">
+          <button type="button" class="copy-btn" data-url="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_poseidon.png" title="Copy URL" aria-label="Copy URL">⧉</button>
+          <a href="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_poseidon.png" target="_blank" rel="noopener">↗ png</a>
+        </span>
+      </div>
     </div>
     
     
     <div class="dl-card">
       <img src="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_poseidon_png.png" alt="screenshot 1" loading="lazy">
-      <div class="dl-card-label"><span data-i18n="screenshot">Screenshot</span><a href="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_poseidon_png.png" target="_blank" rel="noopener">↗ png</a></div>
+      <div class="dl-card-label">
+        <span><span data-i18n="screenshot">Screenshot</span></span>
+        <span class="dl-actions">
+          <button type="button" class="copy-btn" data-url="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_poseidon_png.png" title="Copy URL" aria-label="Copy URL">⧉</button>
+          <a href="https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_poseidon_png.png" target="_blank" rel="noopener">↗ png</a>
+        </span>
+      </div>
     </div>
   </div>
 </section>
@@ -321,7 +341,7 @@
 
 <footer>
   <span><a href="https://github.com/MurkyYT/cs2-map-icons">MurkyYT/cs2-map-icons</a> · <span data-i18n="notAffiliated">not affiliated with valve</span></span>
-  <span>Fri, 17 Jul 2026 02:41:49 GMT</span>
+  <span>Sat, 18 Jul 2026 09:58:14 GMT</span>
 </footer>
 
 
@@ -439,6 +459,34 @@
   const currentLang = detectLang();
   document.addEventListener('DOMContentLoaded', () => applyLang(currentLang));
 })();
+</script>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const url = btn.dataset.url;
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e2) {}
+        document.body.removeChild(ta);
+      }
+      const original = btn.textContent;
+      btn.textContent = '✓';
+      btn.classList.add('copied');
+      clearTimeout(btn._copyTimer);
+      btn._copyTimer = setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1200);
+    });
+  });
 </script>
 
 

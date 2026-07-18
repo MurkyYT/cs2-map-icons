@@ -754,6 +754,14 @@ function mapPage([mapKey, map]) {
     .dl-card-label a { color: var(--accent); font-size: .6rem; }
     .dl-card-label a:hover { text-decoration: underline; }
     .dl-card-square img { aspect-ratio: 1/1; object-fit: contain; background: var(--bg3); padding: 8px; }
+    .dl-actions { display: flex; align-items: center; gap: 6px; }
+    .copy-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      font-family: inherit; font-size: .6rem; line-height: 1; padding: 2px 5px;
+      border-radius: 3px; cursor: pointer; transition: border-color .15s, color .15s;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-btn.copied { border-color: #6bbf6b; color: #6bbf6b; }
     .map-nav {
       border-top: 1px solid var(--border);
       display: flex; justify-content: space-between; align-items: center;
@@ -821,17 +829,35 @@ ${(hasThumb || hasRadar || imgSrc) ? `
     ${imgSrc ? `
     <div class="dl-card dl-card-square">
       <img src="${imgSrc}" alt="${name} icon" loading="lazy">
-      <div class="dl-card-label"><span data-i18n="mapIcon">Map Icon</span><a href="${imgSrc}" target="_blank" rel="noopener">↗ png</a></div>
+      <div class="dl-card-label">
+        <span data-i18n="mapIcon">Map Icon</span>
+        <span class="dl-actions">
+          <button type="button" class="copy-btn" data-url="${imgSrc}" title="Copy URL" aria-label="Copy URL">⧉</button>
+          <a href="${imgSrc}" target="_blank" rel="noopener">↗ png</a>
+        </span>
+      </div>
     </div>` : ''}
     ${radars.map((r, i) => `
     <div class="dl-card dl-card-square">
       <img src="${r}" alt="radar ${i+1}" loading="lazy">
-      <div class="dl-card-label"><span data-i18n="radarLabel">Radar</span>${radars.length > 1 ? ` ${i+1}` : ''}<a href="${r}" target="_blank" rel="noopener">↗ png</a></div>
+      <div class="dl-card-label">
+        <span><span data-i18n="radarLabel">Radar</span>${radars.length > 1 ? ` ${i+1}` : ''}</span>
+        <span class="dl-actions">
+          <button type="button" class="copy-btn" data-url="${r}" title="Copy URL" aria-label="Copy URL">⧉</button>
+          <a href="${r}" target="_blank" rel="noopener">↗ png</a>
+        </span>
+      </div>
     </div>`).join('')}
     ${thumbs.map((t, i) => `
     <div class="dl-card">
       <img src="${t}" alt="screenshot ${i+1}" loading="lazy">
-      <div class="dl-card-label"><span data-i18n="screenshot">Screenshot</span>${thumbs.length > 1 ? ` ${i+1}` : ''}<a href="${t}" target="_blank" rel="noopener">↗ png</a></div>
+      <div class="dl-card-label">
+        <span><span data-i18n="screenshot">Screenshot</span>${thumbs.length > 1 ? ` ${i+1}` : ''}</span>
+        <span class="dl-actions">
+          <button type="button" class="copy-btn" data-url="${t}" title="Copy URL" aria-label="Copy URL">⧉</button>
+          <a href="${t}" target="_blank" rel="noopener">↗ png</a>
+        </span>
+      </div>
     </div>`).join('')}
   </div>
 </section>` : ''}
@@ -848,6 +874,34 @@ ${(hasThumb || hasRadar || imgSrc) ? `
 </footer>
 
 ${i18nScript(true)}
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const url = btn.dataset.url;
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e2) {}
+        document.body.removeChild(ta);
+      }
+      const original = btn.textContent;
+      btn.textContent = '✓';
+      btn.classList.add('copied');
+      clearTimeout(btn._copyTimer);
+      btn._copyTimer = setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1200);
+    });
+  });
+</script>
 
 ${hasThumb && thumbs.length > 1 ? `
 <script>

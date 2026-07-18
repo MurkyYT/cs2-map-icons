@@ -21,7 +21,7 @@ All maps, filterable by mode, auto-rebuilt on every Valve depot update.
 <br>
 
 <div align="center">
-  <img src="docs/screenshot.png" alt="CS2 Map Icons gallery screenshot" width="800">
+  <img src="assets/screenshot.png" alt="CS2 Map Icons gallery screenshot" width="800">
 </div>
 
 <br>
