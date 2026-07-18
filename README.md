@@ -70,6 +70,16 @@ Map icons, radars, thumbnails and overview data are property of **Valve Corporat
 
 Found a bug or want to improve the scraper? Pull requests are welcome!
 
+## Star History
+
+<a href="https://www.star-history.com/?repos=MurkyYT%2Fcs2-map-icons&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=MurkyYT/cs2-map-icons&type=date&theme=dark&legend=top-left&sealed_token=rsSww5qvmlgL0SYXQgKkHhF1ThwavAZpBTII0x_zglefvA_DDUMYfbHnUXPkCAZQReIe7FyKPjJLbHK7xPBXdS75fv3Vm-dU6OMBWeaADtx9CVEETgxyCnOnNIVoe99b7inD-ztQm3lFJjdNxxybZ753UyWX-Ag7nt5P7-9tr856CNOsUW78tZPWfNXL" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=MurkyYT/cs2-map-icons&type=date&legend=top-left&sealed_token=rsSww5qvmlgL0SYXQgKkHhF1ThwavAZpBTII0x_zglefvA_DDUMYfbHnUXPkCAZQReIe7FyKPjJLbHK7xPBXdS75fv3Vm-dU6OMBWeaADtx9CVEETgxyCnOnNIVoe99b7inD-ztQm3lFJjdNxxybZ753UyWX-Ag7nt5P7-9tr856CNOsUW78tZPWfNXL" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=MurkyYT/cs2-map-icons&type=date&legend=top-left&sealed_token=rsSww5qvmlgL0SYXQgKkHhF1ThwavAZpBTII0x_zglefvA_DDUMYfbHnUXPkCAZQReIe7FyKPjJLbHK7xPBXdS75fv3Vm-dU6OMBWeaADtx9CVEETgxyCnOnNIVoe99b7inD-ztQm3lFJjdNxxybZ753UyWX-Ag7nt5P7-9tr856CNOsUW78tZPWfNXL" />
+ </picture>
+</a>
+
 ---
 
 <div align="center">
