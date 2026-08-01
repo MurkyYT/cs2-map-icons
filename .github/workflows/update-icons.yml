@@ -70,6 +70,16 @@ jobs:
         with:
           path: ./depot-downloader
           key: ${{ runner.os }}-depotdownloader-${{ steps.dd_version.outputs.version }}
+      - name: Get latest oxipng version
+        id: oxipng_version
+        run: |
+          VERSION=$(curl -s https://api.github.com/repos/oxipng/oxipng/releases/latest | jq -r '.tag_name')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Cache oxipng
+        uses: actions/cache@v4
+        with:
+          path: ./oxipng
+          key: ${{ runner.os }}-oxipng-${{ steps.oxipng_version.outputs.version }}
       - name: Check if manifest changed
         id: manifest_check
         run: |

@@ -4,7 +4,7 @@ const path = require('path');
 const crypto = require('crypto');
 const https = require('https');
 const SteamUser = require('steam-user');
-const { execFile, execSync } = require('child_process');
+const { execFile, execSync, execFileSync } = require('child_process');
 const AdmZip = require('adm-zip');
 const VsvgConverter = require('./vsvg-converter');
 const console = require('console');
@@ -22,6 +22,8 @@ const radarInfoDir = path.join(dataDir, 'radar_info');
 const thumbDir = path.join(imagesDir, 'thumbs');
 const s2vDir = './s2v';
 const depotDownloaderDir = './depot-downloader';
+const oxipngDir = './oxipng';
+const oxipngVersionFile = path.join(oxipngDir, 'version.txt');
 const s2vVersionFile = path.join(s2vDir, 'version.txt');
 const depotDownloaderVersionFile = path.join(depotDownloaderDir, 'version.txt');
 const manifestFile = path.join(staticDir, 'manifest.txt');
@@ -33,6 +35,7 @@ const repo = process.env.GITHUB_REPOSITORY || "MurkyYT/cs2-map-icons";
 const defaultBranch = process.env.DEFAULT_BRANCH || "main";
 const S2V_REPO = 'ValveResourceFormat/ValveResourceFormat';
 const DEPOT_DOWNLOADER_REPO = 'SteamRE/DepotDownloader';
+const OXIPNG_REPO = 'oxipng/oxipng';
 const ignoreManifest = process.argv.includes('--ignore-manifest') || process.env.IGNORE_MANIFEST === 'true' || process.argv.includes('-i');
 
 const options = {
@@ -189,6 +192,108 @@ async function ensureSource2ViewerCLI() {
     fs.writeFileSync(s2vVersionFile, latestVersion);
     console.log(`Source2Viewer-CLI ${latestVersion} ready`);
     return s2vExe;
+}
+
+function getOxipngAssetPattern() {
+    switch (process.platform) {
+        case 'win32':  return /^oxipng-.*-x86_64-pc-windows-msvc\.zip$/;
+        case 'darwin': return /^oxipng-.*-x86_64-apple-darwin\.tar\.gz$/;
+        default:       return /^oxipng-.*-x86_64-unknown-linux-gnu\.tar\.gz$/;
+    }
+}
+
+function getOxipngExePath() {
+    const exe = process.platform === 'win32' ? 'oxipng.exe' : 'oxipng';
+    return path.join(oxipngDir, exe);
+}
+
+async function ensureOxipng() {
+    if (!fs.existsSync(oxipngDir)) fs.mkdirSync(oxipngDir, { recursive: true });
+
+    const release = await fetchJson(`https://api.github.com/repos/${OXIPNG_REPO}/releases/latest`);
+    const latestVersion = release.tag_name;
+    const oxiExe = getOxipngExePath();
+
+    const cachedVersion = fs.existsSync(oxipngVersionFile)
+        ? fs.readFileSync(oxipngVersionFile, 'utf8').trim()
+        : null;
+
+    if (cachedVersion === latestVersion && fs.existsSync(oxiExe)) {
+        console.log(`oxipng ${latestVersion} already cached`);
+        return oxiExe;
+    }
+
+    const pattern = getOxipngAssetPattern();
+    const asset = release.assets.find(a => pattern.test(a.name));
+    if (!asset) throw new Error(`Could not find oxipng asset matching ${pattern} in release assets`);
+
+    console.log(`Downloading oxipng ${latestVersion}${cachedVersion ? ` (was ${cachedVersion})` : ''}...`);
+
+    const archivePath = path.join(oxipngDir, asset.name);
+    await downloadFileHTTPS(asset.browser_download_url, archivePath);
+
+    const extractDir = path.join(oxipngDir, '_extract');
+    fs.rmSync(extractDir, { recursive: true, force: true });
+    fs.mkdirSync(extractDir, { recursive: true });
+
+    if (asset.name.endsWith('.zip')) {
+        new AdmZip(archivePath).extractAllTo(extractDir, true);
+    } else {
+        execSync(`tar -xzf "${archivePath}" -C "${extractDir}"`);
+    }
+    fs.unlinkSync(archivePath);
+
+    const exeName = path.basename(oxiExe);
+    const findExe = (dir) => {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+            const fullPath = path.join(dir, entry.name);
+            if (entry.isDirectory()) {
+                const found = findExe(fullPath);
+                if (found) return found;
+            } else if (entry.name === exeName) {
+                return fullPath;
+            }
+        }
+        return null;
+    };
+    const found = findExe(extractDir);
+    if (!found) throw new Error(`Could not locate ${exeName} inside extracted oxipng archive`);
+    fs.copyFileSync(found, oxiExe);
+    fs.rmSync(extractDir, { recursive: true, force: true });
+
+    if (process.platform !== 'win32') {
+        fs.chmodSync(oxiExe, 0o755);
+    }
+
+    fs.writeFileSync(oxipngVersionFile, latestVersion);
+    console.log(`oxipng ${latestVersion} ready`);
+    return oxiExe;
+}
+
+function listPngFilesRecursive(dir) {
+    let results = [];
+    if (!fs.existsSync(dir)) return results;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const fullPath = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+            results = results.concat(listPngFilesRecursive(fullPath));
+        } else if (entry.name.toLowerCase().endsWith('.png')) {
+            results.push(fullPath);
+        }
+    }
+    return results;
+}
+
+async function compressPngsInDir(oxiExePath, dir) {
+    const pngFiles = listPngFilesRecursive(dir);
+    if (pngFiles.length === 0) return;
+
+    console.log(`Compressing ${pngFiles.length} PNG(s) in ${dir} with oxipng...`);
+    const batchSize = 200;
+    for (let i = 0; i < pngFiles.length; i += batchSize) {
+        const batch = pngFiles.slice(i, i + batchSize);
+        execFileSync(oxiExePath, ['-o', '4', '--strip', 'safe', '--alpha', ...batch], { stdio: 'inherit' });
+    }
 }
 
 async function downloadVPKFiles(depotDownloaderPath) {
@@ -764,7 +869,7 @@ function generateDataFiles(downloadedData) {
     console.log('Dumped all data to available.md');
 }
 
-[imagesDir, pngDir, radarDir, radarInfoDir, thumbDir, staticDir, dataDir, temp, s2vDir, depotDownloaderDir].forEach(dir => {
+[imagesDir, pngDir, radarDir, radarInfoDir, thumbDir, staticDir, dataDir, temp, s2vDir, depotDownloaderDir, oxipngDir].forEach(dir => {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 });
 
@@ -841,6 +946,9 @@ async function getLatestManifestId() {
         const firstSeenDates = getMapFirstSeenDates();
         const oldData = loadExistingData();
         const downloadedData = await extractAndConvertMapIcons(vpkDir, mapIconFiles, radarMap, thumbMap, radarInfoMap, firstSeenDates, options);
+
+        const oxiExe = await ensureOxipng();
+        await compressPngsInDir(oxiExe, imagesDir);
         
         generateDataFiles(downloadedData);
         writeManifestId(latestManifestId);
