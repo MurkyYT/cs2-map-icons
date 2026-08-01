@@ -574,12 +574,9 @@ async function extractCommunityAddonAssets(depotDownloaderPath, missingRadarMapN
     const radarMap = {};
     const thumbMap = {};
     const radarInfoMap = {};
-    const missingRadarSet = new Set(missingRadarMapNames);
-    const missingThumbSet = new Set(missingThumbMapNames);
-    const missingRadarInfoSet = new Set(missingRadarInfoMapNames);
 
     for (const [mapName, { vpkDirPath, addonVpk, radarFiles, thumbFiles, radarInfoFiles }] of Object.entries(perMapAssets)) {
-        if (missingRadarSet.has(mapName) && radarFiles.length > 0) {
+        if (radarFiles.length > 0) {
             console.log(`  Extracting ${radarFiles.length} radar image(s) for community addon map ${mapName}...`);
             try {
                 await runSource2ViewerCLI(cliPath, vpkDirPath, radarDir, 'panorama/images/overheadmaps/');
@@ -601,7 +598,7 @@ async function extractCommunityAddonAssets(depotDownloaderPath, missingRadarMapN
             }
         }
 
-        if (missingThumbSet.has(mapName) && thumbFiles.length > 0) {
+        if (thumbFiles.length > 0) {
             console.log(`  Extracting ${thumbFiles.length} screenshot(s) for community addon map ${mapName}...`);
             try {
                 await runSource2ViewerCLI(cliPath, vpkDirPath, thumbDir, 'panorama/images/map_icons/screenshots/1080p/');
@@ -623,7 +620,7 @@ async function extractCommunityAddonAssets(depotDownloaderPath, missingRadarMapN
             }
         }
 
-        if (missingRadarInfoSet.has(mapName) && radarInfoFiles.length > 0) {
+        if (radarInfoFiles.length > 0) {
             console.log(`  Extracting radar info for community addon map ${mapName}...`);
             try {
                 const info = extractRadarInfoForMap(addonVpk, radarInfoFiles, mapName);

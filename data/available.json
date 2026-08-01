@@ -705,7 +705,10 @@
         }
       },
       "thumb_paths": [
-        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_poseidon_png.png"
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_poseidon_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_poseidon_3_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_poseidon_2_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_poseidon_1_png.png"
       ]
     },
     "de_sanctum": {
@@ -794,7 +797,15 @@
         }
       },
       "thumb_paths": [
-        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_shelter_png.png"
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_shelter_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_shelter_8_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_shelter_7_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_shelter_6_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_shelter_5_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_shelter_4_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_shelter_3_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_shelter_2_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/cs_shelter_1_png.png"
       ]
     },
     "de_boulder": {
@@ -824,7 +835,12 @@
         }
       },
       "thumb_paths": [
-        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_boulder_png.png"
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_boulder_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_boulder_5_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_boulder_4_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_boulder_3_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_boulder_2_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_boulder_1_png.png"
       ]
     },
     "de_debris": {
@@ -849,7 +865,10 @@
         }
       },
       "thumb_paths": [
-        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_debris_png.png"
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_debris_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_debris_3_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_debris_2_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_debris_1_png.png"
       ]
     },
     "de_eldorado": {
@@ -876,7 +895,16 @@
         }
       },
       "thumb_paths": [
-        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_eldorado_png.png"
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_eldorado_png_png_b87d1bfa.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_eldorado_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_eldorado_4_png_png_6142b759.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_eldorado_4_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_eldorado_3_png_png_128f61c0.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_eldorado_3_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_eldorado_2_png_png_e78910c.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_eldorado_2_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_eldorado_1_png_png_749d72f1.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_eldorado_1_png.png"
       ]
     },
     "de_fachwerk": {
@@ -902,7 +930,11 @@
         }
       },
       "thumb_paths": [
-        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_fachwerk_png.png"
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_fachwerk_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_fachwerk_4_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_fachwerk_3_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_fachwerk_2_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_fachwerk_1_png.png"
       ]
     }
   }
