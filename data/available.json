@@ -1,5 +1,5 @@
 {
-  "count": 50,
+  "count": 51,
   "maps": {
     "ar_baggage": {
       "origin": "panorama/images/map_icons/map_icon_ar_baggage.vsvg_c",
@@ -935,6 +935,49 @@
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_fachwerk_3_png.png",
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_fachwerk_2_png.png",
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_fachwerk_1_png.png"
+      ]
+    },
+    "rush_001": {
+      "origin": "panorama/images/map_icons/map_icon_rush_001.vsvg_c",
+      "hash": "0c7bed91",
+      "display_name": "Complex",
+      "first_seen": "2026-09-23",
+      "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/rush_001.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_convoy_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room101_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room102_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room103_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room104_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room201_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room202_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room203_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room204_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room205_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room206_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room207_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room208_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room209_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room210_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room211_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room212_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room301_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_room401_radar_tga.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/rush_001_roomparty_radar_tga.png"
+      ],
+      "radar_info": {
+        "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/data/radar_info/rush_001.txt",
+        "pos_x": 1744,
+        "pos_y": 7836,
+        "scale": 2.484375
+      },
+      "thumb_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/rush_001_1_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/rush_001_2_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/rush_001_3_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/rush_001_4_png.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/rush_001_png.png"
       ]
     }
   }
