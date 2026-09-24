@@ -51,6 +51,7 @@ const MODE_CONFIG = {
     cs:    { label: 'Hostage',     color: '#3a9bd5' },
     de:    { label: 'Bomb Defuse', color: '#e05252' },
     lobby: { label: 'Menu',        color: '#7a7a8c' },
+    rush:  { label: 'Rush',        color: '#e6437d' },
 };
 
 function getMode(mapKey) {
@@ -245,6 +246,7 @@ function i18nScript(isMapPage = false) {
         'Hostage':     'filterHostage',
         'Arms Race':   'filterArms',
         'Menu':        'filterMenu',
+        'Rush':        'filterRush',
       };
       document.querySelectorAll('.pill').forEach(pill => {
         const key = pillMap[pill.dataset.mode];
@@ -258,6 +260,7 @@ function i18nScript(isMapPage = false) {
       'Hostage':     t(lang, 'filterHostage'),
       'Arms Race':   t(lang, 'filterArms'),
       'Menu':        t(lang, 'filterMenu'),
+      'Rush':        t(lang, 'filterRush'),
     };
     document.querySelectorAll('[data-badge-mode]').forEach(badge => {
       const translated = badgeMap[badge.dataset.badgeMode];
@@ -516,6 +519,7 @@ const indexHTML = `<!DOCTYPE html>
       <button class="pill" data-mode="Hostage">Hostage</button>
       <button class="pill" data-mode="Arms Race">Arms Race</button>
       <button class="pill" data-mode="Menu">Menu</button>
+      <button class="pill" data-mode="Rush">Rush</button>
     </div>
 
     <div class="header-right">

@@ -12,6 +12,7 @@
   "filterHostage":     "Hostage",
   "filterArms":        "Arms Race",
   "filterMenu":        "Menu",
+  "filterRush":        "Rush",
   "showingOf":         "Showing {{vis}} of {{tot}} maps",
   "noMaps":            "No maps found",
   "builtOn":           "Built",

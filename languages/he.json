@@ -12,6 +12,7 @@
   "filterHostage":     "בני ערובה",
   "filterArms":        "מרוץ חימוש",
   "filterMenu":        "תפריט",
+  "filterRush":        "רא'ש",
   "showingOf":         "מציג {{vis}} מתוך {{tot}} מפות",
   "noMaps":            "לא נמצאו מפות",
   "builtOn":           "נוצר ב-",

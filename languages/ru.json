@@ -12,6 +12,7 @@
   "filterHostage":     "Заложники",
   "filterArms":        "Гонка вооружений",
   "filterMenu":        "Меню",
+  "filterRush":        "Раш",
   "showingOf":         "Показано {{vis}} из {{tot}} карт",
   "noMaps":            "Карты не найдены",
   "builtOn":           "Сборка",
