@@ -414,6 +414,7 @@ const indexHTML = `<!DOCTYPE html>
     .pill[data-mode="Hostage"].active     { background: #3a9bd5; border-color: #3a9bd5; color: #fff; }
     .pill[data-mode="Arms Race"].active   { background: #e8a020; border-color: #e8a020; color: #000; }
     .pill[data-mode="Menu"].active        { background: #7a7a8c; border-color: #7a7a8c; color: #fff; }
+    .pill[data-mode="Rush"].active        { background: #e6437d; border-color: #e6437d; color: #fff; }
     .header-right { margin-left: auto; font-size: .75rem; color: var(--muted); white-space: nowrap; }
     .header-right a { color: var(--accent); }
     .header-right a:hover { text-decoration: underline; }
