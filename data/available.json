@@ -3,7 +3,7 @@
   "maps": {
     "ar_baggage": {
       "origin": "panorama/images/map_icons/map_icon_ar_baggage.vsvg_c",
-      "hash": "1bd57b26",
+      "hash": "424bb3f2",
       "display_name": "Baggage",
       "first_seen": "2025-12-28",
       "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_baggage.png",
@@ -49,7 +49,7 @@
     },
     "ar_shoots": {
       "origin": "panorama/images/map_icons/map_icon_ar_shoots.vsvg_c",
-      "hash": "701f3166",
+      "hash": "73042276",
       "display_name": "Shoots (Day)",
       "first_seen": "2025-12-28",
       "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/ar_shoots.png",
