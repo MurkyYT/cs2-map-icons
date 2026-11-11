@@ -190,7 +190,6 @@ jobs:
           fi
 
           gh release create "$TAG" \
-            --draft \
             --target "${{ steps.autocommit.outputs.commit_hash }}" \
             --title "CS2 manifest $MANIFEST" \
             --notes-file "${{ steps.notes.outputs.path }}"
