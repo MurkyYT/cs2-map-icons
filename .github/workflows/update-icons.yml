@@ -112,6 +112,69 @@ jobs:
         with:
           commit_message: "chore: manifest ${{ steps.manifestId.outputs.content }}"
 
+      - name: Generate release notes
+        id: notes
+        if: steps.manifest_check.outputs.changed == 'true' && steps.autocommit.outputs.changes_detected == 'true'
+        run: |
+          HASH="${{ steps.autocommit.outputs.commit_hash }}"
+          MANIFEST="${{ steps.cs2_manifest.outputs.manifest }}"
+          NOTES="$RUNNER_TEMP/release_notes.md"
+
+          OLD_JSON="$RUNNER_TEMP/old_available.json"
+          git show "$HASH^:data/available.json" > "$OLD_JSON" 2>/dev/null || echo '{"maps":{}}' > "$OLD_JSON"
+          NEW_JSON="data/available.json"
+
+          # New maps (not in previous available.json)
+          ADDED=$(jq -r -n --slurpfile o "$OLD_JSON" --slurpfile n "$NEW_JSON" '
+            ($n[0].maps | keys) - ($o[0].maps | keys) | .[]
+            ' | while read -r m; do
+              d=$(jq -r --arg m "$m" '.maps[$m].display_name // $m' "$NEW_JSON")
+              echo "- \`$m\` ($d)"
+            done)
+
+          # Maps no longer present in the game files (origin got blanked)
+          REMOVED=$(jq -r -n --slurpfile o "$OLD_JSON" --slurpfile n "$NEW_JSON" '
+            $n[0].maps | to_entries[]
+            | select(.value.origin == "" and (($o[0].maps[.key].origin // "") != ""))
+            | .key' | sed 's/.*/- `&`/')
+
+          # Per-file changes, grouped by asset type
+          ICONS=""; RADARS=""; THUMBS=""; INFOS=""
+          while IFS=$'\t' read -r status file; do
+            case "$status" in A) label="new";; M) label="updated";; D) label="removed";; *) label="$status";; esac
+            line="- \`$(basename "$file")\` ($label)"
+            case "$file" in
+              images/radars/*)     RADARS+="$line"$'\n' ;;
+              images/thumbs/*)     THUMBS+="$line"$'\n' ;;
+              data/radar_info/*)   INFOS+="$line"$'\n' ;;
+              images/*)            ICONS+="$line"$'\n' ;;
+            esac
+          done < <(git diff --name-status --no-renames "$HASH^" "$HASH" -- images data/radar_info)
+
+          section() { # title, body
+            if [ -n "$2" ]; then
+              printf '### %s\n%s\n\n' "$1" "$2"
+            fi
+          }
+
+          {
+            echo "Map icons updated for CS2 manifest \`$MANIFEST\`."
+            echo
+            section "🆕 New maps" "$ADDED"
+            section "🗑️ Removed from game files" "$REMOVED"
+            section "Icons" "$ICONS"
+            section "Radars" "$RADARS"
+            section "Screenshots" "$THUMBS"
+            section "Radar info" "$INFOS"
+            if [ -z "$ADDED$REMOVED$ICONS$RADARS$THUMBS$INFOS" ]; then
+              echo "_No map asset changes detected in this manifest._"
+            fi
+          } > "$NOTES"
+
+          # GitHub release bodies are capped at 125,000 chars
+          head -c 120000 "$NOTES" > "$NOTES.tmp" && mv "$NOTES.tmp" "$NOTES"
+          echo "path=$NOTES" >> $GITHUB_OUTPUT
+
       - name: Create release
         if: steps.manifest_check.outputs.changed == 'true' && steps.autocommit.outputs.changes_detected == 'true'
         env:
@@ -129,4 +192,4 @@ jobs:
           gh release create "$TAG" \
             --target "${{ steps.autocommit.outputs.commit_hash }}" \
             --title "CS2 manifest $MANIFEST" \
-            --notes "Map icons updated for CS2 manifest \`$MANIFEST\`."
+            --notes-file "${{ steps.notes.outputs.path }}"
