@@ -262,10 +262,21 @@
       ]
     },
     "de_cbble": {
+      "origin": "panorama/images/map_icons/map_icon_de_cbble.vsvg_c",
+      "hash": "6e4c220a",
       "display_name": "Cobblestone",
-      "hash": "624c602a-1590e",
-      "origin": "",
+      "first_seen": "2025-12-28",
       "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/de_cbble.png",
+      "radar_paths": [
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_cbble_radar_psd.png",
+        "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/radars/de_cbble_radar_tga.png"
+      ],
+      "radar_info": {
+        "path": "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/data/radar_info/de_cbble.txt",
+        "pos_x": -3615,
+        "pos_y": 2712,
+        "scale": 4.724792
+      },
       "thumb_paths": [
         "https://raw.githubusercontent.com/MurkyYT/cs2-map-icons/main/images/thumbs/de_cbble_png.png"
       ]
@@ -776,7 +787,7 @@
       ]
     },
     "cs_shelter": {
-      "origin": "panorama/images/map_icons/map_icon_cs_shelter.vsvg_c",
+      "origin": "",
       "hash": "f9fd00b7",
       "display_name": "Shelter",
       "first_seen": "2026-07-09",
@@ -809,7 +820,7 @@
       ]
     },
     "de_boulder": {
-      "origin": "panorama/images/map_icons/map_icon_de_boulder.vsvg_c",
+      "origin": "",
       "hash": "d32eda29",
       "display_name": "Boulder",
       "first_seen": "2026-07-09",
@@ -908,7 +919,7 @@
       ]
     },
     "de_fachwerk": {
-      "origin": "panorama/images/map_icons/map_icon_de_fachwerk.vsvg_c",
+      "origin": "",
       "hash": "f7ab1989",
       "display_name": "Fachwerk",
       "first_seen": "2026-07-09",
