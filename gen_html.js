@@ -181,6 +181,26 @@ const sharedHead = `
       font-family: 'JetBrains Mono', monospace;
       font-size: .6rem; color: var(--muted); margin-left: 8px;
     }
+    .star-btn {
+      display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .75rem; font-weight: 600; letter-spacing: .06em;
+      padding: 5px 10px; white-space: nowrap;
+      transition: border-color .15s, color .15s;
+    }
+    .star-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .star-btn svg { fill: currentColor; }
+    .star-count {
+      font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: var(--muted);
+      border-left: 1px solid var(--border); padding-left: 6px;
+    }
+    .star-count:empty { display: none; }
+    html[dir="rtl"] .star-count {
+      border-left: none; padding-left: 0;
+      border-right: 1px solid var(--border); padding-right: 6px;
+    }
   </style>`;
 
 function i18nScript(isMapPage = false) {
@@ -300,6 +320,37 @@ function i18nScript(isMapPage = false) {
 
   const currentLang = detectLang();
   document.addEventListener('DOMContentLoaded', () => applyLang(currentLang));
+})();
+<\/script>`;
+}
+
+function starButton() {
+    return `
+    <a class="star-btn" href="https://github.com/MurkyYT/cs2-map-icons" target="_blank" rel="noopener" title="Star on GitHub">
+      <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>
+      <span>Star</span><span class="star-count" id="star-count"></span>
+    </a>`;
+}
+
+function starCountScript() {
+    return `
+<script>
+(function() {
+  const el = document.getElementById('star-count');
+  if (!el) return;
+  const KEY = 'cs2mi_stars';
+  try {
+    const c = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (c) el.textContent = c.n;
+    if (c && Date.now() - c.t < 3600000) return;
+  } catch (e) {}
+  fetch('https://api.github.com/repos/MurkyYT/cs2-map-icons')
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(d => {
+      el.textContent = d.stargazers_count;
+      try { localStorage.setItem(KEY, JSON.stringify({ n: d.stargazers_count, t: Date.now() })); } catch (e) {}
+    })
+    .catch(() => {});
 })();
 <\/script>`;
 }
@@ -528,6 +579,7 @@ const indexHTML = `<!DOCTYPE html>
       <a href="https://github.com/MurkyYT/cs2-map-icons" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
 
+    ${starButton()}
     ${langSwitcherWidget()}
   </div>
 </header>
@@ -550,6 +602,7 @@ const indexHTML = `<!DOCTYPE html>
 </footer>
 
 ${i18nScript(false)}
+${starCountScript()}
 
 <script>
   
@@ -790,7 +843,7 @@ function mapPage([mapKey, map]) {
   <span class="topbar-sep">/</span>
   <span class="topbar-title">${mapKey}</span>
   <div class="topbar-mode" style="--mode-c:${mode.color}">${mode.label}</div>
-  <div class="topbar-right">${langSwitcherWidget()}</div>
+  <div class="topbar-right">${starButton()}${langSwitcherWidget()}</div>
 </div>
 
 <div class="page-hero">
@@ -879,6 +932,7 @@ ${(hasThumb || hasRadar || imgSrc) ? `
 </footer>
 
 ${i18nScript(true)}
+${starCountScript()}
 
 <script>
   document.querySelectorAll('.copy-btn').forEach(btn => {
