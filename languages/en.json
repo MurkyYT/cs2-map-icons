@@ -31,5 +31,18 @@
   "screenshot":        "Screenshot",
   "allMaps":           "ALL MAPS",
   "notAffiliated":     "not affiliated with valve",
-  "noScreenshots":     "no screenshots available"
+  "noScreenshots":     "no screenshots available",
+  "changelog": "Update log",
+  "changelogTitle": "Update log",
+  "changelogDesc": "Every game manifest that changed map assets, generated from git history.",
+  "changelogEmpty": "No updates recorded yet.",
+  "latestBuild": "latest build",
+  "release": "release",
+  "newMaps": "New maps",
+  "removedMaps": "Removed from game files",
+  "clIcons": "Icons",
+  "clRadars": "Radars",
+  "clScreenshots": "Screenshots",
+  "clRadarInfo": "Radar info",
+  "noAssetChanges": "No map asset changes detected in this manifest."
 }
