@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Noto+Sans:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+Hebrew:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    
+    
+    html.lang-cyr body, html.lang-cyr .pill, html.lang-cyr .card-name,
+    html.lang-cyr .no-results, html.lang-cyr .logo, html.lang-cyr .section-label,
+    html.lang-cyr .map-title, html.lang-cyr .lang-btn, html.lang-cyr .lang-option,
+    html.lang-cyr header, html.lang-cyr .hero h1, html.lang-cyr .hero p,
+    html.lang-cyr .card-mode-badge, html.lang-cyr .topbar-mode
+    { font-family: 'Noto Sans', sans-serif !important; letter-spacing: 0 !important; }
+
+    
+    html.lang-cjk body, html.lang-cjk .pill, html.lang-cjk .card-name,
+    html.lang-cjk .no-results, html.lang-cjk .logo, html.lang-cjk .section-label,
+    html.lang-cjk .map-title, html.lang-cjk .lang-btn, html.lang-cjk .lang-option,
+    html.lang-cjk header, html.lang-cjk .hero h1, html.lang-cjk .hero p,
+    html.lang-cjk .card-mode-badge, html.lang-cjk .topbar-mode
+    { font-family: 'Noto Sans SC', sans-serif !important; letter-spacing: 0 !important; }
+
+    
+    html.lang-rtl body, html.lang-rtl .pill, html.lang-rtl .card-name,
+    html.lang-rtl .no-results, html.lang-rtl .logo, html.lang-rtl .section-label,
+    html.lang-rtl .map-title, html.lang-rtl .lang-btn, html.lang-rtl .lang-option,
+    html.lang-rtl header, html.lang-rtl .hero h1, html.lang-rtl .hero p,
+    html.lang-rtl .card-mode-badge, html.lang-rtl .topbar-mode
+    { font-family: 'Noto Sans Hebrew', sans-serif !important; letter-spacing: 0 !important; }
+
+    
+    html[dir="rtl"] body            { direction: rtl; }
+    html[dir="rtl"] .header-inner   { flex-direction: row-reverse; }
+    html[dir="rtl"] .card-mode-badge{ left: auto; right: 8px; }
+    html[dir="rtl"] .card-icon      { right: auto; left: 8px; }
+    html[dir="rtl"] .topbar         { flex-direction: row-reverse; }
+    html[dir="rtl"] .topbar-right   { margin-left: 0; margin-right: auto; }
+    html[dir="rtl"] .sidebar        { border-left: none; border-right: 1px solid var(--border); }
+    html[dir="rtl"] .dl-card-label  { flex-direction: row-reverse; }
+    html[dir="rtl"] .map-nav        { flex-direction: row-reverse; }
+    html[dir="rtl"] footer          { flex-direction: row-reverse; }
+    html[dir="rtl"] .meta-table td:first-child { padding-right: 0; padding-left: 1rem; }
+    html[dir="rtl"] .search-wrap svg { left: auto; right: 10px; }
+    html[dir="rtl"] #search         { padding: 7px 34px 7px 12px; }
+
+    :root {
+      --bg:      #0d0e10;
+      --bg2:     #13151a;
+      --bg3:     #1c1f28;
+      --surface: #1e2130;
+      --border:  #2a2d3a;
+      --accent:  #f0b84b;
+      --accent2: #e05252;
+      --text:    #dde2ee;
+      --muted:   #6b7080;
+      --radius:  6px;
+      --card-w:  280px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      background-image:
+        repeating-linear-gradient(0deg,   transparent, transparent 39px, #ffffff04 39px, #ffffff04 40px),
+        repeating-linear-gradient(90deg,  transparent, transparent 39px, #ffffff04 39px, #ffffff04 40px);
+    }
+    a { color: inherit; text-decoration: none; }
+
+    
+    .lang-switcher { position: relative; flex-shrink: 0; }
+    .lang-btn {
+      display: flex; align-items: center; gap: 5px;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .75rem; font-weight: 600; letter-spacing: .06em;
+      padding: 5px 10px; cursor: pointer; transition: border-color .15s;
+    }
+    .lang-btn:hover { border-color: var(--accent); }
+    .lang-btn svg { opacity: .5; }
+    .lang-dropdown {
+      display: none; position: absolute; top: calc(100% + 6px); right: 0;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      min-width: 150px; z-index: 200;
+      box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    }
+    html[dir="rtl"] .lang-dropdown { right: auto; left: 0; }
+    .lang-dropdown.open { display: block; }
+    .lang-option {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 7px 12px; font-size: .8rem; cursor: pointer;
+      transition: background .12s; white-space: nowrap;
+    }
+    .lang-option:hover { background: var(--bg3); }
+    .lang-option.active { color: var(--accent); }
+    .lang-option .lang-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem; color: var(--muted); margin-left: 8px;
+    }
+    .star-btn {
+      display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .75rem; font-weight: 600; letter-spacing: .06em;
+      padding: 5px 10px; white-space: nowrap;
+      transition: border-color .15s, color .15s;
+    }
+    .star-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .star-btn svg { fill: currentColor; }
+    .star-count {
+      font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: var(--muted);
+      border-left: 1px solid var(--border); padding-left: 6px;
+    }
+    .star-count:empty { display: none; }
+    html[dir="rtl"] .star-count {
+      border-left: none; padding-left: 0;
+      border-right: 1px solid var(--border); padding-right: 6px;
+    }
+    .nav-link {
+      font-family: 'Barlow Condensed', sans-serif; font-size: .75rem; font-weight: 600;
+      letter-spacing: .06em; text-transform: uppercase; color: var(--text);
+      padding: 5px 10px; border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--bg3); white-space: nowrap; transition: border-color .15s, color .15s;
+    }
+    .nav-link:hover { border-color: var(--accent); color: var(--accent); }
+  </style>
+  <title>Update log - CS2 Map Icons</title>
+  <link rel="icon" type="image/x-icon" href="https://developer.valvesoftware.com/w/images/6/61/Csgo_icon_competitive.png">
+  <meta name="description" content="Update log for CS2 Map Icons, generated from git history.">
+  <style>
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(13,14,16,.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 1rem; padding: 0 2rem; height: 48px;
+    }
+    .topbar-home {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+      color: var(--accent); font-size: .95rem; letter-spacing: .06em; text-transform: uppercase;
+    }
+    .topbar-home:hover { text-decoration: underline; }
+    .topbar-sep { color: var(--muted); }
+    .topbar-title { font-family: 'JetBrains Mono', monospace; font-size: .72rem; }
+    .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 1rem; }
+    .cl-wrap { max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+    .cl-wrap > h1 {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+      font-size: clamp(2rem, 4vw, 3rem); line-height: 1; margin-bottom: .5rem;
+    }
+    .cl-wrap > p { color: var(--muted); margin-bottom: 2rem; }
+    .cl-entry {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1rem;
+    }
+    .cl-head { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: .6rem; }
+    .cl-manifest { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.15rem; }
+    .cl-manifest code, .cl-list code { font-family: 'JetBrains Mono', monospace; font-size: .75rem; color: var(--accent); }
+    .cl-date { font-size: .72rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+    .cl-links { display: flex; gap: .8rem; font-size: .72rem; font-family: 'JetBrains Mono', monospace; }
+    .cl-links a { color: var(--accent); }
+    .cl-links a:hover { text-decoration: underline; }
+    .cl-pending {
+      font-size: .6rem; letter-spacing: .1em; text-transform: uppercase;
+      background: var(--accent); color: #000; padding: 1px 6px; border-radius: 3px; margin-right: 4px;
+    }
+    .cl-h {
+      font-family: 'Barlow Condensed', sans-serif; font-size: .68rem; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--muted); margin: .8rem 0 .3rem;
+    }
+    .cl-list { list-style: none; font-size: .85rem; padding-left: 0; }
+    .cl-list li { padding: 2px 0; }
+    .cl-dim { color: var(--muted); font-size: .8rem; }
+    .cl-details { margin-top: .5rem; }
+    .cl-details summary {
+      cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+      font-size: .9rem; letter-spacing: .04em; user-select: none;
+    }
+    .cl-details .cl-list { max-height: 260px; overflow-y: auto; margin: .4rem 0 0 1rem; }
+    .cl-count {
+      font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: var(--muted);
+      border: 1px solid var(--border); border-radius: 100px; padding: 0 6px; margin-left: 4px;
+    }
+    .cl-tag { font-size: .6rem; text-transform: uppercase; letter-spacing: .08em; margin-left: 6px; }
+    .cl-new { color: #6bbf6b; } .cl-updated { color: var(--accent); } .cl-removed { color: var(--accent2); }
+    html[dir="rtl"] .cl-head { flex-direction: row-reverse; }
+    @media (max-width: 600px) { .cl-wrap { padding: 1.5rem 1rem 3rem; } .cl-head { flex-direction: column; } }
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <a class="topbar-home" href="index.html">CS2</a>
+  <span class="topbar-sep">/</span>
+  <span class="topbar-title" data-i18n="changelog">Update log</span>
+  <div class="topbar-right">
+    <a class="star-btn" href="https://github.com/MurkyYT/cs2-map-icons" target="_blank" rel="noopener" title="Star on GitHub">
+      <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>
+      <span>Star</span><span class="star-count" id="star-count"></span>
+    </a>
+    <div class="lang-switcher">
+      <button class="lang-btn" onclick="toggleLangDropdown(event)" aria-label="Select language">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        <span id="lang-btn-label">EN</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="m6 9 6 6 6-6"/>
+        </svg>
+      </button>
+      <div class="lang-dropdown" id="lang-dropdown">
+        <div class="lang-option" data-lang="en" onclick="chooseLang('en')">
+          English<span class="lang-code">EN</span>
+        </div>
+        <div class="lang-option" data-lang="he" onclick="chooseLang('he')">
+          עברית<span class="lang-code">HE</span>
+        </div>
+        <div class="lang-option" data-lang="ru" onclick="chooseLang('ru')">
+          Русский<span class="lang-code">RU</span>
+        </div>
+      </div>
+    </div></div>
+</div>
+
+<main class="cl-wrap">
+  <h1 data-i18n="changelogTitle">Update log</h1>
+  <p data-i18n="changelogDesc">Every game manifest that changed map assets, generated from git history.</p>
+  
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>5924479096069937098</code></div>
+        <time class="cl-date" datetime="2026-11-23T23:33:01.000Z">2026-11-23 23:33 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/6ea3bd0d9fc261b4e07501ad66cf0397744e6417" target="_blank" rel="noopener">6ea3bd0 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-5924479096069937098" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">1</span></summary>
+        <ul class="cl-list"><li><code>de_cbble_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>8225060435969537482</code></div>
+        <time class="cl-date" datetime="2026-11-20T06:04:56.000Z">2026-11-20 06:04 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/e4084ea21b0093603e984d53f255a66851dbf9e2" target="_blank" rel="noopener">e4084ea ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-8225060435969537482" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>9806423311119977</code></div>
+        <time class="cl-date" datetime="2026-11-19T06:19:57.000Z">2026-11-19 06:19 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/ec78cd62a3b7168a50e298e22bb4cf837b810d3e" target="_blank" rel="noopener">ec78cd6 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-9806423311119977" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">6</span></summary>
+        <ul class="cl-list"><li><code>de_cbble_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>239443625111074552</code></div>
+        <time class="cl-date" datetime="2026-11-18T05:06:41.000Z">2026-11-18 05:06 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/d07a2907f5f858075e1712bfc0491c942013d981" target="_blank" rel="noopener">d07a290 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-239443625111074552" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clIcons">Icons</span> <span class="cl-count">1</span></summary>
+        <ul class="cl-list"><li><code>de_cbble.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clRadars">Radars</span> <span class="cl-count">2</span></summary>
+        <ul class="cl-list"><li><code>de_cbble_radar_psd.png</code> <span class="cl-tag cl-new">new</span></li><li><code>de_cbble_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li></ul>
+      </details>
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">1</span></summary>
+        <ul class="cl-list"><li><code>de_cbble_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clRadarInfo">Radar info</span> <span class="cl-count">1</span></summary>
+        <ul class="cl-list"><li><code>de_cbble.txt</code> <span class="cl-tag cl-new">new</span></li></ul>
+      </details>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>6678473446694075055</code></div>
+        <time class="cl-date" datetime="2026-11-12T06:07:19.000Z">2026-11-12 06:07 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/6dcfb3a770afc08a16c4e843c51b873cac7fc4d5" target="_blank" rel="noopener">6dcfb3a ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-6678473446694075055" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>6679288287140932208</code></div>
+        <time class="cl-date" datetime="2026-11-11T19:08:19.000Z">2026-11-11 19:08 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/fc7d42c8cef8a7df2e8422efce33171bf2c44447" target="_blank" rel="noopener">fc7d42c ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-6679288287140932208" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>6679288287140932208</code></div>
+        <time class="cl-date" datetime="2026-11-11T18:57:29.000Z">2026-11-11 18:57 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/b40c898e5a4bb3371cd468c61040e9cf36a5e0d1" target="_blank" rel="noopener">b40c898 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-6679288287140932208" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>6679288287140932208</code></div>
+        <time class="cl-date" datetime="2026-11-05T05:34:01.000Z">2026-11-05 05:34 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/50ca4c14b67762b3b3ee137b526b8cf300c0d8c9" target="_blank" rel="noopener">50ca4c1 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-6679288287140932208" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>3690356453703667427</code></div>
+        <time class="cl-date" datetime="2026-11-03T05:43:11.000Z">2026-11-03 05:43 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/c29c14dabcdce583ad122128aa14cc59185ae1eb" target="_blank" rel="noopener">c29c14d ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-3690356453703667427" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>6694633556888099985</code></div>
+        <time class="cl-date" datetime="2026-10-31T04:32:03.000Z">2026-10-31 04:32 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/a92241496523a6d451664482d8c90debd162e300" target="_blank" rel="noopener">a922414 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-6694633556888099985" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>8833146750479675564</code></div>
+        <time class="cl-date" datetime="2026-10-29T04:49:17.000Z">2026-10-29 04:49 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/9a77417b108eab6ee8c10d1140d62c0b77f54174" target="_blank" rel="noopener">9a77417 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-8833146750479675564" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>67499503218971311</code></div>
+        <time class="cl-date" datetime="2026-10-23T03:44:39.000Z">2026-10-23 03:44 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/d84e5b19af6e17f25ce295545a01456c46acee5f" target="_blank" rel="noopener">d84e5b1 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-67499503218971311" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clIcons">Icons</span> <span class="cl-count">2</span></summary>
+        <ul class="cl-list"><li><code>ar_baggage.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+      
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>6962766052972832680</code></div>
+        <time class="cl-date" datetime="2026-10-21T03:40:05.000Z">2026-10-21 03:40 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/e2e3a061475b3461fda61f52041b01b0c4c4cde6" target="_blank" rel="noopener">e2e3a06 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-6962766052972832680" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>2520908610273941189</code></div>
+        <time class="cl-date" datetime="2026-10-17T20:40:40.000Z">2026-10-17 20:40 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/b3f9c571f8dfb52ab599842252b8e98e12ee9e44" target="_blank" rel="noopener">b3f9c57 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-2520908610273941189" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>2520908610273941189</code></div>
+        <time class="cl-date" datetime="2026-10-16T03:33:51.000Z">2026-10-16 03:33 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/a199d2f957c43ddbe80c408566689c161cfa8814" target="_blank" rel="noopener">a199d2f ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-2520908610273941189" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>2312433566686574487</code></div>
+        <time class="cl-date" datetime="2026-10-15T03:38:10.000Z">2026-10-15 03:38 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/9a22f424dab892f8fd59cec100029883c05e6116" target="_blank" rel="noopener">9a22f42 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-2312433566686574487" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>4758919807587010422</code></div>
+        <time class="cl-date" datetime="2026-10-09T04:59:06.000Z">2026-10-09 04:59 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/544b1b7b5b83fbabfebf6c76a037692cf2af1d8f" target="_blank" rel="noopener">544b1b7 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-4758919807587010422" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">5</span></summary>
+        <ul class="cl-list"><li><code>rush_001_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>7820179980365915207</code></div>
+        <time class="cl-date" datetime="2026-10-06T05:20:16.000Z">2026-10-06 05:20 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/068761900db687827aae7ea48428296717dbf89d" target="_blank" rel="noopener">0687619 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-7820179980365915207" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">5</span></summary>
+        <ul class="cl-list"><li><code>rush_001_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>2625928478418236338</code></div>
+        <time class="cl-date" datetime="2026-10-03T04:12:44.000Z">2026-10-03 04:12 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/a2f821eb96743a94a2a7eda5836986fb01cd5d95" target="_blank" rel="noopener">a2f821e ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-2625928478418236338" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>2416787194101235199</code></div>
+        <time class="cl-date" datetime="2026-10-01T05:15:37.000Z">2026-10-01 05:15 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/ae7ed6ac9bdebf7782c71ee2454f20738595e57e" target="_blank" rel="noopener">ae7ed6a ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-2416787194101235199" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">5</span></summary>
+        <ul class="cl-list"><li><code>rush_001_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>1566706412315608688</code></div>
+        <time class="cl-date" datetime="2026-09-29T04:44:05.000Z">2026-09-29 04:44 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/55828fc236d97b99cda0e8cb7561b8dd543bee3d" target="_blank" rel="noopener">55828fc ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-1566706412315608688" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">5</span></summary>
+        <ul class="cl-list"><li><code>rush_001_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>6313884916170234593</code></div>
+        <time class="cl-date" datetime="2026-09-26T03:59:31.000Z">2026-09-26 03:59 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/55d196b3ac675f84012a343b40bb6cfddba2f943" target="_blank" rel="noopener">55d196b ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-6313884916170234593" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">5</span></summary>
+        <ul class="cl-list"><li><code>rush_001_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>4218289832790841850</code></div>
+        <time class="cl-date" datetime="2026-09-25T03:51:09.000Z">2026-09-25 03:51 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/775baadd96b03d728a3c2f7f733fc03ee2f21d6c" target="_blank" rel="noopener">775baad ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-4218289832790841850" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">5</span></summary>
+        <ul class="cl-list"><li><code>rush_001_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>5009084625236407721</code></div>
+        <time class="cl-date" datetime="2026-09-24T03:34:28.000Z">2026-09-24 03:34 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/2818463b8a27dd10eec751a3f301d2a9e9cb41cc" target="_blank" rel="noopener">2818463 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-5009084625236407721" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">5</span></summary>
+        <ul class="cl-list"><li><code>rush_001_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>3469898947734168900</code></div>
+        <time class="cl-date" datetime="2026-09-23T03:46:44.000Z">2026-09-23 03:46 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/22384c28ee79163ec9edfc258dc5594eb0e09917" target="_blank" rel="noopener">22384c2 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-3469898947734168900" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clIcons">Icons</span> <span class="cl-count">1</span></summary>
+        <ul class="cl-list"><li><code>rush_001.png</code> <span class="cl-tag cl-new">new</span></li></ul>
+      </details>
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clRadars">Radars</span> <span class="cl-count">21</span></summary>
+        <ul class="cl-list"><li><code>rush_001_convoy_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room101_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room102_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room103_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room104_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room201_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room202_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room203_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room204_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room205_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room206_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room207_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room208_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room209_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room210_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room211_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room212_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room301_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_room401_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_roomparty_radar_tga.png</code> <span class="cl-tag cl-new">new</span></li></ul>
+      </details>
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">46</span></summary>
+        <ul class="cl-list"><li><code>de_ancient_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_5_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>rush_001_1_png.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_2_png.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_3_png.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_4_png.png</code> <span class="cl-tag cl-new">new</span></li><li><code>rush_001_png.png</code> <span class="cl-tag cl-new">new</span></li></ul>
+      </details>
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clRadarInfo">Radar info</span> <span class="cl-count">1</span></summary>
+        <ul class="cl-list"><li><code>rush_001.txt</code> <span class="cl-tag cl-new">new</span></li></ul>
+      </details>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>2053759441494650084</code></div>
+        <time class="cl-date" datetime="2026-09-10T03:30:34.000Z">2026-09-10 03:30 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/94d2718c84776cd09d14db0a17958f9d7af5c916" target="_blank" rel="noopener">94d2718 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-2053759441494650084" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">5</span></summary>
+        <ul class="cl-list"><li><code>de_cache_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>5133223087201626432</code></div>
+        <time class="cl-date" datetime="2026-09-08T03:30:00.000Z">2026-09-08 03:30 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/ca2012aec9983cf4b1fd7886ffc1808763a787c3" target="_blank" rel="noopener">ca2012a ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-5133223087201626432" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>6839025807341874757</code></div>
+        <time class="cl-date" datetime="2026-08-28T21:53:17.000Z">2026-08-28 21:53 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/2aec2bee14d2448b7919084d4c0b1944ef5d34e6" target="_blank" rel="noopener">2aec2be ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-6839025807341874757" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>2844536608884402770</code></div>
+        <time class="cl-date" datetime="2026-08-27T07:59:09.000Z">2026-08-27 07:59 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/6a346e92fb44f62d9aaa1316d21be80fcb011749" target="_blank" rel="noopener">6a346e9 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-2844536608884402770" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>4322456088840983890</code></div>
+        <time class="cl-date" datetime="2026-08-26T12:58:37.000Z">2026-08-26 12:58 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/49280ba3dc3730e97754bc606d92e416b29eb332" target="_blank" rel="noopener">49280ba ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-4322456088840983890" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>2988082166379903189</code></div>
+        <time class="cl-date" datetime="2026-08-25T01:21:30.000Z">2026-08-25 01:21 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/bc46df14afa144a5018e3a753445d436b288a87a" target="_blank" rel="noopener">bc46df1 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-2988082166379903189" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>4814468113142569832</code></div>
+        <time class="cl-date" datetime="2026-08-20T01:20:41.000Z">2026-08-20 01:20 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/9413a83975982eabfd7cdab2adab7e7bb746371c" target="_blank" rel="noopener">9413a83 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-4814468113142569832" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>7645176062026597595</code></div>
+        <time class="cl-date" datetime="2026-08-13T02:04:47.000Z">2026-08-13 02:04 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/269d82333cbc560f41b32ed3734f2118af4ae57f" target="_blank" rel="noopener">269d823 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-7645176062026597595" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clRadars">Radars</span> <span class="cl-count">4</span></summary>
+        <ul class="cl-list"><li><code>de_boulder_higher1_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_boulder_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_fachwerk_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_fachwerk_radar_tga_e7f1da5c.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">7</span></summary>
+        <ul class="cl-list"><li><code>de_boulder_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_boulder_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clRadarInfo">Radar info</span> <span class="cl-count">1</span></summary>
+        <ul class="cl-list"><li><code>de_fachwerk.txt</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>816091078217593486</code></div>
+        <time class="cl-date" datetime="2026-08-11T01:52:26.000Z">2026-08-11 01:52 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/84adbb9dca5a44069c213a2da27305123ff8d621" target="_blank" rel="noopener">84adbb9 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-816091078217593486" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clIcons">Icons</span> <span class="cl-count">7</span></summary>
+        <ul class="cl-list"><li><code>ar_shoots.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_shelter.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_debris.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_poseidon.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_vertigo.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clRadars">Radars</span> <span class="cl-count">17</span></summary>
+        <ul class="cl-list"><li><code>ar_baggage_lower_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_baggage_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_night_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_italy_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_office_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust2_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_v20_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_lower_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_lower_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>default_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">23</span></summary>
+        <ul class="cl-list"><li><code>ar_baggage_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_italy_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_office_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_office_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust2_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_5_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>default_psd.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>6966900685090593016</code></div>
+        <time class="cl-date" datetime="2026-08-04T02:41:09.000Z">2026-08-04 02:41 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/5aefae071510cc6243a9a127a4f76ed9877e78f9" target="_blank" rel="noopener">5aefae0 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-6966900685090593016" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clIcons">Icons</span> <span class="cl-count">14</span></summary>
+        <ul class="cl-list"><li><code>de_ancient_night.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_boulder.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_debris.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust2.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_vertigo.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>lobby_mapveto.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clRadars">Radars</span> <span class="cl-count">33</span></summary>
+        <ul class="cl-list"><li><code>ar_shoots_night_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_italy_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_office_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_shelter_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_v1_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_boulder_higher1_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_boulder_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_debris_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust2_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_radar_tga_dabd6972.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_v20_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_fachwerk_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_fachwerk_radar_tga_e7f1da5c.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_lower_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_poseidon_radar_spectate_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_poseidon_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_poseidon_radar_tga_f3ba7cb5.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_lower_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_vertigo_lower_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_vertigo_radar_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>default_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">119</span></summary>
+        <ul class="cl-list"><li><code>ar_baggage_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_baggage_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_baggage_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_baggage_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_baggage_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_pool_day_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_night_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_night_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_night_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_night_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_night_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_italy_0_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_italy_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_italy_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_italy_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_office_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_office_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_office_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_office_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_office_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_shelter_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_shelter_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_shelter_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_shelter_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_shelter_5_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_shelter_6_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_shelter_7_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_shelter_8_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_shelter_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_5_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_boulder_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_boulder_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_boulder_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_boulder_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_boulder_5_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_boulder_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_debris_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_debris_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_debris_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust2_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust2_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust2_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_1_png_png_749d72f1.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_3_png_png_128f61c0.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_4_png_png_6142b759.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_png_png_b87d1bfa.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_fachwerk_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_fachwerk_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_fachwerk_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_fachwerk_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_fachwerk_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_5_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_poseidon_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_poseidon_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_poseidon_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_poseidon_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_vertigo_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_vertigo_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_vertigo_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_vertigo_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_vertigo_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>default_psd.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>lobby_mapveto_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>random_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>7357001356549703767</code></div>
+        <time class="cl-date" datetime="2026-07-29T02:41:20.000Z">2026-07-29 02:41 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/7062c5213e7ce34c0fa4d015a777890f36ae353d" target="_blank" rel="noopener">7062c52 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-7357001356549703767" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clRadars">Radars</span> <span class="cl-count">1</span></summary>
+        <ul class="cl-list"><li><code>de_fachwerk_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>7673916425787288234</code></div>
+        <time class="cl-date" datetime="2026-07-21T02:44:39.000Z">2026-07-21 02:44 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/7fef517c4588dfe381d17fddd946dd365778d482" target="_blank" rel="noopener">7fef517 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-7673916425787288234" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clRadars">Radars</span> <span class="cl-count">1</span></summary>
+        <ul class="cl-list"><li><code>de_fachwerk_radar_tga.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clRadarInfo">Radar info</span> <span class="cl-count">1</span></summary>
+        <ul class="cl-list"><li><code>de_boulder.txt</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>8243926021199121453</code></div>
+        <time class="cl-date" datetime="2026-07-17T02:41:51.000Z">2026-07-17 02:41 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/60b0917763d93b34031a2bd7704b1fbfd4e0497f" target="_blank" rel="noopener">60b0917 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-8243926021199121453" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>118363704811264052</code></div>
+        <time class="cl-date" datetime="2026-07-15T02:31:07.000Z">2026-07-15 02:31 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/4d4185edd1d4bc10ac7cae43756d5db0ea347af4" target="_blank" rel="noopener">4d4185e ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-118363704811264052" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>2809027269665125439</code></div>
+        <time class="cl-date" datetime="2026-07-10T03:23:35.000Z">2026-07-10 03:23 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/caa553e3913bd373d0ff9d1995fda0fe7109e699" target="_blank" rel="noopener">caa553e ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-2809027269665125439" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>3030058169296419362</code></div>
+        <time class="cl-date" datetime="2026-07-09T06:49:13.000Z">2026-07-09 06:49 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/df55715da7376cf47746f02459bdb05281bea055" target="_blank" rel="noopener">df55715 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-3030058169296419362" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clIcons">Icons</span> <span class="cl-count">5</span></summary>
+        <ul class="cl-list"><li><code>cs_shelter.png</code> <span class="cl-tag cl-new">new</span></li><li><code>de_boulder.png</code> <span class="cl-tag cl-new">new</span></li><li><code>de_debris.png</code> <span class="cl-tag cl-new">new</span></li><li><code>de_eldorado.png</code> <span class="cl-tag cl-new">new</span></li><li><code>de_fachwerk.png</code> <span class="cl-tag cl-new">new</span></li></ul>
+      </details>
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clScreenshots">Screenshots</span> <span class="cl-count">35</span></summary>
+        <ul class="cl-list"><li><code>cs_shelter_png.png</code> <span class="cl-tag cl-new">new</span></li><li><code>de_anubis_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_5_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_boulder_png.png</code> <span class="cl-tag cl-new">new</span></li><li><code>de_cache_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_debris_png.png</code> <span class="cl-tag cl-new">new</span></li><li><code>de_dust2_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust2_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust2_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_eldorado_png.png</code> <span class="cl-tag cl-new">new</span></li><li><code>de_fachwerk_png.png</code> <span class="cl-tag cl-new">new</span></li><li><code>de_inferno_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_1_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_2_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_3_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_4_png.png</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train_png.png</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+      
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>7169488960211596754</code></div>
+        <time class="cl-date" datetime="2026-07-07T03:28:17.000Z">2026-07-07 03:28 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/2088a37a3748a03e897a82a5abcdaec55bf4781f" target="_blank" rel="noopener">2088a37 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-7169488960211596754" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>5443921723055292523</code></div>
+        <time class="cl-date" datetime="2026-07-03T20:17:48.000Z">2026-07-03 20:17 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/8eeeb7500918c51c7554aebfde71d463d12904cd" target="_blank" rel="noopener">8eeeb75 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-5443921723055292523" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>9084223690997339133</code></div>
+        <time class="cl-date" datetime="2026-06-24T22:02:35.000Z">2026-06-24 22:02 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/719bda9fa275cb893fda6229b2a955446f8f129b" target="_blank" rel="noopener">719bda9 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-9084223690997339133" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>9084223690997339133</code></div>
+        <time class="cl-date" datetime="2026-06-24T21:58:08.000Z">2026-06-24 21:58 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/f1526e726629cbe108a915e0687882004b64f2e8" target="_blank" rel="noopener">f1526e7 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-9084223690997339133" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    
+      
+      
+      
+      
+      
+      
+      <details class="cl-details">
+        <summary><span data-i18n="clRadarInfo">Radar info</span> <span class="cl-count">17</span></summary>
+        <ul class="cl-list"><li><code>ar_baggage.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>ar_shoots_night.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_italy.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>cs_office.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_ancient_night.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_anubis.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_cache.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_dust2.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_inferno.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_mirage.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_nuke.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_overpass.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_train.txt</code> <span class="cl-tag cl-updated">updated</span></li><li><code>de_vertigo.txt</code> <span class="cl-tag cl-updated">updated</span></li></ul>
+      </details>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>9084223690997339133</code></div>
+        <time class="cl-date" datetime="2026-06-20T13:13:15.000Z">2026-06-20 13:13 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/fa8551950df73d89c353a53211414db9e2c789ce" target="_blank" rel="noopener">fa85519 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-9084223690997339133" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>9084223690997339133</code></div>
+        <time class="cl-date" datetime="2026-06-20T12:49:23.000Z">2026-06-20 12:49 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/2763a6dacbbf301d76d3323fe3705ab95a2c06c7" target="_blank" rel="noopener">2763a6d ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-9084223690997339133" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>9084223690997339133</code></div>
+        <time class="cl-date" datetime="2026-06-19T14:07:29.000Z">2026-06-19 14:07 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/89a4f222d9a29e0dde690a54ae1b71c023ea5e35" target="_blank" rel="noopener">89a4f22 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-9084223690997339133" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>9084223690997339133</code></div>
+        <time class="cl-date" datetime="2026-06-18T08:42:33.000Z">2026-06-18 08:42 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/225bb64e83eefedb40fc6747bdd15a9d7c76b3da" target="_blank" rel="noopener">225bb64 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-9084223690997339133" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">manifest <code>9084223690997339133</code></div>
+        <time class="cl-date" datetime="2026-06-17T04:12:25.000Z">2026-06-17 04:12 UTC</time>
+      </div>
+      <div class="cl-links"><a href="https://github.com/MurkyYT/cs2-map-icons/commit/221a368024922b8f2cff8d052848f56f77138970" target="_blank" rel="noopener">221a368 ↗</a><a href="https://github.com/MurkyYT/cs2-map-icons/releases/tag/manifest-9084223690997339133" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a></div>
+    </header>
+    <p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>
+  </article>
+</main>
+
+<footer>
+  <span><a href="https://github.com/MurkyYT/cs2-map-icons">MurkyYT/cs2-map-icons</a> · <span data-i18n="notAffiliated">not affiliated with valve</span></span>
+  <span>Tue, 24 Nov 2026 21:28:58 GMT</span>
+</footer>
+
+
+<script>
+(function() {
+  const LANG_DATA   = {"en":{"nativeName":"English","script":"latin","dir":"ltr","siteTitle":"CS2 Map Icons","heroTitle2":"Map Icons","heroDesc":"All {{n}} maps auto-extracted from the game VPK on every update. Icons, radars and screenshots available as raw PNGs.","searchPlaceholder":"Search maps…","filterAll":"All","filterDefuse":"Defuse","filterHostage":"Hostage","filterArms":"Arms Race","filterMenu":"Menu","filterRush":"Rush","showingOf":"Showing {{vis}} of {{tot}} maps","noMaps":"No maps found","builtOn":"Built","maps":"maps","footer":"Auto-generated from <a href=\"https://github.com/MurkyYT/cs2-map-icons\">MurkyYT/cs2-map-icons</a> · Data sourced from Counter-Strike 2 game files · Not affiliated with Valve Corporation","modeLabel":"Mode","keyLabel":"Key","screenshotsLabel":"Screenshots","radarsLabel":"Radars","vpkHashLabel":"VPK Hash","iconLabel":"Icon","radarLabel":"Radar","assetsSection":"Assets","mapIcon":"Map Icon","screenshot":"Screenshot","allMaps":"ALL MAPS","notAffiliated":"not affiliated with valve","noScreenshots":"no screenshots available"},"he":{"nativeName":"עברית","script":"rtl","dir":"rtl","siteTitle":"CS2 אייקוני מפות","heroTitle2":"אייקוני מפות","heroDesc":"כל {{n}} המפות נשלפות אוטומטית מה-VPK של המשחק בכל עדכון. אייקונים, מכ\"מים וצילומי מסך זמינים כ-PNG.","searchPlaceholder":"חיפוש מפות…","filterAll":"הכל","filterDefuse":"פצצה","filterHostage":"בני ערובה","filterArms":"מרוץ חימוש","filterMenu":"תפריט","filterRush":"רא'ש","showingOf":"מציג {{vis}} מתוך {{tot}} מפות","noMaps":"לא נמצאו מפות","builtOn":"נוצר ב-","maps":"מפות","footer":"נוצר אוטומטית מ-<a href=\"https://github.com/MurkyYT/cs2-map-icons\">MurkyYT/cs2-map-icons</a> · נתונים מקובצי Counter-Strike 2 · אינו קשור ל-Valve Corporation","modeLabel":"מצב","keyLabel":"מפתח","screenshotsLabel":"צילומי מסך","radarsLabel":"מכ\"מים","vpkHashLabel":"VPK האש","iconLabel":"אייקון","radarLabel":"מכ\"ם","assetsSection":"קבצים","mapIcon":"אייקון מפה","screenshot":"צילום מסך","allMaps":"כל המפות","notAffiliated":"אינו קשור ל-valve","noScreenshots":"אין צילומי מסך זמינים"},"ru":{"nativeName":"Русский","script":"cyr","dir":"ltr","siteTitle":"CS2 Иконки карт","heroTitle2":"Иконки карт","heroDesc":"Все {{n}} карт автоматически извлекаются из VPK при каждом обновлении. Иконки, радары и скриншоты доступны в формате PNG.","searchPlaceholder":"Поиск карт…","filterAll":"Все","filterDefuse":"Разминирование","filterHostage":"Заложники","filterArms":"Гонка вооружений","filterMenu":"Меню","filterRush":"Раш","showingOf":"Показано {{vis}} из {{tot}} карт","noMaps":"Карты не найдены","builtOn":"Сборка","maps":"карт","footer":"Автогенерация из <a href=\"https://github.com/MurkyYT/cs2-map-icons\">MurkyYT/cs2-map-icons</a> · Данные из файлов Counter-Strike 2 · Не связано с Valve Corporation","modeLabel":"Режим","keyLabel":"Ключ","screenshotsLabel":"Скриншоты","radarsLabel":"Радары","vpkHashLabel":"VPK хэш","iconLabel":"Иконка","radarLabel":"Радар","assetsSection":"Материалы","mapIcon":"Иконка карты","screenshot":"Скриншот","allMaps":"ВСЕ КАРТЫ","notAffiliated":"не связано с valve","noScreenshots":"скриншоты недоступны"}};
+  const LANG_KEYS   = ["en","he","ru"];
+  const DEFAULT     = 'en';
+  const STORAGE_KEY = 'cs2mi_lang';
+  const IS_MAP_PAGE = true;
+
+  
+  function interp(str, vars) {
+    return str.replace(/\{\{(\w+)\}\}/g, (_, k) => vars[k] !== undefined ? vars[k] : '');
+  }
+
+  function t(lang, key, vars) {
+    const val = (LANG_DATA[lang] && LANG_DATA[lang][key] !== undefined)
+      ? LANG_DATA[lang][key]
+      : (LANG_DATA[DEFAULT][key] || key);
+    return vars ? interp(val, vars) : val;
+  }
+
+  function detectLang() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored && LANG_KEYS.includes(stored)) return stored;
+    const browser = (navigator.language || '').slice(0, 2).toLowerCase();
+    return LANG_KEYS.includes(browser) ? browser : DEFAULT;
+  }
+
+  
+  const SCRIPT_CLASS = { cyr: 'lang-cyr', cjk: 'lang-cjk', rtl: 'lang-rtl' };
+
+  function applyLang(lang) {
+    const data = LANG_DATA[lang] || LANG_DATA[DEFAULT];
+
+    
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key  = el.dataset.i18n;
+      const vars = el.dataset.i18nVars ? JSON.parse(el.dataset.i18nVars) : undefined;
+      el.textContent = t(lang, key, vars);
+    });
+
+    
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      el.placeholder = t(lang, el.dataset.i18nPlaceholder);
+    });
+
+    
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key  = el.dataset.i18nHtml;
+      const vars = el.dataset.i18nVars ? JSON.parse(el.dataset.i18nVars) : undefined;
+      const val  = (LANG_DATA[lang] && LANG_DATA[lang][key]) || (LANG_DATA[DEFAULT][key] || '');
+      el.innerHTML = vars ? interp(val, vars) : val;
+    });
+
+    
+    if (!IS_MAP_PAGE) {
+      const pillMap = {
+        'all':         'filterAll',
+        'Bomb Defuse': 'filterDefuse',
+        'Hostage':     'filterHostage',
+        'Arms Race':   'filterArms',
+        'Menu':        'filterMenu',
+        'Rush':        'filterRush',
+      };
+      document.querySelectorAll('.pill').forEach(pill => {
+        const key = pillMap[pill.dataset.mode];
+        if (key) pill.textContent = t(lang, key);
+      });
+    }
+
+    
+    const badgeMap = {
+      'Bomb Defuse': t(lang, 'filterDefuse'),
+      'Hostage':     t(lang, 'filterHostage'),
+      'Arms Race':   t(lang, 'filterArms'),
+      'Menu':        t(lang, 'filterMenu'),
+      'Rush':        t(lang, 'filterRush'),
+    };
+    document.querySelectorAll('[data-badge-mode]').forEach(badge => {
+      const translated = badgeMap[badge.dataset.badgeMode];
+      if (translated) badge.textContent = translated;
+    });
+
+    
+    document.querySelectorAll('.lang-option').forEach(opt =>
+      opt.classList.toggle('active', opt.dataset.lang === lang));
+    const btnLabel = document.getElementById('lang-btn-label');
+    if (btnLabel) btnLabel.textContent = lang.toUpperCase();
+
+    
+    document.documentElement.lang = lang;
+    document.documentElement.classList.remove('lang-cyr', 'lang-cjk', 'lang-rtl');
+    const script = data.script || 'latin';
+    if (SCRIPT_CLASS[script]) document.documentElement.classList.add(SCRIPT_CLASS[script]);
+    const dir = data.dir || 'ltr';
+    document.documentElement.setAttribute('dir', dir);
+  }
+
+  function setLang(lang) {
+    localStorage.setItem(STORAGE_KEY, lang);
+    applyLang(lang);
+  }
+
+  window.toggleLangDropdown = function(e) {
+    e.stopPropagation();
+    document.getElementById('lang-dropdown').classList.toggle('open');
+  };
+  window.chooseLang = function(lang) {
+    setLang(lang);
+    document.getElementById('lang-dropdown').classList.remove('open');
+  };
+  document.addEventListener('click', () =>
+    document.getElementById('lang-dropdown')?.classList.remove('open'));
+
+  const currentLang = detectLang();
+  document.addEventListener('DOMContentLoaded', () => applyLang(currentLang));
+})();
+</script>
+
+<script>
+(function() {
+  const el = document.getElementById('star-count');
+  if (!el) return;
+  const KEY = 'cs2mi_stars';
+  try {
+    const c = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (c) el.textContent = c.n;
+    if (c && Date.now() - c.t < 3600000) return;
+  } catch (e) {}
+  fetch('https://api.github.com/repos/MurkyYT/cs2-map-icons')
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(d => {
+      el.textContent = d.stargazers_count;
+      try { localStorage.setItem(KEY, JSON.stringify({ n: d.stargazers_count, t: Date.now() })); } catch (e) {}
+    })
+    .catch(() => {});
+})();
+</script>
+</body>
+</html>

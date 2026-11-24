@@ -164,3 +164,41 @@ jobs:
             section "Screenshots" "$THUMBS"
             section "Radar info" "$INFOS"
             if [ -z "$ADDED$REMOVED$ICONS$RADARS$THUMBS$INFOS" ]; then
+              echo "_No map asset changes detected in this manifest._"
+            fi
+          } > "$NOTES"
+
+          # GitHub release bodies are capped at 125,000 chars
+          head -c 120000 "$NOTES" > "$NOTES.tmp" && mv "$NOTES.tmp" "$NOTES"
+          echo "path=$NOTES" >> $GITHUB_OUTPUT
+
+      - name: Create release
+        if: steps.manifest_check.outputs.changed == 'true' && steps.autocommit.outputs.changes_detected == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          MANIFEST="${{ steps.cs2_manifest.outputs.manifest }}"
+          TAG="manifest-$MANIFEST"
+
+          # Skip if a release for this manifest already exists
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists, skipping"
+            exit 0
+          fi
+
+          gh release create "$TAG" \
+            --target "${{ steps.autocommit.outputs.commit_hash }}" \
+            --title "CS2 manifest $MANIFEST" \
+            --notes-file "${{ steps.notes.outputs.path }}"
+
+      # Generated last so the changelog can read the manifest commit via git log
+      - name: Generate HTML
+        if: steps.manifest_check.outputs.changed == 'true' && steps.autocommit.outputs.changes_detected == 'true'
+        run: node gen_html.js
+
+      - name: Commit site
+        if: steps.manifest_check.outputs.changed == 'true' && steps.autocommit.outputs.changes_detected == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore: update site"
+          file_pattern: docs
