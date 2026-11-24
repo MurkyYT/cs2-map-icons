@@ -1,5 +1,6 @@
 const fs   = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 const args = process.argv.slice(2);
 const get  = (flag, def) => { const i = args.indexOf(flag); return i !== -1 ? args[i + 1] : def; };
@@ -37,6 +38,236 @@ function loadLanguages(dir) {
 const LANGUAGES   = loadLanguages(langsDir);
 const LANG_CODES  = Object.keys(LANGUAGES);
 const DEFAULT_LANG = LANG_CODES.includes('en') ? 'en' : LANG_CODES[0];
+
+// ── Changelog (from git log) ────────────────────────────────────────────────
+const REPO_URL  = 'https://github.com/MurkyYT/cs2-map-icons';
+const LOG_LIMIT = parseInt(get('--log-limit', '50'), 10);
+const esc = s => String(s).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function git(cmd) {
+    try {
+        return execSync(`git ${cmd}`, {
+            cwd: __dirname, encoding: 'utf8',
+            maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'],
+        });
+    } catch { return null; }
+}
+
+function mapsAt(ref) {
+    const out = git(`show ${ref}:data/available.json`);
+    if (!out) return {};
+    try { return JSON.parse(out).maps || {}; } catch { return {}; }
+}
+
+function classify(changes) {
+    const groups = { icons: [], radars: [], thumbs: [], radarInfo: [] };
+    const label = { A: 'new', M: 'updated', D: 'removed' };
+    for (const { status, file } of changes) {
+        const item = { name: path.basename(file), status: label[status] || status };
+        if (file.startsWith('images/radars/'))        groups.radars.push(item);
+        else if (file.startsWith('images/thumbs/'))   groups.thumbs.push(item);
+        else if (file.startsWith('data/radar_info/')) groups.radarInfo.push(item);
+        else if (file.startsWith('images/'))          groups.icons.push(item);
+    }
+    return groups;
+}
+
+function diffMaps(oldMaps, newMaps) {
+    const nameOf = k => newMaps[k]?.display_name || oldMaps[k]?.display_name || k;
+    const added = Object.keys(newMaps).filter(k => !(k in oldMaps))
+        .map(k => ({ key: k, name: nameOf(k) }));
+    const removed = Object.keys(newMaps)
+        .filter(k => newMaps[k].origin === '' && (oldMaps[k]?.origin || '') !== '')
+        .map(k => ({ key: k, name: nameOf(k) }));
+    return { added, removed };
+}
+
+function loadChangelog() {
+    if (git('rev-parse --is-inside-work-tree') === null) {
+        console.warn('Changelog: not a git repo, skipping');
+        return [];
+    }
+    if ((git('rev-parse --is-shallow-repository') || '').trim() === 'true') {
+        console.warn('Changelog: shallow clone, history will be incomplete (use fetch-depth: 0)');
+    }
+
+    const entries = [];
+
+    // Pending entry: working-tree changes that the workflow is about to commit
+    const status = git('status --porcelain --untracked-files=all -- images data/radar_info');
+    if (status && status.trim()) {
+        const changes = status.split('\n').filter(Boolean).map(l => {
+            const code = l.slice(0, 2).trim();
+            return { status: code === '??' ? 'A' : code[0], file: l.slice(3).trim() };
+        });
+        const manifestFile = path.join(__dirname, 'static', 'manifest.txt');
+        const manifest = fs.existsSync(manifestFile) ? fs.readFileSync(manifestFile, 'utf8').trim() : '';
+        entries.push({
+            manifest, hash: null, date: new Date(),
+            ...diffMaps(mapsAt('HEAD'), maps),
+            groups: classify(changes),
+        });
+    }
+
+    const log = git(`log -n ${LOG_LIMIT} --format=%H%x09%cI%x09%s --grep="^chore: manifest"`);
+    for (const line of (log || '').split('\n').filter(Boolean)) {
+        const [hash, date, ...rest] = line.split('\t');
+        const subject = rest.join('\t');
+        const manifest = subject.replace(/^chore: manifest\s*/, '').trim();
+
+        const diff = git(`diff-tree --no-commit-id --name-status -r --no-renames --root ${hash} -- images data/radar_info`) || '';
+        const changes = diff.split('\n').filter(Boolean).map(l => {
+            const [s, ...f] = l.split('\t');
+            return { status: s, file: f.join('\t') };
+        });
+
+        entries.push({
+            manifest, hash, date: new Date(date),
+            ...diffMaps(mapsAt(`${hash}^`), mapsAt(hash)),
+            groups: classify(changes),
+        });
+    }
+    return entries;
+}
+
+const changelog = loadChangelog();
+
+function changelogEntry(e) {
+    const hasChanges = e.added.length || e.removed.length ||
+        Object.values(e.groups).some(g => g.length);
+
+    const mapList = (titleKey, title, list) => list.length ? `
+      <h4 class="cl-h" data-i18n="${titleKey}">${title}</h4>
+      <ul class="cl-list">${list.map(m =>
+        `<li><a href="maps/${esc(m.key)}.html"><code>${esc(m.key)}</code></a> <span class="cl-dim">(${esc(m.name)})</span></li>`
+      ).join('')}</ul>` : '';
+
+    const fileList = (titleKey, title, list) => list.length ? `
+      <details class="cl-details">
+        <summary><span data-i18n="${titleKey}">${title}</span> <span class="cl-count">${list.length}</span></summary>
+        <ul class="cl-list">${list.map(f =>
+          `<li><code>${esc(f.name)}</code> <span class="cl-tag cl-${f.status}">${f.status}</span></li>`
+        ).join('')}</ul>
+      </details>` : '';
+
+    const links = [
+        e.hash && `<a href="${REPO_URL}/commit/${e.hash}" target="_blank" rel="noopener">${e.hash.slice(0, 7)} ↗</a>`,
+        e.hash && e.manifest && `<a href="${REPO_URL}/releases/tag/manifest-${esc(e.manifest)}" target="_blank" rel="noopener"><span data-i18n="release">release</span> ↗</a>`,
+    ].filter(Boolean).join('');
+
+    return `
+  <article class="cl-entry">
+    <header class="cl-head">
+      <div>
+        <div class="cl-manifest">${e.hash ? '' : '<span class="cl-pending" data-i18n="latestBuild">latest build</span> '}manifest <code>${esc(e.manifest || '?')}</code></div>
+        <time class="cl-date" datetime="${e.date.toISOString()}">${e.date.toISOString().replace('T', ' ').slice(0, 16)} UTC</time>
+      </div>
+      <div class="cl-links">${links}</div>
+    </header>
+    ${hasChanges ? `
+      ${mapList('newMaps', 'New maps', e.added)}
+      ${mapList('removedMaps', 'Removed from game files', e.removed)}
+      ${fileList('clIcons', 'Icons', e.groups.icons)}
+      ${fileList('clRadars', 'Radars', e.groups.radars)}
+      ${fileList('clScreenshots', 'Screenshots', e.groups.thumbs)}
+      ${fileList('clRadarInfo', 'Radar info', e.groups.radarInfo)}`
+      : `<p class="cl-dim" data-i18n="noAssetChanges">No map asset changes detected in this manifest.</p>`}
+  </article>`;
+}
+
+function changelogPage() {
+    return `<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  ${sharedHead}
+  <title>Update log - CS2 Map Icons</title>
+  <link rel="icon" type="image/x-icon" href="https://developer.valvesoftware.com/w/images/6/61/Csgo_icon_competitive.png">
+  <meta name="description" content="Update log for CS2 Map Icons, generated from git history.">
+  <style>
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(13,14,16,.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 1rem; padding: 0 2rem; height: 48px;
+    }
+    .topbar-home {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+      color: var(--accent); font-size: .95rem; letter-spacing: .06em; text-transform: uppercase;
+    }
+    .topbar-home:hover { text-decoration: underline; }
+    .topbar-sep { color: var(--muted); }
+    .topbar-title { font-family: 'JetBrains Mono', monospace; font-size: .72rem; }
+    .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 1rem; }
+    .cl-wrap { max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+    .cl-wrap > h1 {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+      font-size: clamp(2rem, 4vw, 3rem); line-height: 1; margin-bottom: .5rem;
+    }
+    .cl-wrap > p { color: var(--muted); margin-bottom: 2rem; }
+    .cl-entry {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1rem;
+    }
+    .cl-head { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: .6rem; }
+    .cl-manifest { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.15rem; }
+    .cl-manifest code, .cl-list code { font-family: 'JetBrains Mono', monospace; font-size: .75rem; color: var(--accent); }
+    .cl-date { font-size: .72rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+    .cl-links { display: flex; gap: .8rem; font-size: .72rem; font-family: 'JetBrains Mono', monospace; }
+    .cl-links a { color: var(--accent); }
+    .cl-links a:hover { text-decoration: underline; }
+    .cl-pending {
+      font-size: .6rem; letter-spacing: .1em; text-transform: uppercase;
+      background: var(--accent); color: #000; padding: 1px 6px; border-radius: 3px; margin-right: 4px;
+    }
+    .cl-h {
+      font-family: 'Barlow Condensed', sans-serif; font-size: .68rem; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--muted); margin: .8rem 0 .3rem;
+    }
+    .cl-list { list-style: none; font-size: .85rem; padding-left: 0; }
+    .cl-list li { padding: 2px 0; }
+    .cl-dim { color: var(--muted); font-size: .8rem; }
+    .cl-details { margin-top: .5rem; }
+    .cl-details summary {
+      cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+      font-size: .9rem; letter-spacing: .04em; user-select: none;
+    }
+    .cl-details .cl-list { max-height: 260px; overflow-y: auto; margin: .4rem 0 0 1rem; }
+    .cl-count {
+      font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: var(--muted);
+      border: 1px solid var(--border); border-radius: 100px; padding: 0 6px; margin-left: 4px;
+    }
+    .cl-tag { font-size: .6rem; text-transform: uppercase; letter-spacing: .08em; margin-left: 6px; }
+    .cl-new { color: #6bbf6b; } .cl-updated { color: var(--accent); } .cl-removed { color: var(--accent2); }
+    html[dir="rtl"] .cl-head { flex-direction: row-reverse; }
+    @media (max-width: 600px) { .cl-wrap { padding: 1.5rem 1rem 3rem; } .cl-head { flex-direction: column; } }
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <a class="topbar-home" href="index.html">CS2</a>
+  <span class="topbar-sep">/</span>
+  <span class="topbar-title" data-i18n="changelog">Update log</span>
+  <div class="topbar-right">${starButton()}${langSwitcherWidget()}</div>
+</div>
+
+<main class="cl-wrap">
+  <h1 data-i18n="changelogTitle">Update log</h1>
+  <p data-i18n="changelogDesc">Every game manifest that changed map assets, generated from git history.</p>
+  ${changelog.length ? changelog.map(changelogEntry).join('\n') :
+    '<p class="cl-dim" data-i18n="changelogEmpty">No updates recorded yet.</p>'}
+</main>
+
+<footer>
+  <span><a href="${REPO_URL}">MurkyYT/cs2-map-icons</a> · <span data-i18n="notAffiliated">not affiliated with valve</span></span>
+  <span>${buildDate}</span>
+</footer>
+
+${i18nScript(true)}
+${starCountScript()}
+</body>
+</html>`;
+}
 
 console.log(`Loaded languages: ${LANG_CODES.join(', ')}`);
 
@@ -201,6 +432,13 @@ const sharedHead = `
       border-left: none; padding-left: 0;
       border-right: 1px solid var(--border); padding-right: 6px;
     }
+    .nav-link {
+      font-family: 'Barlow Condensed', sans-serif; font-size: .75rem; font-weight: 600;
+      letter-spacing: .06em; text-transform: uppercase; color: var(--text);
+      padding: 5px 10px; border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--bg3); white-space: nowrap; transition: border-color .15s, color .15s;
+    }
+    .nav-link:hover { border-color: var(--accent); color: var(--accent); }
   </style>`;
 
 function i18nScript(isMapPage = false) {
@@ -578,7 +816,7 @@ const indexHTML = `<!DOCTYPE html>
       <span data-i18n="builtOn">Built</span> ${buildDate} &nbsp;·&nbsp;
       <a href="https://github.com/MurkyYT/cs2-map-icons" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
-
+    <a class="nav-link" href="changelog.html" data-i18n="changelog">Update log</a>
     ${starButton()}
     ${langSwitcherWidget()}
   </div>
@@ -843,7 +1081,7 @@ function mapPage([mapKey, map]) {
   <span class="topbar-sep">/</span>
   <span class="topbar-title">${mapKey}</span>
   <div class="topbar-mode" style="--mode-c:${mode.color}">${mode.label}</div>
-  <div class="topbar-right">${starButton()}${langSwitcherWidget()}</div>
+  <div class="topbar-right"><a class="nav-link" href="../changelog.html" data-i18n="changelog">Update log</a>${starButton()}${langSwitcherWidget()}</div>
 </div>
 
 <div class="page-hero">
@@ -1008,3 +1246,6 @@ for (const entry of sorted) {
     count++;
 }
 console.log(`Map pages written -> ${mapsDir}/  (${count} pages)`);
+
+fs.writeFileSync(path.join(outDir, 'changelog.html'), changelogPage(), 'utf8');
+console.log(`Changelog written -> ${path.join(outDir, 'changelog.html')}  (${changelog.length} entries)`);
